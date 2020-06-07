@@ -7,6 +7,8 @@ function App(): JSX.Element {
   return (
     <div className="App">
       <Header/>
+      <h1>Do</h1>
+      <h1>…release on Fridays?</h1>
       <Footer/>
     </div>
   );

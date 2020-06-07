@@ -13,7 +13,7 @@ function Header(): JSX.Element {
   useEffect(() => {
     const interval = setInterval(() => {
       setTransform(calculateCurrentClockHandTransform())
-    }, 30_000);
+    }, 60_000);
     return () => clearInterval(interval);
   }, []);
 
