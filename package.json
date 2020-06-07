@@ -9,8 +9,8 @@
     "email": "dev@twixes.com"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/Twixes/hubmeter.git"
+    "type": "git",
+    "url": "https://github.com/Twixes/hubmeter.git"
   },
   "homepage": "https://hubmeter.live",
   "private": true,
