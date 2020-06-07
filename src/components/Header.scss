@@ -5,7 +5,7 @@
   justify-content: space-between;
   width: 100%;
   height: 4rem;
-  padding: 0 0.375rem;
+  padding: 0 0.75rem;
 }
 
 .Header-link {
@@ -15,13 +15,16 @@
 .Header-logo {
   display: flex;
   align-items: center;
-  padding: 0.375rem;
   font-size: 1.75rem;
 }
 
 .Header-nav {
-  display: flex;
-  height: 2.75rem;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.75rem;
+  & a {
+    height: 2rem;
+  }
 }
 
 #Header-clock {
@@ -38,6 +41,5 @@
 }
 
 .Header-icon {
-  padding: 0.375rem;
   fill: var(--color-foreground);
 }
