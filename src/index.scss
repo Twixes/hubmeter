@@ -36,3 +36,10 @@ h1 {
     0 0 .1em var(--color-accent), 0 0 .2em var(--color-accent),
     0 0 .3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
 }
+
+.bounded {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100rem;
+  padding: 0 0.75rem;
+}

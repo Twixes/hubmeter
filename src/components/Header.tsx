@@ -18,7 +18,7 @@ function Header(): JSX.Element {
   }, []);
 
   return (
-    <header className="Header">
+    <header className="Header bounded">
       <a href="/" className="Header-link">
         <div className="Header-logo">
           <svg id="Header-clock" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
