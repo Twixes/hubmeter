@@ -1,12 +1,11 @@
 import React from 'react';
-import './App.css';
+import Header from './Header';
+import './App.scss';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>HubMeter</h1>
-      </header>
+      <Header/>
     </div>
   );
 }
