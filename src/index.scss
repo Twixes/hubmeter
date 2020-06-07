@@ -1,11 +1,24 @@
+:root {
+  --color-background: #000b2e;
+  --color-accent: #7a27ff;
+  --color-accent-dim: rgba(122, 39, 255, 0.6);
+  --color-foreground: #fff;
+  --color-foreground-dim: rgba(255, 255, 255, 0.6);
+  --font-family-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
+  --font-weight: 700;
+}
+
 body {
   margin: 0;
-  background: #000b2e;
+  background: var(--color-background);
   color: #fff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  font-weight: 700;
+  font-family: var(--font-family-stack);
+  font-weight: var(--font-weight);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
 }
