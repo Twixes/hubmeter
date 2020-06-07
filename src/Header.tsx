@@ -4,7 +4,7 @@ import './Header.scss';
 function calculateCurrentClockHandTransform(): string {
   const now = new Date()
   const hourPrecise = now.getHours() + now.getMinutes() / 60
-  return `rotate(${hourPrecise / 24 * 360 - 90}deg)`
+  return `rotate(${hourPrecise / 12 * 360}deg)`
 }
 
 function Header(): JSX.Element {
@@ -19,7 +19,7 @@ function Header(): JSX.Element {
 
   return (
     <header className="Header">
-      <a href="https://hubmeter.live" className="Header-link">
+      <a href="/" className="Header-link">
         <div className="Header-logo">
           <svg id="Header-clock" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="20" cy="20" r="18" strokeWidth="4"/>
