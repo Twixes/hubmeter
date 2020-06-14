@@ -29,14 +29,47 @@
     "typescript": "^3.9.5"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "snazzy": "^8.0.0",
+    "standardx": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "standardx **/*.{ts,tsx} --verbose | snazzy && react-scripts test",
+    "fix": "standardx **/*.{ts,tsx} --fix"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "rules": {
+      "no-unused-vars": "off",
+      "jsx-quotes": [
+        "error",
+        "prefer-double"
+      ],
+      "react/jsx-tag-spacing": [
+        "error",
+        {
+          "closingSlash": "never",
+          "beforeSelfClosing": "never",
+          "afterOpening": "never",
+          "beforeClosing": "never"
+        }
+      ],
+      "space-before-function-paren": [
+        "error",
+        {
+          "named": "never"
+        }
+      ],
+      "@typescript-eslint/no-unused-vars": "error"
+    }
+  },
+  "standardx": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint/eslint-plugin"
+    ]
   },
   "browserslist": {
     "production": [
