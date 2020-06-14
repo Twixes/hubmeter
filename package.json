@@ -35,10 +35,11 @@
     "standardx": "^5.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "standardx **/*.{ts,tsx} --verbose | snazzy && react-scripts test",
-    "fix": "standardx **/*.{ts,tsx} --fix"
+    "start": "react-scripts start",
+    "lint": "standardx **/*.{ts,tsx} --verbose | snazzy",
+    "fix": "standardx **/*.{ts,tsx} --fix",
+    "test": "npm run lint && react-scripts test"
   },
   "eslintConfig": {
     "rules": {
