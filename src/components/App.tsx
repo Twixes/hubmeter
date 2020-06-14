@@ -3,6 +3,17 @@ import Header from './Header';
 import Footer from './Footer';
 import './App.scss';
 
+let questions: string[] = [ // "Do ${subject} ${question}?"
+    'release on Friday',
+    'pull all-nighters',
+    'work the night shift',
+    'get up at the crack of dawn',
+    'code on weekends',
+    'code at high noon',
+    'have a life beside coding',
+    'code at all'
+]
+
 function App(): JSX.Element {
   return (
     <div className="App">
