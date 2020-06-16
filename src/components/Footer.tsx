@@ -4,7 +4,7 @@ import './Footer.scss';
 function Footer(): JSX.Element {
   return (
     <footer className="Footer bounded">
-      <span>GitHub activity insights in terms of time.<br/>
+      <span>GitHub activity insights you haven't seen before.<br/>
       By <a href="https://twixes.com">Twixes</a>. 👋</span>
     </footer>
   );
