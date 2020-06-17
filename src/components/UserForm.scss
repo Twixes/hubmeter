@@ -78,7 +78,7 @@
   border-radius: 0.5rem;
   cursor: pointer;
   &:not(:disabled):active {
-    background: var(--color-accent-dim);
+    background: var(--color-accent);
     color: var(--color-foreground);
   }
   &:disabled {
