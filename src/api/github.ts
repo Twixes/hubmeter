@@ -34,22 +34,26 @@ export function buildURL(parts: string[], params?: object): URL {
   return url
 }
 
+async function checkForProblem(response: Response): Promise<void> {
+  if (response.status === 403) {
+    const rateLimitResetEpoch: number = parseInt(response.headers.get('X-Ratelimit-Reset')!) * 1000
+    const rateLimitReset: Date = new Date(rateLimitResetEpoch)
+    const deltaMilliseconds: number = rateLimitResetEpoch - Date.now()
+    throw Error(
+      `GitHub rate limit exceeded for now. Reset at ${rateLimitReset.getHours()}:${rateLimitReset.getMinutes()} ` +
+      `(in ${Math.round(deltaMilliseconds / 1000 / 60)} min).`
+    )
+  } else if (!response.ok) {
+    const problem: Problem = await response.json()
+    throw Error(problem.message)
+  }
+}
+
 export async function fetchUserEventsPage(login: string, page: number): Promise<Event[]> {
     const url: URL = buildURL(['users', login, 'events'])
     url.searchParams.set('page', page.toString())
     const response: Response = await fetch(url.toString())
-    if (response.status === 403) {
-      const rateLimitResetEpoch: number = parseInt(response.headers.get('X-Ratelimit-Reset')!) * 1000
-      const rateLimitReset: Date = new Date(rateLimitResetEpoch)
-      const deltaMilliseconds: number = rateLimitResetEpoch - Date.now()
-      throw Error(
-        `GitHub rate limit exceeded for now. Reset at ${rateLimitReset.getHours()}:${rateLimitReset.getMinutes()} ` +
-        `(in ${Math.round(deltaMilliseconds / 1000 / 60)} min).`
-      )
-    } else if (!response.ok) {
-      const problem: Problem = await response.json()
-      throw Error(problem.message)
-    }
+    await checkForProblem(response)
     const events: Event[] = await response.json()
     return events
 }
@@ -65,19 +69,17 @@ export async function fetchUserEventsAll(login: string): Promise<Event[]> {
 export async function fetchSearchUsers(query: string): Promise<User[]> {
   const url: URL = buildURL(['search', 'users'], { q: query })
   const response: Response = await fetch(url.toString())
-  if (response.status === 403) {
-    const rateLimitResetEpoch: number = parseInt(response.headers.get('X-Ratelimit-Reset')!) * 1000
-    const rateLimitReset: Date = new Date(rateLimitResetEpoch)
-    const deltaMilliseconds: number = rateLimitResetEpoch - Date.now()
-    throw Error(
-      `GitHub rate limit exceeded for now. Reset at ${rateLimitReset.getHours()}:${rateLimitReset.getMinutes()} ` +
-      `(in ${Math.round(deltaMilliseconds / 1000 / 60)} min).`
-    )
-  } else if (!response.ok) {
-    const problem: Problem = await response.json()
-    throw Error(problem.message)
-  }
+  await checkForProblem(response)
   const searchResults: SearchResults = await response.json()
   const users: User[] = searchResults.items
   return users
+}
+
+export async function fetchUser(login: string): Promise<User | null> {
+  const url: URL = buildURL(['users', login])
+  const response: Response = await fetch(url.toString())
+  if (response.status === 404) return null
+  await checkForProblem(response)
+  const user: User = await response.json()
+  return user
 }

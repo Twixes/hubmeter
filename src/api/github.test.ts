@@ -1,4 +1,4 @@
-import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers } from './github';
+import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser } from './github';
 
 describe('#buildURL()', () => {
   it('should return proper user events URL', () => {
@@ -40,5 +40,18 @@ describe('#fetchSearchUsers()', () => {
     expect(users[0].id).toBeDefined()
     expect(users[0].login).toBeDefined()
     expect(users[0].avatar_url).toBeDefined()
+  })
+})
+
+describe('#fetchUser()', () => {
+  it('should return a user', async () => {
+    const user: User | null = await fetchUser('twixes')
+    expect(user!.id).toBeDefined()
+    expect(user!.login).toBeDefined()
+    expect(user!.avatar_url).toBeDefined()
+  })
+  it('should return null if user does not exist', async () => {
+    const user: User | null = await fetchUser('twixesssssssssssssssssssssssssssssssssssssssssssssssss')
+    expect(user).toBeNull()
   })
 })
