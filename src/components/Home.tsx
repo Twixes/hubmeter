@@ -1,6 +1,4 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Route, Switch } from "react-router-dom"
 import './Home.scss'
 
 let questions: string[] = [ // "Do ${subject} ${question}?"
@@ -15,10 +13,12 @@ let questions: string[] = [ // "Do ${subject} ${question}?"
 ]
 
 export default function App(): JSX.Element {
+  const randomQuestion: string = questions[Math.floor(Math.random() * questions.length)]
+
   return (
     <>
       <h1>Do</h1>
-      <h1>…{ questions[Math.floor(Math.random() * questions.length)] }?</h1>
+      <h1>…{randomQuestion}?</h1>
     </>
   )
 }
