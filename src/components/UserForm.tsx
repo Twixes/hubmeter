@@ -37,21 +37,31 @@ export default function UserForm({ login }: Props): JSX.Element {
   const aAttributes: {[attribute: string]: string} = {}
   let currentIndicatorElement
   if (isTypingInProgress) {
-    currentIndicatorElement = <div className="UserForm-indicator-typing"><b>.</b><b>.</b><b>.</b></div>
+    currentIndicatorElement = (
+      <div className="UserForm-indicator-typing" style={{ opacity: currentLogin ? 1 : ''}}>
+        <b>.</b><b>.</b><b>.</b>
+      </div>
+    )
   } else if (currentLogin && currentAvatarBackgroundImage) {
     aAttributes['href'] = `https://github.com/${currentLogin}`
-    currentIndicatorElement = <div
-      className="UserForm-indicator-avatar"
-      style={{ backgroundImage: isTypingInProgress ? 'none' : currentAvatarBackgroundImage }}
-    ></div>
+    currentIndicatorElement = (
+      <div className="UserForm-indicator-avatar" style={{ backgroundImage: currentAvatarBackgroundImage }}></div>
+    )
   } else {
-    currentIndicatorElement = <div className="UserForm-indicator-unknown">?</div>
+    currentIndicatorElement = (
+      <div className="UserForm-indicator-unknown" style={{ opacity: currentLogin ? 1 : ''}}>?</div>
+    )
   }
 
   return (
     <form className="UserForm card">
-      <a {...aAttributes} target="_blank"><div className="UserForm-indicator">{currentIndicatorElement}</div></a>
-      <input className="UserForm-input" name="login" value={currentLogin} placeholder="GitHub user/org" spellCheck={false} onChange={onLoginChange}/>
+      <a {...aAttributes} target="_blank">
+        <div className="UserForm-indicator">{currentIndicatorElement}</div>
+      </a>
+      <input
+        className="UserForm-input" name="login" value={currentLogin} placeholder="GitHub user/org" spellCheck={false}
+        onChange={onLoginChange}
+      />
       <Link to={`/${currentLogin}`}>
         <button
           className="UserForm-button" type="button" onClick={onLoadUserClick}

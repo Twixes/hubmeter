@@ -26,6 +26,7 @@
 }
 
 .UserForm-indicator-avatar {
+  border-radius: 0.25rem;
   background-size: contain;
   background-repeat: no-repeat;
   height: 100%;
@@ -34,9 +35,14 @@
 
 .UserForm-indicator-typing,
 .UserForm-indicator-unknown {
+  transition: var(--duration-short) ease;
   opacity: var(--opacity-dim);
+  border-radius: 0.25rem;
   background: var(--color-accent);
   color: var(--color-foreground);
+  &:disabled {
+    opacity: var(--opacity-dim);
+  }
 }
 
 .UserForm-indicator-typing {
@@ -71,7 +77,7 @@
   width: 3rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  &:active {
+  &:not(:disabled):active {
     background: var(--color-accent-dim);
     color: var(--color-foreground);
   }
