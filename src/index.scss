@@ -1,12 +1,16 @@
 :root {
   --color-background: #000b2e;
   --color-accent: #7a27ff;
-  --color-accent-dim: rgba(122, 39, 255, 0.75);
+  --opacity-dim: 0.6;
+  --color-accent-dim: rgba(122, 39, 255, var(--opacity-dim));
   --color-foreground: #fff;
-  --color-foreground-dim: rgba(255, 255, 255, 0.75);
+  --color-foreground-dim: rgba(255, 255, 255, var(--opacity-dim));
   --font-family-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
   --font-weight: 700;
+  --duration-short: 0.2s;
+  --duration-medium: 0.4s;
+  --duration-long: 1s;
 }
 
 ::selection {
@@ -14,10 +18,15 @@
   color: var(--color-foreground);
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   background: var(--color-background);
-  color: #fff;
+  color: var(--color-foreground);
   font-family: var(--font-family-stack);
   font-weight: var(--font-weight);
   -webkit-font-smoothing: antialiased;
@@ -29,12 +38,34 @@ a {
 }
 
 h1 {
+  margin: 0.5rem 0;
   font-size: 1.75rem;
   font-style: italic;
   text-shadow:
     0 0 .033em #fff, 0 0 .08em #fff,
     0 0 .1em var(--color-accent), 0 0 .2em var(--color-accent),
     0 0 .3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 3rem;
+  padding: 0 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--color-foreground);
+  color: var(--color-accent);
+  box-shadow:
+    0 0 0.125rem rgba(0, 0, 0, 0.1), 0 0 0.25rem rgba(0, 0, 0, 0.1), 0 0 0.5rem rgba(0, 0, 0, 0.1),
+    0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
+}
+
+button,
+input {
+  border: none;
+  font-size: 1.5rem;
+  text-overflow: ellipsis;
 }
 
 .bounded {
@@ -46,4 +77,11 @@ h1 {
   @media screen and (min-width: 40rem) {
     padding: 0 4rem;
   }
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
 }
