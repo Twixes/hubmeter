@@ -1,4 +1,5 @@
 import React from 'react'
+import UserForm from './UserForm'
 import './Home.scss'
 
 let questions: string[] = [ // "Do ${subject} ${question}?"
@@ -18,6 +19,7 @@ export default function App(): JSX.Element {
   return (
     <>
       <h1>Do</h1>
+      <UserForm login={''}/>
       <h1>…{randomQuestion}?</h1>
     </>
   )

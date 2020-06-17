@@ -1,0 +1,81 @@
+@keyframes UserForm-typing-indicator-bounce {
+  0% {
+    transform: translate3d(0, 0, 0);
+  } 100% {
+    transform: translate3d(0, -0.25em, 0);
+  }
+}
+
+.UserForm {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0 !important;
+}
+
+.UserForm-indicator {
+  font-size: 1.125rem;
+  text-align: center;
+  line-height: 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.UserForm-indicator-avatar {
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+}
+
+.UserForm-indicator-typing,
+.UserForm-indicator-unknown {
+  opacity: var(--opacity-dim);
+  background: var(--color-accent);
+  color: var(--color-foreground);
+}
+
+.UserForm-indicator-typing {
+  & b {
+    animation:
+      UserForm-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite alternate;
+    display: inline-block;
+    @for $i from 1 through 3 {
+      &:nth-child(#{$i}) {
+        animation-delay: calc(#{$i - 1} * var(--duration-long) / 3 / 5);
+      }
+    }
+  }
+}
+
+.UserForm-input {
+  flex-grow: 1;
+  width: 0;
+  height: 100%;
+  padding: 0;
+  margin-left: 0.75rem;
+  &::placeholder {
+    color: var(--color-accent-dim);
+    opacity: 1;
+  }
+}
+
+.UserForm-button {
+  transition: var(--duration-short) ease;
+  padding: 0;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  &:active {
+    background: var(--color-accent-dim);
+    color: var(--color-foreground);
+  }
+  &:disabled {
+    opacity: var(--opacity-dim);
+  }
+}
