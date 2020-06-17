@@ -9,6 +9,7 @@ interface Props {
 
 export default function UserForm({ login }: Props): JSX.Element {
   const [currentLogin, setCurrentLogin] = useState(login)
+  const [currentUser, setCurrentUser] = useState({ id: '', login: '', avatar_url: '' })
   const [currentAvatarBackgroundImage, setCurrentAvatarBackgroundImage] = useState('')
   const [isTypingInProgress, setIsTypingInProgress] = useState(false)
   const [typingTimeout, setTypingTimeout] = useState(setTimeout(async () => {}, 0))
@@ -21,7 +22,7 @@ export default function UserForm({ login }: Props): JSX.Element {
     setTypingTimeout(setTimeout(() => {
       if (element.value) {
         fetchSearchUsers(element.value).then(users => {
-          setCurrentAvatarBackgroundImage(users.length ? `url(${users[0].avatar_url}` : '')
+          setCurrentAvatarBackgroundImage(users.length ? `url(${users[0].avatar_url}&s=144` : '')
         }).finally(() => {
           setIsTypingInProgress(false)
         })
@@ -34,16 +35,16 @@ export default function UserForm({ login }: Props): JSX.Element {
   function onLoadUserClick(): void {
   }
 
-  const aAttributes: {[attribute: string]: string} = {}
+  const aElementAttributes: {[attribute: string]: string} = {}
   let currentIndicatorElement
   if (isTypingInProgress) {
     currentIndicatorElement = (
       <div className="UserForm-indicator-typing" style={{ opacity: currentLogin ? 1 : ''}}>
-        <b>.</b><b>.</b><b>.</b>
+        <span>.</span><span>.</span><span>.</span>
       </div>
     )
   } else if (currentLogin && currentAvatarBackgroundImage) {
-    aAttributes['href'] = `https://github.com/${currentLogin}`
+    aElementAttributes['href'] = `https://github.com/${currentLogin}`
     currentIndicatorElement = (
       <div className="UserForm-indicator-avatar" style={{ backgroundImage: currentAvatarBackgroundImage }}></div>
     )
@@ -55,12 +56,12 @@ export default function UserForm({ login }: Props): JSX.Element {
 
   return (
     <form className="UserForm card">
-      <a {...aAttributes} target="_blank">
+      <a {...aElementAttributes} target="_blank">
         <div className="UserForm-indicator">{currentIndicatorElement}</div>
       </a>
       <input
-        className="UserForm-input" name="login" value={currentLogin} placeholder="GitHub user/org" spellCheck={false}
-        onChange={onLoginChange}
+        className="UserForm-input" type="search" name="login" value={currentLogin} placeholder="GitHub user/org"
+        spellCheck={false} onChange={onLoginChange}
       />
       <Link to={`/${currentLogin}`}>
         <button

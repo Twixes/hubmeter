@@ -69,6 +69,10 @@ input {
   text-overflow: ellipsis;
 }
 
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
 .bounded {
   box-sizing: border-box;
   margin: 0 auto;
