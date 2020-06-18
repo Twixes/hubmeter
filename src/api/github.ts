@@ -59,7 +59,6 @@ export async function fetchUserEventsPage(login: string, page: number): Promise<
 }
 
 export async function fetchUserEventsAll(login: string): Promise<Event[]> {
-  const events: Event[] = []
   const promises: Promise<Event[]>[] = []
   for (let page = 1; page <= 10; page++) promises.push(fetchUserEventsPage(login, page))
   const pages: Event[][] = await Promise.all(promises)
