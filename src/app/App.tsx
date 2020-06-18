@@ -12,9 +12,9 @@ const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'work the night shift',
   'git up at the crack of dawn',
   'code on weekends',
-  'code at high noon',
-  'have a life',
-  'ever code'
+  'commit at high noon',
+  'push in the morning',
+  'even have a life'
 ]
 
 function HeadlineAbove(): JSX.Element {
