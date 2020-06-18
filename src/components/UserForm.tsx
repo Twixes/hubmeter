@@ -121,7 +121,7 @@ export default function UserForm({ login }: Props): JSX.Element {
 
   return (
     <form className="UserForm" ref={wrapperRef} onSubmit={onFormSubmit}>
-      <Card continueBottom={isSearchShown} noPaddingRight noBoxShadow>
+      <Card continueBottom={isSearchShown} noPaddingRight>
         <>
           <a {...aElementAttributes} target="_blank" rel="noopener noreferrer">
             <div className="UserForm-indicator" style={{ opacity: isButtonEnabled ? 1 : ''}} >
@@ -139,8 +139,7 @@ export default function UserForm({ login }: Props): JSX.Element {
         </>
       </Card>
       <Card
-        className="UserForm-search-box" continueTop noPaddingLeft noPaddingRight noBoxShadow
-        style={{ height: searchBoxHeight }}>
+        className="UserForm-search-box" continueTop noPaddingLeft noPaddingRight style={{ height: searchBoxHeight }}>
         <ul className="UserForm-search-list" style={{ height: searchBoxHeight }}>
           {currentSearchResults.slice(0, MAX_SEARCH_RESULTS_VISIBLE).map(user =>(
               <li

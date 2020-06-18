@@ -14,6 +14,6 @@
   background: var(--color-foreground);
   color: var(--color-accent);
   box-shadow:
-    0 0 0.125rem rgba(0, 0, 0, 0.1), 0 0 0.25rem rgba(0, 0, 0, 0.1), 0 0 0.5rem rgba(0, 0, 0, 0.1),
-    0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
+    0 0.08rem 0.12rem var(--color-shadow), 0 0.16rem 0.24rem var(--color-shadow),
+    0 0.32rem 0.48rem var(--color-shadow), 0 0.64rem 0.96rem var(--color-shadow);
 }

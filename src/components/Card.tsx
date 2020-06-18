@@ -9,11 +9,10 @@ interface Props {
   continueBottom?: boolean
   noPaddingLeft?: boolean
   noPaddingRight?: boolean
-  noBoxShadow?: boolean
 }
 
 export default function UserForm(
-  { children, className, style, continueTop, continueBottom, noPaddingLeft, noPaddingRight, noBoxShadow }: Props
+  { children, className, style, continueTop, continueBottom, noPaddingLeft, noPaddingRight }: Props
 ): JSX.Element {
   if (!style) style = {}
   if (continueTop) {
@@ -26,7 +25,6 @@ export default function UserForm(
   }
   if (noPaddingLeft) style.paddingLeft = 0
   if (noPaddingRight) style.paddingRight = 0
-  if (noBoxShadow) style.boxShadow = 'none'
   className = className ? `Card ${className}` : 'Card'
   return (
     <div className={className} style={style}>
