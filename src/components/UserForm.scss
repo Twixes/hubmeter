@@ -1,21 +1,22 @@
 @keyframes UserForm-typing-indicator-bounce {
   0% {
-    transform: translate3d(0, 0, 0);
+    transform: translateY(0);
   } 100% {
-    transform: translate3d(0, -0.25em, 0);
+    transform: translateY(-0.25em);
   }
 }
 
 .UserForm {
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 0 !important;
+  position: relative;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 0 0.125rem rgba(0, 0, 0, 0.1), 0 0 0.25rem rgba(0, 0, 0, 0.1), 0 0 0.5rem rgba(0, 0, 0, 0.1),
+    0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
 }
 
 .UserForm-indicator {
+  transition: opacity var(--duration-short) ease;
+  opacity: var(--opacity-dim);
   font-size: 1.125rem;
   text-align: center;
   line-height: 1.5rem;
@@ -23,26 +24,24 @@
   width: 1.5rem;
   border-radius: 0.25rem;
   overflow: hidden;
+  user-select: none;
+  & div {
+    height: 100%;
+    width: 100%;
+    border-radius: 0.25rem;
+  }
 }
 
 .UserForm-indicator-avatar {
-  border-radius: 0.25rem;
   background-size: contain;
   background-repeat: no-repeat;
-  height: 100%;
-  width: 100%;
 }
 
 .UserForm-indicator-typing,
-.UserForm-indicator-unknown {
-  transition: var(--duration-short) ease;
-  opacity: var(--opacity-dim);
-  border-radius: 0.25rem;
+.UserForm-indicator-unknown,
+.UserForm-indicator-error {
   background: var(--color-accent);
   color: var(--color-foreground);
-  &:disabled {
-    opacity: var(--opacity-dim);
-  }
 }
 
 .UserForm-indicator-typing {
@@ -58,12 +57,13 @@
   }
 }
 
-.UserForm-input {
+.UserForm-login {
   flex-grow: 1;
   width: 0;
-  height: 100%;
+  height: 3rem;
   padding: 0;
   margin-left: 0.75rem;
+  line-height: 3rem;
   &::placeholder {
     color: var(--color-accent-dim);
     opacity: 1;
@@ -75,13 +75,51 @@
   padding: 0;
   height: 3rem;
   width: 3rem;
-  border-radius: 0.5rem;
+  border-radius: 0.5rem 0 0 0.5rem;
+  text-align: center;
+  user-select: none;
   cursor: pointer;
-  &:not(:disabled):active {
+  &:not(:disabled):active,
+  a:focus &:not(:disabled) {
     background: var(--color-accent-dim);
     color: var(--color-foreground);
   }
   &:disabled {
     opacity: var(--opacity-dim);
+  }
+}
+
+.UserForm-search-box {
+  position: absolute;
+  overflow: hidden;
+}
+
+.UserForm-search-list {
+  transition: height var(--duration-short) ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.UserForm-search-result {
+  transition: background var(--duration-short) ease, border-color var(--duration-short) ease;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 3rem;
+  padding-left: 0.75rem;
+  border-top: 1px solid var(--color-background-dim);
+  outline: none;
+  align-items: center;
+  text-align: left;
+  line-height: 3rem;
+  font-size: 1.5rem;
+  text-overflow: ellipsis;
+  &:hover,
+  &:focus {
+    border-top-color: transparent;
+    background: var(--color-background-dim);
   }
 }
