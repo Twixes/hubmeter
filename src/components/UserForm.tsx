@@ -34,6 +34,11 @@ export default function UserForm({ login }: Props): JSX.Element {
     currentLoginInput && (didSearchErrorOccur || isTypingInProgress || !isTypingInProgress && currentAvatarURL)
   )
 
+  function pushUser(login: string) {
+    setIsSearchHiddenOverride(true)
+    history.push(`/${login}`)
+  }
+
   function onLoginInputChange(event: ChangeEvent<HTMLInputElement>): void {
     const element = event.target
     setCurrentLoginInput(element.value)
@@ -74,13 +79,13 @@ export default function UserForm({ login }: Props): JSX.Element {
 
   function onFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (isButtonEnabled) history.push(`/${currentLoginInput}`)
+    if (isButtonEnabled) pushUser(currentLoginInput)
   }
 
   function setUserFromSearch(user: User) {
     setCurrentLoginInput(user.login)
     setCurrentAvatarURL(user.avatar_url)
-    setIsSearchHiddenOverride(true)
+    pushUser(user.login)
   }
 
   function onSearchResultKeyDownedGenerator(user: User) {
