@@ -1,7 +1,7 @@
 import React, { useState, useRef, FormEvent, KeyboardEvent } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { User } from '../../api/github'
-import { useOutsideClickHandler} from '../../components/utils'
+import { useOutsideClickHandler} from '../../utils'
 import UserSearchControls from './UserSearchControls'
 import UserSearchResults from './UserSearchResults'
 import './UserSearch.scss'
