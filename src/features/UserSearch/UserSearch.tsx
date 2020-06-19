@@ -1,17 +1,19 @@
 import React, { useState, useRef, FormEvent, KeyboardEvent } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { User } from '../../api/github'
 import { useOutsideClickHandler} from '../../components/utils'
 import UserSearchControls from './UserSearchControls'
 import UserSearchResults from './UserSearchResults'
 import './UserSearch.scss'
 
-interface Props {
-  login: string
-}
+export default function UserSearch(): JSX.Element {
+  const params = useParams<{ login: string | undefined }>()
+  const history = useHistory()
+  const formRef = useRef(null)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+  const navigationRefs = useRef<(HTMLElement | null)[]>(Array<HTMLElement | null>(5).fill(null))
 
-export default function UserSearch({ login }: Props): JSX.Element {
-  const [currentLoginInput, setCurrentLoginInput] = useState<string>(login)
+  const [currentLoginInput, setCurrentLoginInput] = useState<string>(params.login || '')
   const [matchingUser, setMatchingUser] = useState<User | null>(null)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [currentSearchResults, setCurrentSearchResults] = useState<User[]>([])
@@ -19,18 +21,6 @@ export default function UserSearch({ login }: Props): JSX.Element {
   const [isTypingInProgress, setIsTypingInProgress] = useState<boolean>(false)
   const [didSearchErrorOccur, setDidSearchErrorOccur] = useState<boolean>(false)
   const [currentNavigationIndex, setCurrentNavigationIndex] = useState(0)
-
-  const history = useHistory()
-  const formRef = useRef(null)
-  const buttonRef = useRef<HTMLButtonElement | null>(null)
-  const navigationRefs = useRef<(HTMLElement | null)[]>(Array<HTMLElement | null>(5).fill(null))
-
-  useOutsideClickHandler(formRef, () => {
-    if (matchingUser) setCurrentLoginInput(matchingUser.login)
-    setSelectedUser(null)
-    setIsSearchHiddenOverride(true)
-    setCurrentNavigationIndex(0)
-  })
 
   const linkLogin: string = selectedUser ? selectedUser.login : matchingUser ? matchingUser.login : currentLoginInput
   const isSearchShown: boolean = Boolean(
@@ -40,6 +30,14 @@ export default function UserSearch({ login }: Props): JSX.Element {
     currentLoginInput &&
     (didSearchErrorOccur || isTypingInProgress || (!isTypingInProgress && (matchingUser || selectedUser)))
   )
+
+  useOutsideClickHandler(formRef, () => {
+    //if (!isSearchShown) return
+    if (matchingUser) setCurrentLoginInput(matchingUser.login)
+    setSelectedUser(null)
+    setIsSearchHiddenOverride(true)
+    setCurrentNavigationIndex(0)
+  })
 
   function submit() {
     setCurrentLoginInput(linkLogin)
