@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import store from './app/store'
+import { RecoilRoot } from 'recoil'
 import App from './app/App'
 import 'sanitize.css'
 import 'sanitize.css/forms.css'
@@ -11,11 +10,11 @@ import './index.scss'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <RecoilRoot>
       <BrowserRouter>
         <App/>
       </BrowserRouter>
-    </Provider>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 )
