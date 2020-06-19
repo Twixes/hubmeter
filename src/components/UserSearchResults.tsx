@@ -1,6 +1,5 @@
 import React, { KeyboardEvent } from 'react'
-import { motion, AnimatePresence, Variants } from 'framer-motion'
-import Card from './Card'
+import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
 import { User } from '../api/github'
 import './UserSearchResults.scss'
 
@@ -15,12 +14,16 @@ interface Props {
 const MAX_RESULTS_SHOWN: number = 4
 
 const VARIANTS: Variants = {
-  hidden: {
-    height: 0
-  },
-  shown: (numberOfResults: number) => {
+  hidden: ([shouldReduceMotion, numberOfResults]: [boolean, number]) => {
     return {
-      height: `${Math.min(numberOfResults, MAX_RESULTS_SHOWN) * 3}rem`
+      height: shouldReduceMotion ? `${Math.min(numberOfResults, MAX_RESULTS_SHOWN) * 3}rem` : 0,
+      opacity: shouldReduceMotion ? 0 : 1
+    }
+  },
+  shown: ([, numberOfResults]: [boolean, number]) => {
+    return {
+      height: `${Math.min(numberOfResults, MAX_RESULTS_SHOWN) * 3}rem`,
+      opacity: 1
     }
   }
 };
@@ -28,13 +31,13 @@ const VARIANTS: Variants = {
 export default function UserSearchResults(
   { isSearchShown, currentLoginInput, users, setUserFromSearch, onSearchResultKeyDownedGenerator }: Props
 ): JSX.Element {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
     <AnimatePresence>
       {isSearchShown && <motion.ul
-        className="UserSearchResults" custom={users.length} variants={VARIANTS}
-        initial="hidden"
-        animate="shown"
-        exit="hidden"
+        className="UserSearchResults" custom={[shouldReduceMotion, users.length]} variants={VARIANTS}
+        initial="hidden" animate="shown" exit="hidden"
       >
         {users.slice(0, MAX_RESULTS_SHOWN).map(user =>(
             <li
