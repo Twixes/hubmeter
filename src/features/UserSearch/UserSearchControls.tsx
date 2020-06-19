@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent, KeyboardEvent, Dispatch, SetStateAction, MutableRefObject } from 'react'
 import { fetchSearchUsers, User } from '../../api/github'
 import './UserSearchControls.scss'
-import { match } from 'assert'
 
 interface Props {
   currentLoginInput: string
@@ -125,10 +124,8 @@ export default function UserSearchControls({
 
   return (
     <div
-      className="UserSearchControls" style={{
-        borderBottomLeftRadius: isSearchShown ? 0 : 'inherit', borderBottomRightRadius: isSearchShown ? 0 : 'inherit',
-        paddingRight: 0
-      }}
+      className="UserSearchControls"
+      style={isSearchShown ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}
     >
       <a {...aElementAttributes} target="_blank" rel="noopener noreferrer">
         <div className="UserSearch-indicator" style={{ opacity: isSubmitEnabled ? 1 : ''}} >
