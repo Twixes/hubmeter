@@ -79,8 +79,7 @@
   line-height: 3rem;
   user-select: none;
   cursor: pointer;
-  &:not(:disabled):active,
-  &:not(:disabled):focus {
+  &:not(:disabled):active {
     background: var(--color-accent);
     color: var(--color-foreground);
   }

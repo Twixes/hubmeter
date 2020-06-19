@@ -51,10 +51,13 @@ h1 {
 
 button,
 input {
-  border: none;
-  outline: none;
+  border: none;;
   font-size: 1.5rem;
   text-overflow: ellipsis;
+}
+
+input {
+  outline: none;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
