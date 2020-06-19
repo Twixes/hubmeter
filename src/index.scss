@@ -61,6 +61,13 @@ input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+}
+
 .bounded {
   box-sizing: border-box;
   margin: 0 auto;
@@ -72,9 +79,17 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 
-#root {
+.card {
+  transition: border-radius var(--duration-short) ease;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100%;
+  padding: 0 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--color-foreground);
+  color: var(--color-accent);
+  box-shadow:
+    0 0.08rem 0.12rem var(--color-shadow), 0 0.16rem 0.24rem var(--color-shadow),
+    0 0.32rem 0.48rem var(--color-shadow), 0 0.64rem 0.96rem var(--color-shadow);
 }

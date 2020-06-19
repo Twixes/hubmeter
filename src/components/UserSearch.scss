@@ -11,6 +11,11 @@
   border-radius: 0.5rem;
 }
 
+.UserSearch-control {
+  flex-direction: row;
+  align-items: center;
+}
+
 .UserSearch-indicator {
   transition: opacity var(--duration-short) ease;
   opacity: var(--opacity-dim);

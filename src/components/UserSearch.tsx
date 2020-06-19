@@ -2,7 +2,6 @@ import React, { useState, useRef, ChangeEvent, FormEvent, KeyboardEvent } from '
 import { useHistory } from 'react-router-dom'
 import { fetchSearchUsers, User } from '../api/github'
 import { useOutsideClickHandler} from './utils'
-import Card from './Card'
 import UserSearchResults from './UserSearchResults'
 import './UserSearch.scss'
 
@@ -204,23 +203,26 @@ export default function UserSearch({ login }: Props): JSX.Element {
 
   return (
     <form className="UserSearch" ref={formRef} onSubmit={onFormSubmit}>
-      <Card continueBottom={isSearchShown} noPaddingRight>
-        <>
-          <a {...aElementAttributes} target="_blank" rel="noopener noreferrer">
-            <div className="UserSearch-indicator" style={{ opacity: isPushEnabled ? 1 : ''}} >
-              {currentIndicatorElement}
-            </div>
-          </a>
-          <input
-            className="UserSearch-login" type="search" name="login"
-            ref={ref => navigationRefs.current[0] = ref as HTMLInputElement} tabIndex={0}
-            value={selectedUser ? selectedUser.login : currentLoginInput} maxLength={39}
-            spellCheck={false} placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off"
-            autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
-          />
-          <button className="UserSearch-button" type="submit" disabled={!isPushEnabled} ref={buttonRef}>→</button>
-        </>
-      </Card>
+      <div
+        className="UserSearch-control card" style={{
+          borderBottomLeftRadius: isSearchShown ? 0 : 'inherit', borderBottomRightRadius: isSearchShown ? 0 : 'inherit',
+          paddingRight: 0
+        }}
+      >
+        <a {...aElementAttributes} target="_blank" rel="noopener noreferrer">
+          <div className="UserSearch-indicator" style={{ opacity: isPushEnabled ? 1 : ''}} >
+            {currentIndicatorElement}
+          </div>
+        </a>
+        <input
+          className="UserSearch-login" type="search" name="login"
+          ref={ref => navigationRefs.current[0] = ref as HTMLInputElement} tabIndex={0}
+          value={selectedUser ? selectedUser.login : currentLoginInput} maxLength={39}
+          spellCheck={false} placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off"
+          autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
+        />
+        <button className="UserSearch-button" type="submit" disabled={!isPushEnabled} ref={buttonRef}>→</button>
+      </div>
       <UserSearchResults
         isSearchShown={isSearchShown} currentSearchResults={currentSearchResults} setUserFromSearch={setUserFromSearch}
         navigationRefs={navigationRefs} onSearchResultKeyDownGenerator={onSearchResultKeyDownGenerator}
