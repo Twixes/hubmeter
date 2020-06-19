@@ -1,5 +1,5 @@
 import React, { useState, useRef, ChangeEvent, FormEvent, KeyboardEvent } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { fetchSearchUsers, User } from '../api/github'
 import { useOutsideClickHandler} from './utils'
 import Card from './Card'
@@ -10,53 +10,78 @@ interface Props {
   login: string
 }
 
-const MAX_SEARCH_RESULTS_VISIBLE: number = 4
+const MAX_SEARCH_RESULTS_SHOWN: number = 4
 
 export default function UserSearch({ login }: Props): JSX.Element {
   const [currentLoginInput, setCurrentLoginInput] = useState<string>(login)
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [matchingUser, setMatchingUser] = useState<User | null>(null)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [currentSearchResults, setCurrentSearchResults] = useState<User[]>([])
   const [isSearchHiddenOverride, setIsSearchHiddenOverride] = useState<boolean>(false)
   const [isTypingInProgress, setIsTypingInProgress] = useState<boolean>(false)
   const [didSearchErrorOccur, setDidSearchErrorOccur] = useState<boolean>(false)
   const [typingTimeout, setTypingTimeout] = useState(setTimeout(() => {}, 0))
+  const [currentNavigationIndex, setCurrentNavigationIndex] = useState(0)
 
   const history = useHistory()
-  const wrapperRef = useRef(null)
-  useOutsideClickHandler(wrapperRef, () => { setIsSearchHiddenOverride(true) })
+  const formRef = useRef(null)
+  const buttonRef = useRef(null)
+  const navigationRefs = useRef(Array<HTMLElement | undefined>(5))
 
+  useOutsideClickHandler(formRef, () => {
+    setIsSearchHiddenOverride(true)
+    setCurrentNavigationIndex(0)
+  })
+
+
+  const linkLogin: string = selectedUser ? selectedUser.login : matchingUser ? matchingUser.login : currentLoginInput
   const isSearchShown: boolean = Boolean(
     currentLoginInput && !isTypingInProgress && !isSearchHiddenOverride !== false && currentSearchResults.length
   )
   const isPushEnabled: boolean = Boolean(
-    currentLoginInput && (didSearchErrorOccur || isTypingInProgress || !isTypingInProgress && currentUser)
+    currentLoginInput &&
+    (didSearchErrorOccur || isTypingInProgress || (!isTypingInProgress && (matchingUser || selectedUser)))
   )
 
   function push() {
     setIsSearchHiddenOverride(true)
-    if (currentUser) {
-      setCurrentLoginInput(currentUser.login)
-      history.push(`/${currentUser.login}`)
-    } else if (currentLoginInput) {
-      history.push(`/${currentLoginInput}`)
+    setCurrentNavigationIndex(0)
+    setCurrentLoginInput(linkLogin)
+    history.push(`/${linkLogin}`)
+  }
+
+  function navigateSearchResultsWithKeyboard(event: KeyboardEvent<HTMLElement>, direction: number) {
+    if (!isSearchShown) return
+    const nextNavigationIndex = Math.min(Math.max(currentNavigationIndex + direction, 0), MAX_SEARCH_RESULTS_SHOWN)
+    const nextNavigationElement: HTMLElement | undefined = navigationRefs.current[nextNavigationIndex]
+    if (!nextNavigationElement) return
+    event.preventDefault()
+    setCurrentNavigationIndex(nextNavigationIndex)
+    nextNavigationElement.focus()
+    if (nextNavigationIndex <= 0) {
+      setSelectedUser(null)
+      ;(nextNavigationElement as HTMLInputElement).setSelectionRange(currentLoginInput.length, currentLoginInput.length)
+    } else {
+      setSelectedUser(currentSearchResults[nextNavigationIndex-1])
     }
   }
 
   function onLoginInputChange(event: ChangeEvent<HTMLInputElement>): void {
     const element = event.target
-    setCurrentLoginInput(element.value)
-    setCurrentUser(null)
+    const originalValue = element.value
+    setCurrentLoginInput(originalValue)
+    setMatchingUser(null)
+    setSelectedUser(null)
     setIsSearchHiddenOverride(false)
     setIsTypingInProgress(true)
     setDidSearchErrorOccur(false)
     clearTimeout(typingTimeout)
     setTypingTimeout(setTimeout(() => {
-      if (element.value) {
-        fetchSearchUsers(element.value).then(users => {
-          setCurrentSearchResults(users)
-          if (users.length && users[0].login.toLowerCase() === element.value.toLowerCase()) {
-            setCurrentUser(users[0])
-          }
+      if (originalValue) {
+        fetchSearchUsers(originalValue).then(users => {
+          if (element.value !== originalValue) return // cancel if input value has changed in the meantime
+          if (users.length && users[0].login.toLowerCase() === originalValue.toLowerCase()) setMatchingUser(users[0])
+          setCurrentSearchResults(users.slice(0, MAX_SEARCH_RESULTS_SHOWN))
         }).catch(() => {
           setDidSearchErrorOccur(true)
           setCurrentSearchResults([])
@@ -67,6 +92,7 @@ export default function UserSearch({ login }: Props): JSX.Element {
         setIsTypingInProgress(false)
       }
     }, 500))
+    setCurrentNavigationIndex(0)
   }
 
   function onLoginInputFocus(): void {
@@ -74,28 +100,72 @@ export default function UserSearch({ login }: Props): JSX.Element {
   }
 
   function onLoginInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.which === 27) {
-      event.preventDefault()
-      setIsSearchHiddenOverride(true)
+    switch (event.key) {
+      case 'Tab':
+        if (!selectedUser && matchingUser) setSelectedUser(matchingUser)
+        setIsSearchHiddenOverride(true)
+        break
+      case 'Escape':
+        event.preventDefault()
+        ;(event.target as HTMLInputElement).blur()
+        setCurrentNavigationIndex(0)
+        setIsSearchHiddenOverride(true)
+        setSelectedUser(null)
+        break
+      case 'ArrowUp':
+        navigateSearchResultsWithKeyboard(event, -1)
+        break
+      case 'ArrowDown':
+        navigateSearchResultsWithKeyboard(event, 1)
+        break
     }
   }
 
   function onFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    document.querySelector('input')?.blur()
+    navigationRefs.current[0]!.blur()
+    if (!selectedUser && matchingUser) setSelectedUser(matchingUser)
     if (isPushEnabled) push()
   }
 
   function setUserFromSearch(user: User) {
     setCurrentLoginInput(user.login)
-    setCurrentUser(user)
+    setSelectedUser(user)
     push()
   }
 
-  function onSearchResultKeyDownedGenerator(user: User) {
+  function onSearchResultKeyDownGenerator(user: User) {
     return (event: KeyboardEvent<HTMLLIElement>) => {
-      if (event.which === 13) setUserFromSearch(user)
-      else if (event.which === 27) setIsSearchHiddenOverride(true)
+      switch (event.key) {
+        case 'Tab':
+          event.preventDefault()
+          setIsSearchHiddenOverride(true)
+          setSelectedUser(user)
+          setCurrentNavigationIndex(0)
+          ;(buttonRef.current! as HTMLAnchorElement).focus()
+          break
+        case 'Enter':
+          setCurrentNavigationIndex(0)
+          setUserFromSearch(user)
+          break
+        case 'Escape':
+          setCurrentNavigationIndex(0)
+          setIsSearchHiddenOverride(true)
+          setSelectedUser(null)
+          break
+        case 'ArrowUp':
+          navigateSearchResultsWithKeyboard(event, -1)
+          break
+        case 'ArrowDown':
+          navigateSearchResultsWithKeyboard(event, 1)
+          break
+      }
+    }
+  }
+
+  function onSearchResultFocusGenerator(user: User) {
+    return () => {
+      setSelectedUser(user)
     }
   }
 
@@ -103,29 +173,37 @@ export default function UserSearch({ login }: Props): JSX.Element {
   let currentIndicatorElement: JSX.Element
   if (isTypingInProgress) {
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-typing">
-        <span>.</span><span>.</span><span>.</span>
-      </div>
+      <div className="UserSearch-indicator-typing"><span>.</span><span>.</span><span>.</span></div>
     )
   } else if (currentLoginInput && didSearchErrorOccur) {
     aElementAttributes['href'] = `https://github.com/${currentLoginInput}`
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-error">!</div>
+      <div className="UserSearch-indicator-mark" key="exclamation-mark">!</div>
     )
-  } else if (currentLoginInput && currentUser) {
-    aElementAttributes['href'] = `https://github.com/${currentLoginInput}`
+  } else if (selectedUser) {
+    aElementAttributes['href'] = `https://github.com/${selectedUser.login}`
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${currentUser.avatar_url}&s=144` }}>
-      </div>
+      <div
+        className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
+        key="avatar"
+      ></div>
+    )
+  } else if (matchingUser) {
+    aElementAttributes['href'] = `https://github.com/${matchingUser.login}`
+    currentIndicatorElement = (
+      <div
+        className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
+        key="avatar"
+      ></div>
     )
   } else {
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-unknown">?</div>
+      <div className="UserSearch-indicator-mark" key="question-mark">?</div>
     )
   }
 
   return (
-    <form className="UserSearch" ref={wrapperRef} onSubmit={onFormSubmit}>
+    <form className="UserSearch" ref={formRef} onSubmit={onFormSubmit}>
       <Card continueBottom={isSearchShown} noPaddingRight>
         <>
           <a {...aElementAttributes} target="_blank" rel="noopener noreferrer">
@@ -134,18 +212,19 @@ export default function UserSearch({ login }: Props): JSX.Element {
             </div>
           </a>
           <input
-            className="UserSearch-login" type="search" name="login" value={currentLoginInput} spellCheck={false}
-            placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off" autoFocus
-            onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
+            className="UserSearch-login" type="search" name="login"
+            ref={ref => navigationRefs.current[0] = ref as HTMLInputElement} tabIndex={0}
+            value={selectedUser ? selectedUser.login : currentLoginInput} maxLength={39}
+            spellCheck={false} placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off"
+            autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
           />
-          <Link to={`/${currentLoginInput}`}>
-            <button className="UserSearch-action" type="button" disabled={!isPushEnabled}>→</button>
-          </Link>
+          <button className="UserSearch-button" type="submit" disabled={!isPushEnabled} ref={buttonRef}>→</button>
         </>
       </Card>
       <UserSearchResults
-        isSearchShown={isSearchShown} currentLoginInput={currentLoginInput} users={currentSearchResults}
-        setUserFromSearch={setUserFromSearch} onSearchResultKeyDownedGenerator={onSearchResultKeyDownedGenerator}
+        isSearchShown={isSearchShown} currentSearchResults={currentSearchResults} setUserFromSearch={setUserFromSearch}
+        navigationRefs={navigationRefs} onSearchResultKeyDownGenerator={onSearchResultKeyDownGenerator}
+        onSearchResultFocusGenerator={onSearchResultFocusGenerator}
       />
     </form>
   )
