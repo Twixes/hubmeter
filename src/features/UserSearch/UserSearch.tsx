@@ -32,7 +32,7 @@ export default function UserSearch(): JSX.Element {
   )
 
   useOutsideClickHandler(formRef, () => {
-    //if (!isSearchShown) return
+    if (!isSearchShown) return
     if (matchingUser) setCurrentLoginInput(matchingUser.login)
     setSelectedUser(null)
     setIsSearchHiddenOverride(true)
