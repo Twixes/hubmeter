@@ -43,18 +43,19 @@ export default function UserSearchControls({
     setIsTypingInProgress(true)
     setDidSearchErrorOccur(false)
     clearTimeout(typingTimeout)
-    setTypingTimeout(setTimeout(() => {
+    setTypingTimeout(setTimeout(async () => {
       if (originalValue) {
-        fetchSearchUsers(originalValue).then(users => {
+        try {
+          const users = await fetchSearchUsers(originalValue)
           if (element.value !== originalValue) return // cancel if input value has changed in the meantime
           if (users.length && users[0].login.toLowerCase() === originalValue.toLowerCase()) setMatchingUser(users[0])
           setCurrentSearchResults(users.slice(0, MAX_SEARCH_RESULTS_SHOWN))
-        }).catch(() => {
+        } catch (error) {
           setDidSearchErrorOccur(true)
           setCurrentSearchResults([])
-        }).finally(() => {
+        } finally {
           setIsTypingInProgress(false)
-        })
+        }
       } else {
         setIsTypingInProgress(false)
       }
@@ -89,19 +90,19 @@ export default function UserSearchControls({
     }
   }
 
-  const aElementAttributes: {[attribute: string]: string} = {}
+  const anchorAttributes: {[attribute: string]: string} = {}
   let currentIndicatorElement: JSX.Element
   if (isTypingInProgress) {
     currentIndicatorElement = (
       <div className="UserSearch-indicator-typing"><span>.</span><span>.</span><span>.</span></div>
     )
   } else if (currentLoginInput && didSearchErrorOccur) {
-    aElementAttributes['href'] = `https://github.com/${currentLoginInput}`
+    anchorAttributes['href'] = `https://github.com/${currentLoginInput}`
     currentIndicatorElement = (
       <div className="UserSearch-indicator-mark" key="exclamation-mark">!</div>
     )
   } else if (selectedUser) {
-    aElementAttributes['href'] = `https://github.com/${selectedUser.login}`
+    anchorAttributes['href'] = `https://github.com/${selectedUser.login}`
     currentIndicatorElement = (
       <div
         className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
@@ -109,7 +110,7 @@ export default function UserSearchControls({
       ></div>
     )
   } else if (matchingUser) {
-    aElementAttributes['href'] = `https://github.com/${matchingUser.login}`
+    anchorAttributes['href'] = `https://github.com/${matchingUser.login}`
     currentIndicatorElement = (
       <div
         className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
@@ -127,7 +128,7 @@ export default function UserSearchControls({
       className="UserSearchControls"
       style={isSearchShown ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}
     >
-      <a {...aElementAttributes} target="_blank" rel="noopener noreferrer">
+      <a {...anchorAttributes} target="_blank" rel="noopener noreferrer">
         <div className="UserSearch-indicator" style={{ opacity: isSubmitEnabled ? 1 : ''}} >
           {currentIndicatorElement}
         </div>
