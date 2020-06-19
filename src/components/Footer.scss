@@ -1,4 +1,7 @@
+@import './src/placeholders.scss';
+
 .Footer {
+  @extend %width-control;
   box-sizing: border-box;
   display: flex;
   align-items: center;
