@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 import { RootState } from './rootReducer'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import UserSearch from '../components/UserSearch'
+import UserSearch from '../features/UserSearch/UserSearch'
 
 const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'release on Friday',

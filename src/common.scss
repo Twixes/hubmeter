@@ -1,0 +1,13 @@
+%card {
+  transition: border-radius var(--duration-short) ease;
+  display: flex;
+  padding: 0 0.75rem;
+  margin: 0;
+  border-radius: 0.5rem;
+  background: var(--color-foreground);
+  color: var(--color-accent);
+  box-shadow:
+    0 0.08rem 0.12rem var(--color-shadow), 0 0.16rem 0.24rem var(--color-shadow),
+    0 0.32rem 0.48rem var(--color-shadow), 0 0.64rem 0.96rem var(--color-shadow);
+  overflow: hidden;
+}

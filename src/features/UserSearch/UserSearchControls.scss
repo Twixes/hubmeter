@@ -1,0 +1,7 @@
+@import './src/common.scss';
+
+.UserSearchControls {
+  @extend %card;
+  flex-direction: row;
+  align-items: center;
+}

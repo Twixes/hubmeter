@@ -1,17 +1,13 @@
+@import './src/common.scss';
+
 .UserSearchResults {
+  @extend %card;
   position: absolute;
-  display: flex;
   flex-direction: column;
   width: 100%;
   padding: 0;
-  margin: 0;
-  border-radius: 0 0 0.5rem 0.5rem;
-  background: var(--color-foreground);
-  color: var(--color-accent);
-  box-shadow:
-    0 0.08rem 0.12rem var(--color-shadow), 0 0.16rem 0.24rem var(--color-shadow),
-    0 0.32rem 0.48rem var(--color-shadow), 0 0.64rem 0.96rem var(--color-shadow);
-  overflow: hidden;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .UserSearchResults-user {
