@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import './Header.scss';
 
 function calculateCurrentClockHandTransform(): string {
@@ -19,7 +20,7 @@ function Header(): JSX.Element {
 
   return (
     <header className="Header">
-      <a href="/" className="Header-link">
+      <Link to="/" className="Header-link">
         <div className="Header-logo">
           <svg id="Header-clock" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="20" cy="20" r="18" strokeWidth="4"/>
@@ -27,7 +28,7 @@ function Header(): JSX.Element {
           </svg>
           <div className="Header-name">HubMeter</div>
         </div>
-      </a>
+      </Link>
       <nav className="Header-nav">
         <a href="https://www.producthunt.com/posts/hubmeter">
           <svg className="Header-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
