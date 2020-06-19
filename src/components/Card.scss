@@ -1,8 +1,5 @@
 .Card {
-  transition:
-    border-radius var(--duration-short) ease,
-    width var(--duration-short) ease,
-    height var(--duration-short) ease;
+  transition: border-radius var(--duration-short) ease;
   overflow: hidden;
   width: 100%;
   height: 100%;

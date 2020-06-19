@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 import { RootState } from './rootReducer'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import UserForm from '../components/UserForm'
+import UserSearch from '../components/UserSearch'
 
 const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'release on Friday',
@@ -37,7 +37,7 @@ export default function App(): JSX.Element {
       <Header/>
       <main className="bounded">
         <Route path="/" component={HeadlineAbove} exact/>
-        <UserForm login={''}/>
+        <UserSearch login={''}/>
         <Route path="/" component={HeadlineBelow} exact/>
       </main>
       <Footer/>

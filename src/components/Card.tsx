@@ -4,17 +4,16 @@ import './Card.scss'
 interface Props {
   children: React.ReactElement
   className?: string
-  style?: CSSProperties
   continueTop?: boolean
   continueBottom?: boolean
   noPaddingLeft?: boolean
   noPaddingRight?: boolean
 }
 
-export default function UserForm(
-  { children, className, style, continueTop, continueBottom, noPaddingLeft, noPaddingRight }: Props
+export default function UserSearch(
+  { children, className, continueTop, continueBottom, noPaddingLeft, noPaddingRight }: Props
 ): JSX.Element {
-  if (!style) style = {}
+  const style: CSSProperties = {}
   if (continueTop) {
     style.borderTopLeftRadius = 0
     style.borderTopRightRadius = 0
