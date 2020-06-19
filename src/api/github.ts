@@ -15,11 +15,30 @@ export interface Repo {
   name: string
 }
 
+export enum EventType {
+  CommitCommentEvent = 'CommitCommentEvent',
+  CreateEvent = 'CreateEvent',
+  DeleteEvent = 'DeleteEvent',
+  ForkEvent = 'ForkEvent',
+  GollumEvent = 'GollumEvent',
+  IssueCommentEvent = 'IssueCommentEvent',
+  IssuesEvent = 'IssuesEvent',
+  MemberEvent = 'MemberEvent',
+  PublicEvent = 'PublicEvent',
+  PullRequestEvent = 'PullRequestEvent',
+  PullRequestReviewCommentEvent = 'PullRequestReviewCommentEvent',
+  PushEvent = 'PushEvent',
+  ReleaseEvent = 'ReleaseEvent',
+  SponsorshipEvent = 'SponsorshipEvent',
+  WatchEvent = 'WatchEvent'
+}
+
 export interface Event {
   id: string
-  type: string
+  type: EventType
   actor: User
   repo: Repo
+  created_at: Date
 }
 
 export interface Problem {
@@ -55,7 +74,10 @@ export async function fetchUserEventsPage(login: string, page: number): Promise<
     const response: Response = await fetch(url.toString())
     await checkForProblem(response)
     const events: Event[] = await response.json()
-    return events
+    const eventsWithDates: Event[] = events.map(event => {
+      return { ...event, created_at: new Date(event.created_at) }
+    })
+    return eventsWithDates
 }
 
 export async function fetchUserEventsAll(login: string): Promise<Event[]> {

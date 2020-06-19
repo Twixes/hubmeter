@@ -19,6 +19,7 @@ describe('#fetchUserEventsPage()', () => {
     expect(events[0].type).toBeDefined()
     expect(events[0].actor).toBeDefined()
     expect(events[0].repo).toBeDefined()
+    expect(events[0].created_at).toBeInstanceOf(Date)
   })
 })
 
@@ -30,6 +31,7 @@ describe('#fetchUserEventsAll()', () => {
     expect(events[0].type).toBeDefined()
     expect(events[0].actor).toBeDefined()
     expect(events[0].repo).toBeDefined()
+    expect(events[0].created_at).toBeInstanceOf(Date)
   })
 })
 
