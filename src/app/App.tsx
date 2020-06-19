@@ -4,6 +4,10 @@ import Header from '../components/Header'
 import Main from '../components/Main'
 import Footer from '../components/Footer'
 
+export interface Params {
+  login: string | undefined
+}
+
 export default function App(): JSX.Element {
   return (
     <>
