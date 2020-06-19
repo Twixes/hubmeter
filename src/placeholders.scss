@@ -1,11 +1,21 @@
 %width-control {
-  box-sizing: border-box;
   margin: 0 auto;
   width: 100%;
   max-width: 100rem;
-  padding: 0 0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
   @media screen and (min-width: 40rem) {
-    padding: 0 4rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+%height-control {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  @media screen and (min-width: 40rem) {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 }
 
