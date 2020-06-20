@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilState } from 'recoil'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
-import { showGHAPIErrorNoticeState } from '../recoil'
+import { showGHAPIErrorNoticeState } from '../atoms'
 import './ErrorNotice.scss'
 
 const VARIANTS: Variants = {
