@@ -1,9 +1,9 @@
 import { atom, selectorFamily, DefaultValue } from 'recoil'
 import { User, EventType, Event } from './api/github'
 
-export const currentErrorState = atom<string | null>({
+export const currentErrorMessageState = atom<string | null>({
   key: 'currentError',
-  default: null
+  default: 'Error, something bad happened. Maybe try again later. Or never?'
 })
 
 export const currentUserState = atom<User | null>({

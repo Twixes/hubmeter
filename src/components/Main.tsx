@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { Route, useParams } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
-import { currentUserState } from '../recoil'
 import { fetchUser } from '../api/github'
+import { currentUserState } from '../recoil'
 import { Params } from '../app/App'
 import UserSearch from '../features/UserSearch/UserSearch'
 import Statistics from '../features/Statistics/Statistics'
@@ -36,11 +36,18 @@ function HomeHeadline({ children }: { children: string }): JSX.Element | null {
 export default function Main(): JSX.Element {
   const { login } = useParams<Params>()
 
-  const setCurrentUser = useSetRecoilState(currentUserState)
+  const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
 
   useEffect(() => {
-    login ? fetchUser(login).then(setCurrentUser) : setCurrentUser(null)
-  }, [login, setCurrentUser])
+    if (login) {
+      if (!currentUser || currentUser.login !== login) fetchUser(login).then(user => {
+        setCurrentUser(user)
+      }).catch((error: Error) => {
+      })
+    } else {
+      setCurrentUser(null)
+    }
+  }, [login, currentUser, setCurrentUser])
 
   return (
     <motion.main

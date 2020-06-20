@@ -1,4 +1,6 @@
 import React, { useState, ChangeEvent, KeyboardEvent, Dispatch, SetStateAction, MutableRefObject } from 'react'
+import { useSetRecoilState } from 'recoil'
+import { currentErrorMessageState } from '../../recoil'
 import { fetchSearchUsers, User } from '../../api/github'
 import './UserSearchControls.scss'
 
@@ -31,6 +33,8 @@ export default function UserSearchControls({
   setCurrentSearchResults, setCurrentNavigationIndex, isSearchShown, isSubmitEnabled,
   navigateSearchResultsWithKeyboard, buttonRef, navigationRefs
 }: Props) {
+  const setCurrentErrorMessage = useSetRecoilState(currentErrorMessageState)
+
   const [typingTimeout, setTypingTimeout] = useState(setTimeout(() => {}, 0))
 
   function onLoginInputChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -50,9 +54,11 @@ export default function UserSearchControls({
           if (element.value !== originalValue) return // cancel if input value has changed in the meantime
           if (users.length && users[0].login.toLowerCase() === originalValue.toLowerCase()) setMatchingUser(users[0])
           setCurrentSearchResults(users.slice(0, MAX_SEARCH_RESULTS_SHOWN))
+          setCurrentErrorMessage(null)
         } catch (error) {
           setDidSearchErrorOccur(true)
           setCurrentSearchResults([])
+          setCurrentErrorMessage(error.message)
         } finally {
           setIsTypingInProgress(false)
         }
