@@ -65,9 +65,7 @@ export default function Main(): JSX.Element {
       <UserSearch/>
       <ErrorNotice/>
       <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
-      <AnimatePresence>
-        <Route path="/:login" component={Statistics}/>
-      </AnimatePresence>
+      <Route path="/:login" component={Statistics}/>
     </motion.main>
   )
 }
