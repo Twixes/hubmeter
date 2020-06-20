@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, KeyboardEvent, Dispatch, SetStateAction, MutableRefObject } from 'react'
-import { fetchSearchUsers, User } from '../../api/github'
+import { fetchSearchUsers, User } from '../../github-api'
 import './UserSearchControls.scss'
 
 interface Props {

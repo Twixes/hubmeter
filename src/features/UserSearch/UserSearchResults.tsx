@@ -1,6 +1,6 @@
 import React, { KeyboardEvent, MutableRefObject, Dispatch, SetStateAction } from 'react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
-import { User } from '../../api/github'
+import { User } from '../../github-api'
 import './UserSearchResults.scss'
 
 interface Props {

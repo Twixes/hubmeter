@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil'
 import { motion } from 'framer-motion'
 import { showGHAPIErrorNoticeState, currentUserState, userEventsState } from '../../atoms'
-import { fetchUserEventsAll } from '../../api/github'
-import { Params } from '../../app/App'
+import { fetchUserEventsAll } from '../../github-api'
+import { Params } from '../../components/App'
 import './Statistics.scss'
 
 export default function Statistics(): JSX.Element {

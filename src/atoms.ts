@@ -1,5 +1,5 @@
 import { atom, selectorFamily, DefaultValue } from 'recoil'
-import { User, EventType, Event } from './api/github'
+import { User, EventType, Event } from './github-api'
 
 export const showGHAPIErrorNoticeState = atom<boolean>({
   key: 'showGHAPIErrorNotice',

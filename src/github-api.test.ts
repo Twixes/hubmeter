@@ -1,4 +1,4 @@
-import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser } from './github';
+import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser } from './github-api';
 
 describe('#buildURL()', () => {
   it('should return proper user events URL', () => {
