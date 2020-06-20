@@ -1,13 +1,13 @@
 @import './src/placeholders.scss';
 
-.UserSearchControls {
+.ControlsSearch {
   @extend %card;
   flex-direction: row;
   align-items: center;
   padding-right: 0;
 }
 
-.UserSearchControls-button {
+.ControlsSearch-button {
   transition: var(--duration-short) ease;
   padding: 0;
   height: 3rem;

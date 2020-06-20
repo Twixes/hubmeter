@@ -1,6 +1,6 @@
 @import './src/placeholders.scss';
 
-.UserSearchResults {
+.ControlsSearchResults {
   @extend %card;
   position: absolute;
   flex-direction: column;
@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-.UserSearchResults-user {
+.ControlsSearchResults-user {
   transition: background var(--duration-short) ease, border-color var(--duration-short) ease;
   display: flex;
   flex-direction: row;

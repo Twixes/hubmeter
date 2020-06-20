@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, MutableRefObject, Dispatch, SetStateAction } from 'react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
 import { User } from '../../github-api'
-import './UserSearchResults.scss'
+import './ControlsSearchResults.scss'
 
 interface Props {
   setCurrentLoginInput: Dispatch<SetStateAction<string>>
@@ -32,7 +32,7 @@ const VARIANTS: Variants = {
   }
 }
 
-export default function UserSearchResults(
+export default function ControlsSearchResults(
   {
     setCurrentLoginInput, matchingUser, setSelectedUser, currentSearchResults, setIsSearchHiddenOverride,
     setCurrentNavigationIndex, buttonRef, navigationRefs, isSearchShown, submit, navigateSearchResultsWithKeyboard
@@ -79,24 +79,24 @@ export default function UserSearchResults(
   return (
     <AnimatePresence>
       {isSearchShown && <motion.ul
-        className="UserSearchResults" custom={[shouldReduceMotion, currentSearchResults.length]} variants={VARIANTS}
+        className="ControlsSearchResults" custom={[shouldReduceMotion, currentSearchResults.length]} variants={VARIANTS}
         initial="hidden" animate="shown" exit="hidden"
       >
         {currentSearchResults.map((user, index) => (
             <li
-              className="UserSearchResults-user" key={user.login} tabIndex={index + 1}
+              className="ControlsSearchResults-user" key={user.login} tabIndex={index + 1}
               ref={ref => navigationRefs.current[1 + index] = ref as HTMLLIElement}
               onClick={() => { setUserFromSearch(user) }} onKeyDown={onSearchResultKeyDownGenerator(user)}
               onFocus={() => { setSelectedUser(user) }}
             >
               <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer" tabIndex={-1}>
-                <div className="UserSearch-indicator" style={{ opacity: 1 }}>
+                <div className="Controls-indicator" style={{ opacity: 1 }}>
                   <div
-                    className="UserSearch-indicator-avatar"
+                    className="Controls-indicator-avatar"
                     style={{ backgroundImage: `url(${user.avatar_url}&s=144` }}></div>
                 </div>
               </a>
-              <div className="UserSearch-login">
+              <div className="Controls-login">
                 {user.login}
               </div>
             </li>

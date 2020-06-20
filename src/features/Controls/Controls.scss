@@ -1,4 +1,4 @@
-@keyframes UserSearch-typing-indicator-bounce {
+@keyframes Controls-typing-indicator-bounce {
   0% {
     transform: translateY(0);
   } 100% {
@@ -6,7 +6,7 @@
   }
 }
 
-.UserSearch {
+.Controls {
   z-index: 10;
   display: grid;
   grid-auto-flow: row;
@@ -15,7 +15,7 @@
   border-radius: 0.5rem;
 }
 
-.UserSearch-indicator {
+.Controls-indicator {
   transition: opacity var(--duration-short) ease;
   opacity: var(--opacity-dim);
   font-size: 1.125rem;
@@ -33,21 +33,21 @@
   }
 }
 
-.UserSearch-indicator-avatar {
+.Controls-indicator-avatar {
   background-size: contain;
   background-repeat: no-repeat;
 }
 
-.UserSearch-indicator-typing,
-.UserSearch-indicator-mark {
+.Controls-indicator-typing,
+.Controls-indicator-mark {
   background: var(--color-accent);
   color: var(--color-foreground);
 }
 
-.UserSearch-indicator-typing {
+.Controls-indicator-typing {
   & span {
     animation:
-      UserSearch-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite alternate;
+      Controls-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite alternate;
     display: inline-block;
     @for $i from 1 through 3 {
       &:nth-child(#{$i}) {
@@ -57,7 +57,7 @@
   }
 }
 
-.UserSearch-login {
+.Controls-login {
   flex-grow: 1;
   width: 0;
   height: 3rem;

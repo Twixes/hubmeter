@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, KeyboardEvent, Dispatch, SetStateAction, MutableRefObject } from 'react'
 import { fetchSearchUsers, User } from '../../github-api'
-import './UserSearchControls.scss'
+import './ControlsSearch.scss'
 
 interface Props {
   currentLoginInput: string
@@ -25,7 +25,7 @@ interface Props {
 
 const MAX_SEARCH_RESULTS_SHOWN: number = 4
 
-export default function UserSearchControls({
+export default function ControlsSearch({
   currentLoginInput, setCurrentLoginInput, matchingUser, setMatchingUser, selectedUser, setSelectedUser,
   setIsSearchHiddenOverride, isTypingInProgress, setIsTypingInProgress, didSearchErrorOccur, setDidSearchErrorOccur,
   setCurrentSearchResults, setCurrentNavigationIndex, isSearchShown, isSubmitEnabled,
@@ -94,18 +94,18 @@ export default function UserSearchControls({
   let currentIndicatorElement: JSX.Element
   if (isTypingInProgress) {
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-typing"><span>.</span><span>.</span><span>.</span></div>
+      <div className="Controls-indicator-typing"><span>.</span><span>.</span><span>.</span></div>
     )
   } else if (currentLoginInput && didSearchErrorOccur) {
     anchorAttributes['href'] = `https://github.com/${currentLoginInput}`
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-mark" key="exclamation-mark">!</div>
+      <div className="Controls-indicator-mark" key="exclamation-mark">!</div>
     )
   } else if (selectedUser) {
     anchorAttributes['href'] = `https://github.com/${selectedUser.login}`
     currentIndicatorElement = (
       <div
-        className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
+        className="Controls-indicator-avatar" style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
         key="avatar"
       ></div>
     )
@@ -113,35 +113,35 @@ export default function UserSearchControls({
     anchorAttributes['href'] = `https://github.com/${matchingUser.login}`
     currentIndicatorElement = (
       <div
-        className="UserSearch-indicator-avatar" style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
+        className="Controls-indicator-avatar" style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
         key="avatar"
       ></div>
     )
   } else {
     currentIndicatorElement = (
-      <div className="UserSearch-indicator-mark" key="question-mark">?</div>
+      <div className="Controls-indicator-mark" key="question-mark">?</div>
     )
   }
 
   return (
     <div
-      className="UserSearchControls"
+      className="ControlsSearch"
       style={isSearchShown ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}
     >
       <a {...anchorAttributes} target="_blank" rel="noopener noreferrer">
-        <div className="UserSearch-indicator" style={{ opacity: isSubmitEnabled ? 1 : ''}} >
+        <div className="Controls-indicator" style={{ opacity: isSubmitEnabled ? 1 : ''}} >
           {currentIndicatorElement}
         </div>
       </a>
       <input
-        className="UserSearch-login" type="search" name="login"
+        className="Controls-login" type="search" name="login"
         ref={ref => navigationRefs.current[0] = ref as HTMLInputElement} tabIndex={0}
         value={selectedUser ? selectedUser.login : currentLoginInput} maxLength={39}
         spellCheck={false} placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off"
         autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
       />
       <button
-        className="UserSearchControls-button" type="submit" disabled={!isSubmitEnabled} ref={buttonRef}
+        className="ControlsSearch-button" type="submit" disabled={!isSubmitEnabled} ref={buttonRef}
         style={isSearchShown ? { borderBottomRightRadius: 0 } : {}}
       >→</button>
     </div>

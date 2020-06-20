@@ -6,7 +6,7 @@ import { fetchUser } from '../github-api'
 import { showGHAPIErrorNoticeState, currentUserState } from '../atoms'
 import { Params } from './App'
 import ErrorNotice from '../components/ErrorNotice'
-import UserSearch from '../features/UserSearch/UserSearch'
+import Controls from '../features/Controls/Controls'
 import Statistics from '../features/Statistics/Statistics'
 import './Main.scss'
 
@@ -62,7 +62,7 @@ export default function Main(): JSX.Element {
       style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}
     >
       <HomeHeadline>Do</HomeHeadline>
-      <UserSearch/>
+      <Controls/>
       <ErrorNotice/>
       <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics}/>

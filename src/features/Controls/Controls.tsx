@@ -5,11 +5,11 @@ import { motion } from 'framer-motion'
 import { useOutsideClickHandler} from '../../utils'
 import { User } from '../../github-api'
 import { currentUserState } from '../../atoms'
-import UserSearchControls from './UserSearchControls'
-import UserSearchResults from './UserSearchResults'
-import './UserSearch.scss'
+import ControlsSearch from './ControlsSearch'
+import ControlsSearchResults from './ControlsSearchResults'
+import './Controls.scss'
 
-export default function UserSearch(): JSX.Element {
+export default function Controls(): JSX.Element {
   const currentUser = useRecoilValue(currentUserState)
 
   const { login } = useParams<{ login: string | undefined }>()
@@ -92,8 +92,8 @@ export default function UserSearch(): JSX.Element {
   }
 
   return (
-    <motion.form className="UserSearch" ref={formRef} onSubmit={onFormSubmit} positionTransition>
-      <UserSearchControls
+    <motion.form className="Controls" ref={formRef} onSubmit={onFormSubmit} positionTransition>
+      <ControlsSearch
         currentLoginInput={currentLoginInput} setCurrentLoginInput={setCurrentLoginInput} matchingUser={matchingUser}
         setMatchingUser={setMatchingUser} selectedUser={selectedUser} setSelectedUser={setSelectedUser}
         setIsSearchHiddenOverride={setIsSearchHiddenOverride} isTypingInProgress={isTypingInProgress}
@@ -103,7 +103,7 @@ export default function UserSearch(): JSX.Element {
         isSubmitEnabled={isSubmitEnabled} navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
         buttonRef={buttonRef} navigationRefs={navigationRefs}
       />
-      <UserSearchResults
+      <ControlsSearchResults
         setCurrentLoginInput={setCurrentLoginInput} matchingUser={matchingUser} setSelectedUser={setSelectedUser}
         currentSearchResults={currentSearchResults} setIsSearchHiddenOverride={setIsSearchHiddenOverride}
         setCurrentNavigationIndex={setCurrentNavigationIndex} isSearchShown={isSearchShown} buttonRef={buttonRef}
