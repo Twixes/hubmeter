@@ -1,0 +1,46 @@
+@import './src/placeholders.scss';
+
+.ErrorNotice {
+  @extend %card;
+  flex-direction: row;
+  align-items: center;
+  min-height: 3rem;
+  padding-right: 0;
+  background: var(--color-accent);
+  color: var(--color-foreground);
+  font-size: 1.5rem;
+}
+
+.ErrorNotice-indicator {
+  background: var(--color-foreground);
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  text-align: center;
+  line-height: 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 0.25rem;
+  user-select: none;
+}
+
+.ErrorNotice-message {
+  flex-grow: 1;
+  width: 0;
+  padding: 0.375rem 0;
+  margin: 0 0.75rem;
+}
+
+.ErrorNotice-button {
+  transition: var(--duration-short) ease;
+  padding: 0;
+  align-self: stretch;
+  width: 3rem;
+  border-radius: 0.5rem 0 0 0.5rem;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  &:active {
+    background: var(--color-foreground);
+    color: var(--color-accent);
+  }
+}

@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import { Route, useParams } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
 import { fetchUser } from '../api/github'
-import { currentUserState } from '../recoil'
+import { currentErrorMessageState, currentUserState } from '../recoil'
 import { Params } from '../app/App'
 import UserSearch from '../features/UserSearch/UserSearch'
 import Statistics from '../features/Statistics/Statistics'
+import ErrorNotice from '../components/ErrorNotice'
 import './Main.scss'
 
 const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
@@ -36,18 +37,21 @@ function HomeHeadline({ children }: { children: string }): JSX.Element | null {
 export default function Main(): JSX.Element {
   const { login } = useParams<Params>()
 
+  const setCurrentErrorMessage = useSetRecoilState(currentErrorMessageState)
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
 
   useEffect(() => {
     if (login) {
       if (!currentUser || currentUser.login !== login) fetchUser(login).then(user => {
         setCurrentUser(user)
+        setCurrentErrorMessage(null)
       }).catch((error: Error) => {
+        setCurrentErrorMessage(error.message)
       })
     } else {
       setCurrentUser(null)
     }
-  }, [login, currentUser, setCurrentUser])
+  }, [login, setCurrentErrorMessage, currentUser, setCurrentUser])
 
   return (
     <motion.main
@@ -62,6 +66,9 @@ export default function Main(): JSX.Element {
         <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
       </AnimatePresence>
       <Route path="/:login" component={() => <h1>By hour:</h1>}/>
+      <AnimatePresence>
+        <ErrorNotice/>
+      </AnimatePresence>
     </motion.main>
   )
 }
