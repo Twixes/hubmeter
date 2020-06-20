@@ -4,10 +4,12 @@
   @extend %card;
   position: absolute;
   flex-direction: column;
+  top: 3rem;
   width: 100%;
   padding: 0;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  overflow: hidden;
 }
 
 .UserSearchResults-user {

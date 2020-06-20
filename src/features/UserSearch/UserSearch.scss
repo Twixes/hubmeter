@@ -7,6 +7,10 @@
 }
 
 .UserSearch {
+  z-index: 10;
+  display: grid;
+  grid-auto-flow: row;
+  gap: 0.75rem;
   position: relative;
   border-radius: 0.5rem;
 }
@@ -22,7 +26,7 @@
   border-radius: 0.25rem;
   overflow: hidden;
   user-select: none;
-  & div {
+  & > div {
     height: 100%;
     width: 100%;
     border-radius: 0.25rem;
@@ -74,7 +78,6 @@
   padding: 0;
   height: 3rem;
   width: 3rem;
-  border-radius: 0.5rem 0 0 0.5rem;
   text-align: center;
   line-height: 3rem;
   user-select: none;

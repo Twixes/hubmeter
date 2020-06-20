@@ -52,17 +52,23 @@ h1 {
 
 button,
 input {
-  border: none;;
+  border: none;
   font-size: 1.5rem;
   text-overflow: ellipsis;
 }
 
-input {
-  outline: none;
+button {
+  transition: border-radius var(--duration-short) ease;
+  border-radius: 0.5rem;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
+}
+
+input,
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
 }
 
 #root {
