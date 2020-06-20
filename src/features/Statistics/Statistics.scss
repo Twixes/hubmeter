@@ -1,0 +1,5 @@
+@import './src/placeholders.scss';
+
+.Statistics {
+  @extend %height-control;
+}
