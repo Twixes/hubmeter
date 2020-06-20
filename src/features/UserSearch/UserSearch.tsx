@@ -1,20 +1,27 @@
-import React, { useState, useRef, FormEvent, KeyboardEvent } from 'react'
+import React, { useState, useEffect, useRef, FormEvent, KeyboardEvent } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { User } from '../../api/github'
+import { useRecoilValue } from 'recoil'
+import { motion } from 'framer-motion'
 import { useOutsideClickHandler} from '../../utils'
+import { User } from '../../api/github'
+import { currentUserState } from '../../recoil'
 import UserSearchControls from './UserSearchControls'
 import UserSearchResults from './UserSearchResults'
 import './UserSearch.scss'
 
 export default function UserSearch(): JSX.Element {
-  const params = useParams<{ login: string | undefined }>()
+  const currentUser = useRecoilValue(currentUserState)
+
+  const { login } = useParams<{ login: string | undefined }>()
   const history = useHistory()
   const formRef = useRef(null)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
   const navigationRefs = useRef<(HTMLElement | null)[]>(Array<HTMLElement | null>(5).fill(null))
 
-  const [currentLoginInput, setCurrentLoginInput] = useState<string>(params.login || '')
-  const [matchingUser, setMatchingUser] = useState<User | null>(null)
+  const [currentLoginInput, setCurrentLoginInput] = useState<string>(
+    (currentUser ? currentUser.login : login) || ''
+  )
+  const [matchingUser, setMatchingUser] = useState<User | null>(currentUser)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [currentSearchResults, setCurrentSearchResults] = useState<User[]>([])
   const [isSearchHiddenOverride, setIsSearchHiddenOverride] = useState<boolean>(false)
@@ -38,6 +45,21 @@ export default function UserSearch(): JSX.Element {
     setIsSearchHiddenOverride(true)
     setCurrentNavigationIndex(0)
   })
+
+  useEffect(() => {
+    if (!currentUser) return
+    setCurrentLoginInput(currentUser.login)
+    setMatchingUser(currentUser)
+    history.replace(`/${currentUser.login}`)
+  }, [currentUser, setCurrentLoginInput, setMatchingUser, history])
+
+  useEffect(() => {
+    if (!login) {
+      setCurrentLoginInput('')
+      setMatchingUser(null)
+      setSelectedUser(null)
+    }
+  }, [login])
 
   function submit() {
     setCurrentLoginInput(linkLogin)
@@ -70,7 +92,7 @@ export default function UserSearch(): JSX.Element {
   }
 
   return (
-    <form className="UserSearch" ref={formRef} onSubmit={onFormSubmit}>
+    <motion.form className="UserSearch" ref={formRef} onSubmit={onFormSubmit} positionTransition>
       <UserSearchControls
         currentLoginInput={currentLoginInput} setCurrentLoginInput={setCurrentLoginInput} matchingUser={matchingUser}
         setMatchingUser={setMatchingUser} selectedUser={selectedUser} setSelectedUser={setSelectedUser}
@@ -88,6 +110,6 @@ export default function UserSearch(): JSX.Element {
         navigationRefs={navigationRefs} submit={submit}
         navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
       />
-    </form>
+    </motion.form>
   )
 }

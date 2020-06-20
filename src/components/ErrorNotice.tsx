@@ -1,20 +1,46 @@
 import React from 'react'
 import { useRecoilState } from 'recoil'
-import { motion } from 'framer-motion'
-import { currentErrorMessageState } from '../recoil'
+import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
+import { showGHAPIErrorNoticeState } from '../recoil'
 import './ErrorNotice.scss'
 
-export default function ErrorNotice(): JSX.Element | null {
-  const [currentErrorMessage, setCurrentErrorMessage] = useRecoilState(currentErrorMessageState)
+const VARIANTS: Variants = {
+  hidden: (shouldReduceMotion: boolean) => {
+    return {
+      marginTop: shouldReduceMotion ? '0.75rem' : '-3rem',
+      opacity: 0
+    }
+  },
+  shown: () => {
+    return {
+      marginTop: '0.75rem',
+      opacity: 1
+    }
+  }
+}
 
-  return !currentErrorMessage ? null : (
-    <motion.div
-      className="ErrorNotice" variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }}
-      initial="hidden" animate="shown" exit="hidden"
-    >
-      <div className="ErrorNotice-indicator">!</div>
-      <div className="ErrorNotice-message">{currentErrorMessage}</div>
-      <button className="ErrorNotice-button" type="button" onClick={() => { setCurrentErrorMessage(null) }}>✗</button>
-    </motion.div>
+export default function ErrorNotice(): JSX.Element | null {
+  const [showGHAPIErrorNotice, setShowGHAPIErrorNotice] = useRecoilState(showGHAPIErrorNoticeState)
+  const shouldReduceMotion = useReducedMotion()
+
+  return (
+    <AnimatePresence>
+      {!showGHAPIErrorNotice ? null : (
+        <motion.div
+          className="ErrorNotice" custom={shouldReduceMotion} variants={VARIANTS}
+          initial="hidden" animate="shown" exit="hidden" positionTransition
+        >
+          <div className="ErrorNotice-indicator">!</div>
+          <div className="ErrorNotice-message">
+            GitHub API error. <a
+              href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer"
+            >Rate limiting</a> may be at fault. Try again later.
+          </div>
+          <button className="ErrorNotice-button" type="button" onClick={() => { setShowGHAPIErrorNotice(false) }}>
+            ✗
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
