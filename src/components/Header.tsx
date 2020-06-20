@@ -12,10 +12,9 @@ export default function Header(): JSX.Element {
   const [extraRotations, setExtraRotations] = useState(0)
   const [clockHandTransform, setClockHandTransform] = useState(calculateCurrentClockHandTransform(extraRotations))
 
-  const updateClockHandTransform = useCallback(
-    () => { setClockHandTransform(calculateCurrentClockHandTransform(extraRotations)) },
-    [extraRotations],
-  )
+  const updateClockHandTransform = useCallback(() => {
+    setClockHandTransform(calculateCurrentClockHandTransform(extraRotations))
+  }, [extraRotations])
 
   useEffect(() => {
     updateClockHandTransform()
