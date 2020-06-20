@@ -1,13 +1,13 @@
-import React, { ReactElement, useState } from 'react'
-import { Route, useParams, useHistory, match } from 'react-router-dom'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { fetchUser, User } from '../api/github'
+import React, { useEffect } from 'react'
+import { Route, useParams } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
+import { AnimatePresence, motion } from 'framer-motion'
+import { currentUserState } from '../recoil'
+import { fetchUser } from '../api/github'
+import { Params } from '../app/App'
 import UserSearch from '../features/UserSearch/UserSearch'
+import Statistics from '../features/Statistics/Statistics'
 import './Main.scss'
-
-interface Props {
-  match: match<{ login: string | undefined }>
-}
 
 const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'release on Friday',
@@ -20,34 +20,27 @@ const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'even have a life'
 ]
 
-const HEADLINE_VARIANTS: Variants = {
-  hidden: {
-    opacity: 0
-  },
-  shown: {
-    opacity: 1
-  }
-}
+function HomeHeadline({ children }: { children: string }): JSX.Element | null {
+  const { login } = useParams<Params>()
 
-function Headline({ children }: { children: string }): JSX.Element | null {
-  const params = useParams<{ login: string | undefined }>()
-  return params.login ? null : (
-    <motion.h1 variants={HEADLINE_VARIANTS} initial="hidden" animate="shown" exit="hidden" positionTransition>
+  return login ? null : (
+    <motion.h1
+      variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }}
+      initial="hidden" animate="shown" exit="hidden" positionTransition
+    >
       {children}
     </motion.h1>
   )
 }
 
-export default function Main({ match }: Props): JSX.Element {
-  const login: string | undefined = match.params.login
+export default function Main(): JSX.Element {
+  const { login } = useParams<Params>()
 
-  const [pathUser, setPathUser] = useState<User | null>(null)
+  const setCurrentUser = useSetRecoilState(currentUserState)
 
-  const history = useHistory()
-
-  history.listen(async () => {
-    setPathUser(login ? await fetchUser(login) : null)
-  })
+  useEffect(() => {
+    login ? fetchUser(login).then(setCurrentUser) : setCurrentUser(null)
+  }, [login, setCurrentUser])
 
   return (
     <motion.main
@@ -55,11 +48,11 @@ export default function Main({ match }: Props): JSX.Element {
       style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}
     >
       <AnimatePresence initial={false}>
-        <Headline>Do</Headline>
+        <HomeHeadline>Do</HomeHeadline>
       </AnimatePresence>
       <UserSearch/>
       <AnimatePresence initial={false}>
-        <Headline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</Headline>
+        <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
       </AnimatePresence>
       <Route path="/:login" component={() => <h1>By hour:</h1>}/>
     </motion.main>
