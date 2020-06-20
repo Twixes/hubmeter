@@ -72,22 +72,3 @@
     opacity: 1;
   }
 }
-
-.UserSearch-button {
-  transition: var(--duration-short) ease;
-  padding: 0;
-  height: 3rem;
-  width: 3rem;
-  text-align: center;
-  line-height: 3rem;
-  user-select: none;
-  cursor: pointer;
-  &:not(:disabled):active {
-    background: var(--color-accent);
-    color: var(--color-foreground);
-  }
-  &:disabled {
-    opacity: var(--opacity-dim);
-    cursor: default;
-  }
-}

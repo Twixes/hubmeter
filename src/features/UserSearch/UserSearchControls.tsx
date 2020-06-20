@@ -141,7 +141,7 @@ export default function UserSearchControls({
         autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
       />
       <button
-        className="UserSearch-button" type="submit" disabled={!isSubmitEnabled} ref={buttonRef}
+        className="UserSearchControls-button" type="submit" disabled={!isSubmitEnabled} ref={buttonRef}
         style={isSearchShown ? { borderBottomRightRadius: 0 } : {}}
       >→</button>
     </div>
