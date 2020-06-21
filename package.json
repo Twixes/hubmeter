@@ -45,8 +45,8 @@
   "scripts": {
     "build": "react-scripts build",
     "start": "react-scripts start",
-    "lint": "standardx **/*.{ts,tsx} --verbose | snazzy",
-    "fix": "standardx **/*.{ts,tsx} --fix",
+    "lint": "standardx '**/*.{ts,tsx}' --verbose | snazzy",
+    "fix": "standardx '**/*.{ts,tsx}' --fix",
     "test": "npm run lint && react-scripts test"
   },
   "eslintConfig": {
