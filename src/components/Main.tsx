@@ -1,9 +1,9 @@
 import React, { useEffect, ReactChild } from 'react'
 import { Route, useParams } from 'react-router-dom'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
 import { fetchUser } from '../github-api'
-import { showGHAPIErrorNoticeState, currentUserState } from '../atoms'
+import { showGHAPIErrorNoticeState, show404ErrorNoticeState, currentUserState } from '../atoms'
 import { Params } from './App'
 import Notice from './Notice'
 import Controls from '../features/Controls/Controls'
@@ -40,6 +40,7 @@ export default function Main(): JSX.Element {
   const { login } = useParams<Params>()
 
   const [showGHAPIErrorNotice, setShowGHAPIErrorNotice] = useRecoilState(showGHAPIErrorNoticeState)
+  const [show404ErrorNotice, setShow404ErrorNotice] = useRecoilState(show404ErrorNoticeState)
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
 
   useEffect(() => {
@@ -47,14 +48,17 @@ export default function Main(): JSX.Element {
       if (!currentUser || currentUser.login !== login) fetchUser(login).then(user => {
         setCurrentUser(user)
         setShowGHAPIErrorNotice(false)
+        setShow404ErrorNotice(!user)
       }).catch(() => {
         setShowGHAPIErrorNotice(true)
+        setShow404ErrorNotice(false)
       })
     } else {
       setCurrentUser(null)
       setShowGHAPIErrorNotice(false)
+      setShow404ErrorNotice(false)
     }
-  }, [login, setShowGHAPIErrorNotice, currentUser, setCurrentUser])
+  }, [login, setShowGHAPIErrorNotice, setShow404ErrorNotice, currentUser, setCurrentUser])
 
   return (
     <motion.main
@@ -63,6 +67,9 @@ export default function Main(): JSX.Element {
     >
       <HomeHeadline>Do</HomeHeadline>
       <Controls/>
+      <Notice
+        shouldDisplay={show404ErrorNotice} indication={'!'} onXClick={() => { setShow404ErrorNotice(false) }}
+      >User doesn't exist.</Notice>
       <Notice
         shouldDisplay={showGHAPIErrorNotice} indication={'!'} onXClick={() => { setShowGHAPIErrorNotice(false) }}
       >

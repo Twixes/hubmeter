@@ -6,6 +6,11 @@ export const showGHAPIErrorNoticeState = atom<boolean>({
   default: false
 })
 
+export const show404ErrorNoticeState = atom<boolean>({
+  key: 'show404ErrorNotice',
+  default: false
+})
+
 export const currentUserState = atom<User | null>({
   key: 'currentUser',
   default: null
