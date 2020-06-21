@@ -1,4 +1,4 @@
-import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser } from './github-api';
+import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser, fetchUserEventsPilot } from './github-api';
 
 describe('#buildURL()', () => {
   it('should return proper user events URL', () => {
@@ -20,6 +20,19 @@ describe('#fetchUserEventsPage()', () => {
     expect(events[0].actor).toBeDefined()
     expect(events[0].repo).toBeDefined()
     expect(events[0].created_at).toBeInstanceOf(Date)
+  })
+})
+
+describe('#fetchUserEventsPilot()', () => {
+  it('should return an array of events', async () => {
+    const [events, lastPageNumber]: [Event[], number] = await fetchUserEventsPilot('posthog')
+    expect(events).toBeInstanceOf(Array)
+    expect(events[0].id).toBeDefined()
+    expect(events[0].type).toBeDefined()
+    expect(events[0].actor).toBeDefined()
+    expect(events[0].repo).toBeDefined()
+    expect(events[0].created_at).toBeInstanceOf(Date)
+    expect(lastPageNumber).toBeGreaterThanOrEqual(1)
   })
 })
 
