@@ -1,6 +1,6 @@
 @import './src/_base.scss';
 
-.ErrorNotice {
+.Notice {
   @extend %card;
   flex-direction: row;
   align-items: center;
@@ -11,7 +11,7 @@
   font-size: 1.5rem;
 }
 
-.ErrorNotice-indicator {
+.Notice-indicator {
   background: var(--color-foreground);
   color: var(--color-accent);
   font-size: 1.125rem;
@@ -23,7 +23,7 @@
   user-select: none;
 }
 
-.ErrorNotice-message {
+.Notice-message {
   flex-grow: 1;
   width: 0;
   padding: 0.375rem 0;
@@ -31,7 +31,7 @@
   overflow: hidden;
 }
 
-.ErrorNotice-button {
+.Notice-button {
   transition: background var(--duration-short) var(--timing-function-standard), color var(--duration-short) var(--timing-function-standard);
   padding: 0;
   align-self: stretch;

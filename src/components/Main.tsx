@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, ReactChild } from 'react'
 import { Route, useParams } from 'react-router-dom'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
 import { fetchUser } from '../github-api'
 import { showGHAPIErrorNoticeState, currentUserState } from '../atoms'
 import { Params } from './App'
-import ErrorNotice from '../components/ErrorNotice'
+import Notice from './Notice'
 import Controls from '../features/Controls/Controls'
 import Statistics from '../features/Statistics/Statistics'
 import './Main.scss'
@@ -21,7 +21,7 @@ const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'even have a life'
 ]
 
-function HomeHeadline({ children }: { children: string }): JSX.Element | null {
+function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | null {
   const { login } = useParams<Params>()
 
   return login ? null : (
@@ -39,7 +39,7 @@ function HomeHeadline({ children }: { children: string }): JSX.Element | null {
 export default function Main(): JSX.Element {
   const { login } = useParams<Params>()
 
-  const setShowGHAPIErrorNotice = useSetRecoilState(showGHAPIErrorNoticeState)
+  const [showGHAPIErrorNotice, setShowGHAPIErrorNotice] = useRecoilState(showGHAPIErrorNoticeState)
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
 
   useEffect(() => {
@@ -63,7 +63,13 @@ export default function Main(): JSX.Element {
     >
       <HomeHeadline>Do</HomeHeadline>
       <Controls/>
-      <ErrorNotice/>
+      <Notice
+        shouldDisplay={showGHAPIErrorNotice} indication={'!'} onXClick={() => { setShowGHAPIErrorNotice(false) }}
+      >
+        <>GitHub API error. <a
+          href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer"
+        >Rate limiting</a> may be at fault. Try again later.</>
+      </Notice>
       <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics}/>
     </motion.main>
