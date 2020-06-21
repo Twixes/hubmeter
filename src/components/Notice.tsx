@@ -6,7 +6,7 @@ interface Props {
   children: ReactChild
   shouldDisplay: boolean
   indication: string
-  onXClick: () => void
+  onXClick?: () => void
   initialAnimatePresence?: boolean
 }
 
@@ -53,7 +53,7 @@ export default function ErrorNotice(
             className="Notice-message" custom={shouldReduceMotion} variants={INSIDE_VARIANTS}
             initial="hidden" animate="shown" exit="hidden"
           >{children}</motion.div>
-          <button className="Notice-button" type="button" onClick={onXClick}>✗</button>
+          {onXClick && <button className="Notice-button" type="button" onClick={onXClick}>✗</button>}
         </motion.div>
       )}
     </AnimatePresence>
