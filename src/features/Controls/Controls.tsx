@@ -54,8 +54,8 @@ export default function Controls(): JSX.Element {
   }, [currentUser, setCurrentLoginInput, setMatchingUser, history])
 
   useEffect(() => {
+    setCurrentLoginInput(login || '')
     if (!login) {
-      setCurrentLoginInput('')
       setMatchingUser(null)
       setSelectedUser(null)
     }
