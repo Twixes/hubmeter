@@ -1,18 +1,19 @@
+@import './src/_base.scss';
+
 :root {
-  --color-background: #000b2e;
-  --color-accent: #7a27ff;
-  --color-shadow: rgba(0, 0, 0, 0.075);
-  --opacity-dim: 0.6;
-  --color-background-dim: rgba(0, 11, 46, 0.1);
-  --color-accent-dim: rgba(122, 39, 255, var(--opacity-dim));
-  --color-foreground: #fff;
-  --color-foreground-dim: rgba(255, 255, 255, var(--opacity-dim));
-  --font-family-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
-  --font-weight: 700;
-  --duration-short: 0.2s;
-  --duration-medium: 0.4s;
-  --duration-long: 1s;
+  --color-background: #{$color-background};
+  --color-foreground: #{$color-foreground};
+  --color-accent: #{$color-accent};
+  --color-shadow: #{$color-shadow};
+  --opacity-dim: #{$opacity-dim};
+  --color-accent-dim: #{$color-accent-dim};
+  --color-foreground-dim: #{$color-foreground-dim};
+  --font-family-stack: #{inspect($font-family-stack)};
+  --font-weight: #{$font-weight};
+  --duration-short: #{$duration-short};
+  --duration-medium: #{$duration-medium};
+  --duration-long: #{$duration-long};
+  --timing-function-standard: #{$timing-function-standard};
 }
 
 ::selection {
@@ -58,7 +59,7 @@ input {
 }
 
 button {
-  transition: border-radius var(--duration-short) ease;
+  transition: border-radius var(--duration-short) var(--timing-function-standard);
   border-radius: 0.5rem;
 }
 

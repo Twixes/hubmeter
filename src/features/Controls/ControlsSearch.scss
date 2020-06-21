@@ -1,4 +1,4 @@
-@import './src/placeholders.scss';
+@import './src/_base.scss';
 
 .ControlsSearch {
   @extend %card;
@@ -8,7 +8,7 @@
 }
 
 .ControlsSearch-button {
-  transition: var(--duration-short) ease;
+  transition: var(--duration-short) var(--timing-function-standard);
   padding: 0;
   height: 3rem;
   width: 3rem;

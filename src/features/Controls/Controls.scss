@@ -16,7 +16,7 @@
 }
 
 .Controls-indicator {
-  transition: opacity var(--duration-short) ease;
+  transition: opacity var(--duration-short) var(--timing-function-standard);
   opacity: var(--opacity-dim);
   font-size: 1.125rem;
   text-align: center;

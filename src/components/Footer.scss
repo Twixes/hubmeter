@@ -1,4 +1,4 @@
-@import './src/placeholders.scss';
+@import './src/_base.scss';
 
 .Footer {
   @extend %width-control;
@@ -11,7 +11,7 @@
   text-align: center;
   & br {
     display: none;
-    @media screen and (min-width: 40rem) {
+    @media screen and (min-width: $breakpoint-width-tablet) {
       display: block;
     }
   }

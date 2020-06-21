@@ -1,4 +1,4 @@
-@import './src/placeholders.scss';
+@import './src/_base.scss';
 
 .Header {
   @extend %width-control;
@@ -33,7 +33,7 @@
 }
 
 .Header-clock-hand {
-  transition: transform 1s ease;
+  transition: transform var(--duration-long) var(--timing-function-standard);
   transform-origin: 20px;
 }
 

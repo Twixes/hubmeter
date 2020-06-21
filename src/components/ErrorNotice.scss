@@ -1,4 +1,4 @@
-@import './src/placeholders.scss';
+@import './src/_base.scss';
 
 .ErrorNotice {
   @extend %card;
@@ -32,7 +32,7 @@
 }
 
 .ErrorNotice-button {
-  transition: background var(--duration-short) ease, color var(--duration-short) ease;
+  transition: background var(--duration-short) var(--timing-function-standard), color var(--duration-short) var(--timing-function-standard);
   padding: 0;
   align-self: stretch;
   width: 3rem;
