@@ -64,11 +64,26 @@ export async function fetchUserEventsPage(login: string, page: number): Promise<
     return eventsWithDates
 }
 
+export async function fetchUserEventsPilot(login: string): Promise<[Event[], number]> {
+    const url: URL = buildURL(['users', login, 'events'])
+    url.searchParams.set('page', '1')
+    const response: Response = await fetch(url.toString())
+    const events: Event[] = await response.json()
+    const eventsWithDates: Event[] = events.map(event => {
+      return { ...event, created_at: new Date(event.created_at) }
+    })
+    const linkHeader: string | null = response.headers.get('link')
+    let lastPageNumber: number = 1
+    if (linkHeader) lastPageNumber = parseInt(linkHeader.match(/events\?page=(\d+)>; rel="last"/)![1])
+    return [eventsWithDates, lastPageNumber]
+}
+
 export async function fetchUserEventsAll(login: string): Promise<Event[]> {
+  const [pilotEvents, lastPageNumber] = await fetchUserEventsPilot(login)
   const promises: Promise<Event[]>[] = []
-  for (let page = 1; page <= 10; page++) promises.push(fetchUserEventsPage(login, page))
+  for (let page = 2; page <= lastPageNumber; page++) promises.push(fetchUserEventsPage(login, page))
   const pages: Event[][] = await Promise.all(promises)
-  return pages.flat()
+  return pages.flat().concat(pilotEvents)
 }
 
 export async function fetchSearchUsers(query: string): Promise<User[]> {
