@@ -1,12 +1,20 @@
 %width-control {
   margin: 0 auto;
   width: 100%;
-  max-width: 100rem;
+  max-width: 120rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   @media screen and (min-width: 40rem) {
     padding-left: 4rem;
     padding-right: 4rem;
+  }
+  @media screen and (min-width: 80rem) {
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+  @media screen and (min-width: 120rem) {
+    padding-left: 12rem;
+    padding-right: 12rem;
   }
 }
 
