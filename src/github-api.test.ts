@@ -1,4 +1,6 @@
 import { User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser, fetchUserEventsPilot } from './github-api';
+/* eslint-env jest */
+
 
 describe('#buildURL()', () => {
   it('should return proper user events URL', () => {

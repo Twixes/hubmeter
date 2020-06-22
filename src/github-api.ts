@@ -1,12 +1,11 @@
 export interface User {
   id: string
   login: string
-  avatar_url: string
 }
 
 export interface SearchResults {
-  total_count: number
-  incomplete_results: boolean
+  total_count: number // eslint-disable-line camelcase
+  incomplete_results: boolean // eslint-disable-line camelcase
   items: User[]
 }
 
@@ -38,7 +37,7 @@ export interface Event {
   type: EventType
   actor: User
   repo: Repo
-  created_at: Date
+  created_at: Date // eslint-disable-line camelcase
 }
 
 export interface Problem {
