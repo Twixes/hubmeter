@@ -1,0 +1,43 @@
+@import './../_base.scss';
+
+.Graph {
+  @extend %card;
+  width: 100%;
+  height: 16rem;
+  padding: 0.75rem;
+  overflow: hidden;
+}
+
+.Graph-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.Graph-main,
+.Graph-overlay {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  margin: 0;
+}
+
+.Graph-overlay-caption {
+  position: absolute;
+  text-align: center;
+  border-radius: 0.25rem;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.Graph-overlay-part {
+  margin: 0;
+  & svg {
+    transition: fill var(--duration-short) var(--timing-function-standard);
+  }
+  &:hover svg {
+    fill: rgba(0, 0, 0, 0.2);
+  }
+}

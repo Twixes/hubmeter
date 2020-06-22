@@ -15,6 +15,7 @@
   "homepage": "https://hubmeter.live",
   "private": true,
   "dependencies": {
+    "@react-hook/size": "^2.1.0",
     "@testing-library/jest-dom": "^5.10.0",
     "@testing-library/react": "^10.3.0",
     "@testing-library/user-event": "^12.0.2",
@@ -28,6 +29,7 @@
     "recoil": "^0.0.10",
     "reselect": "^4.0.0",
     "sanitize.css": "^11.0.1",
+    "svg-round-corners": "^0.1.0",
     "typescript": "^3.9.5"
   },
   "devDependencies": {
@@ -59,14 +61,20 @@
       }
     },
     "rules": {
-      "max-len": [1, 120],
+      "max-len": [
+        1,
+        120
+      ],
       "no-unused-vars": "off",
       "jsx-quotes": [
         "error",
         "prefer-double"
       ],
       "react/jsx-closing-tag-location": "off",
-      "react/jsx-closing-bracket-location": ["error", "line-aligned"],
+      "react/jsx-closing-bracket-location": [
+        "error",
+        "line-aligned"
+      ],
       "react/jsx-tag-spacing": [
         "error",
         {
