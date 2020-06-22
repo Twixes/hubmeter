@@ -33,8 +33,7 @@
 }
 
 .Header-clock-hand {
-  transition: transform var(--duration-long) var(--timing-function-standard);
-  transform-origin: 20px;
+  transform-origin: 20px !important;
 }
 
 .Header-name {

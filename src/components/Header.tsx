@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import './Header.scss'
 
-function calculateCurrentClockHandTransform(extraRotations: number = 0): string {
+function calculateCurrentClockHandRotation(extraRotations: number = 0): number {
   const now = new Date()
   const hoursPrecise = now.getHours() + now.getMinutes() / 60
-  return `rotate(${Math.round((hoursPrecise / 12 + extraRotations) * 360)}deg)`
+  return Math.round((hoursPrecise / 12 + extraRotations) * 360)
 }
 
 export default function Header(): JSX.Element {
   const [extraRotations, setExtraRotations] = useState(0)
-  const [clockHandTransform, setClockHandTransform] = useState(calculateCurrentClockHandTransform(extraRotations))
+  const [clockHandRotation, setClockHandRotation] = useState(calculateCurrentClockHandRotation(extraRotations))
 
   const updateClockHandTransform = useCallback(() => {
-    setClockHandTransform(calculateCurrentClockHandTransform(extraRotations))
+    setClockHandRotation(calculateCurrentClockHandRotation(extraRotations))
   }, [extraRotations])
 
   useEffect(() => {
@@ -30,9 +31,10 @@ export default function Header(): JSX.Element {
             id="Header-clock" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
           >
             <circle cx="20" cy="20" r="18" strokeWidth="4"/>
-            <line
-              className="Header-clock-hand" style={{ transform: clockHandTransform }} x1="20" y1="22" x2="20" y2="7"
-              strokeWidth="4"
+            <motion.line
+              className="Header-clock-hand" transition={{ type: 'spring', damping: 24, stiffness: 120, mass: 2 }}
+              initial={{ rotate: clockHandRotation }} animate={{ rotate: clockHandRotation }}
+              x1="20" y1="22" x2="20" y2="7" strokeWidth="4"
             />
           </svg>
           <div className="Header-name">HubMeter</div>
