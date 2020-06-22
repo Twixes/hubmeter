@@ -28,7 +28,7 @@ describe('#fetchUserEventsPage()', () => {
 })
 
 describe('#fetchUserEventsPilot()', () => {
-  it('should return an array of events', async () => {
+  it('should return an array of events with last page number', async () => {
     const [events, lastPageNumber]: [Event[], number] = await fetchUserEventsPilot('posthog')
     expect(events).toBeInstanceOf(Array)
     expect(events[0].id).toBeDefined()
