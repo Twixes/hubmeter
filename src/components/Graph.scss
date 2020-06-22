@@ -35,7 +35,7 @@
 .Graph-overlay-part {
   margin: 0;
   & svg {
-    transition: fill var(--duration-short) var(--timing-function-standard);
+    transition: fill var(--duration-instant) var(--timing-function-standard);
   }
   &:hover svg {
     fill: rgba(0, 0, 0, 0.2);

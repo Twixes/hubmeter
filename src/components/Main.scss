@@ -3,4 +3,6 @@
 .Main {
   @extend %width-control;
   @extend %height-control;
+  display: flex;
+  flex-direction: column;
 }

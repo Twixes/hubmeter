@@ -10,6 +10,7 @@
   --color-foreground-dim: #{$color-foreground-dim};
   --font-family-stack: #{inspect($font-family-stack)};
   --font-weight: #{$font-weight};
+  --duration-instant: #{$duration-instant};
   --duration-short: #{$duration-short};
   --duration-medium: #{$duration-medium};
   --duration-long: #{$duration-long};
@@ -42,7 +43,7 @@ a {
 }
 
 h1 {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
   font-size: 1.75rem;
   font-style: italic;
   text-shadow:

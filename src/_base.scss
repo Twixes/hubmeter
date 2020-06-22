@@ -7,6 +7,7 @@ $color-foreground-dim: rgba($color-foreground, $opacity-dim);
 $color-accent-dim: rgba($color-accent, $opacity-dim);
 $font-family-stack: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 $font-weight: 700;
+$duration-instant: 0.1s;
 $duration-short: 0.2s;
 $duration-medium: 0.4s;
 $duration-long: 1s;
@@ -36,11 +37,11 @@ $timing-function-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 %height-control {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
   @media screen and (min-width: $breakpoint-width-tablet) {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
   }
 }
 
