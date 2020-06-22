@@ -45,14 +45,16 @@ export default function Main(): JSX.Element {
 
   useEffect(() => {
     if (login) {
-      if (!currentUser || currentUser.login !== login) fetchUser(login).then(user => {
-        setCurrentUser(user)
-        setShowGHAPIErrorNotice(false)
-        setShow404ErrorNotice(!user)
-      }).catch(() => {
-        setShowGHAPIErrorNotice(true)
-        setShow404ErrorNotice(false)
-      })
+      if (!currentUser || currentUser.login !== login) {
+        fetchUser(login).then(user => {
+          setCurrentUser(user)
+          setShowGHAPIErrorNotice(false)
+          setShow404ErrorNotice(!user)
+        }).catch(() => {
+          setShowGHAPIErrorNotice(true)
+          setShow404ErrorNotice(false)
+        })
+      }
     } else {
       setCurrentUser(null)
       setShowGHAPIErrorNotice(false)
@@ -68,14 +70,17 @@ export default function Main(): JSX.Element {
       <HomeHeadline>Do</HomeHeadline>
       <Controls/>
       <Notice
-        shouldDisplay={show404ErrorNotice} indication={'!'} onXClick={() => { setShow404ErrorNotice(false) }}
-      >User doesn't exist.</Notice>
+        shouldDisplay={show404ErrorNotice} indication="!" onXClick={() => { setShow404ErrorNotice(false) }}
+      >User doesn't exist.
+      </Notice>
       <Notice
-        shouldDisplay={showGHAPIErrorNotice} indication={'!'} onXClick={() => { setShowGHAPIErrorNotice(false) }}
+        shouldDisplay={showGHAPIErrorNotice} indication="!" onXClick={() => { setShowGHAPIErrorNotice(false) }}
       >
-        <>GitHub API error. <a
+        <>GitHub&nbsp;API&nbsp;error. <a
           href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer"
-        >Rate limiting</a> may be at fault. Try again later.</>
+        >Rate&nbsp;limiting
+        </a> may be at&nbsp;fault. Try&nbsp;again&nbsp;later.
+        </>
       </Notice>
       <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics}/>

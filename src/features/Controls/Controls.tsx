@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, FormEvent, KeyboardEvent } from 're
 import { useParams, useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { motion } from 'framer-motion'
-import { useOutsideClickHandler} from '../../utils'
+import { useOutsideClickHandler } from '../../utils'
 import { User } from '../../github-api'
 import { currentUserState } from '../../atoms'
 import ControlsSearch from './ControlsSearch'
@@ -80,7 +80,7 @@ export default function Controls(): JSX.Element {
       setSelectedUser(null)
       ;(nextNavigationElement as HTMLInputElement).setSelectionRange(currentLoginInput.length, currentLoginInput.length)
     } else {
-      setSelectedUser(currentSearchResults[nextNavigationIndex-1])
+      setSelectedUser(currentSearchResults[nextNavigationIndex - 1])
     }
   }
 

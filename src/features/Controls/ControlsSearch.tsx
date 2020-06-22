@@ -97,25 +97,25 @@ export default function ControlsSearch({
       <div className="Controls-indicator-typing"><span>.</span><span>.</span><span>.</span></div>
     )
   } else if (currentLoginInput && didSearchErrorOccur) {
-    anchorAttributes['href'] = `https://github.com/${currentLoginInput}`
+    anchorAttributes.href = `https://github.com/${currentLoginInput}`
     currentIndicatorElement = (
       <div className="Controls-indicator-mark" key="exclamation-mark">!</div>
     )
   } else if (selectedUser) {
-    anchorAttributes['href'] = `https://github.com/${selectedUser.login}`
+    anchorAttributes.href = `https://github.com/${selectedUser.login}`
     currentIndicatorElement = (
       <div
         className="Controls-indicator-avatar" style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
         key="avatar"
-      ></div>
+      />
     )
   } else if (matchingUser) {
-    anchorAttributes['href'] = `https://github.com/${matchingUser.login}`
+    anchorAttributes.href = `https://github.com/${matchingUser.login}`
     currentIndicatorElement = (
       <div
         className="Controls-indicator-avatar" style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
         key="avatar"
-      ></div>
+      />
     )
   } else {
     currentIndicatorElement = (
@@ -129,13 +129,13 @@ export default function ControlsSearch({
       style={isSearchShown ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}
     >
       <a {...anchorAttributes} target="_blank" rel="noopener noreferrer">
-        <div className="Controls-indicator" style={{ opacity: isSubmitEnabled ? 1 : ''}} >
+        <div className="Controls-indicator" style={{ opacity: isSubmitEnabled ? 1 : '' }}>
           {currentIndicatorElement}
         </div>
       </a>
       <input
         className="Controls-login" type="search" name="login"
-        ref={ref => navigationRefs.current[0] = ref as HTMLInputElement} tabIndex={0}
+        ref={ref => { navigationRefs.current[0] = ref as HTMLInputElement }} tabIndex={0}
         value={selectedUser ? selectedUser.login : currentLoginInput} maxLength={39}
         spellCheck={false} placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off"
         autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
@@ -143,7 +143,8 @@ export default function ControlsSearch({
       <button
         className="ControlsSearch-button" type="submit" disabled={!isSubmitEnabled} ref={buttonRef}
         style={isSearchShown ? { borderBottomRightRadius: 0 } : {}}
-      >→</button>
+      >→
+      </button>
     </div>
   )
 }

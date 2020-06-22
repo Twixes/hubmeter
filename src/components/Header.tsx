@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import './Header.scss';
+import './Header.scss'
 
 function calculateCurrentClockHandTransform(extraRotations: number = 0): string {
   const now = new Date()
@@ -31,7 +31,7 @@ export default function Header(): JSX.Element {
           >
             <circle cx="20" cy="20" r="18" strokeWidth="4"/>
             <line
-              className="Header-clock-hand" style={{ transform: clockHandTransform}} x1="20" y1="22" x2="20" y2="7"
+              className="Header-clock-hand" style={{ transform: clockHandTransform }} x1="20" y1="22" x2="20" y2="7"
               strokeWidth="4"
             />
           </svg>

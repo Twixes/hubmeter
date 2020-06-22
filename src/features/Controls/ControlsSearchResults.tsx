@@ -83,24 +83,25 @@ export default function ControlsSearchResults(
         initial="hidden" animate="shown" exit="hidden"
       >
         {currentSearchResults.map((user, index) => (
-            <li
-              className="ControlsSearchResults-user" key={user.login} tabIndex={index + 1}
-              ref={ref => navigationRefs.current[1 + index] = ref as HTMLLIElement}
-              onClick={() => { setUserFromSearch(user) }} onKeyDown={onSearchResultKeyDownGenerator(user)}
-              onFocus={() => { setSelectedUser(user) }}
-            >
-              <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer" tabIndex={-1}>
-                <div className="Controls-indicator" style={{ opacity: 1 }}>
-                  <div
-                    className="Controls-indicator-avatar"
-                    style={{ backgroundImage: `url(${user.avatar_url}&s=144` }}></div>
-                </div>
-              </a>
-              <div className="Controls-login">
-                {user.login}
+          <li
+            className="ControlsSearchResults-user" key={user.login} tabIndex={index + 1}
+            ref={ref => { navigationRefs.current[1 + index] = ref as HTMLLIElement }}
+            onClick={() => { setUserFromSearch(user) }} onKeyDown={onSearchResultKeyDownGenerator(user)}
+            onFocus={() => { setSelectedUser(user) }}
+          >
+            <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer" tabIndex={-1}>
+              <div className="Controls-indicator" style={{ opacity: 1 }}>
+                <div
+                  className="Controls-indicator-avatar"
+                  style={{ backgroundImage: `url(${user.avatar_url}&s=144` }}
+                />
               </div>
-            </li>
-          )
+            </a>
+            <div className="Controls-login">
+              {user.login}
+            </div>
+          </li>
+        )
         )}
       </motion.ul>}
     </AnimatePresence>

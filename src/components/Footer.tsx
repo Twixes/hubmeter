@@ -1,11 +1,12 @@
-import React from 'react';
-import './Footer.scss';
+import React from 'react'
+import './Footer.scss'
 
 export default function Footer(): JSX.Element {
   return (
     <footer className="Footer">
-      <span>GitHub activity insights you haven't seen before. <br/>
-      By <a href="https://twixes.com">Twixes</a>. 👋</span>
+      <span>GitHub&nbsp;activity insights you&nbsp;haven't seen&nbsp;before. <br/>
+        By&nbsp;<a href="https://twixes.com">Twixes</a>.&nbsp;👋
+      </span>
     </footer>
   )
 }

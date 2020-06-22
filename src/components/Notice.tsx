@@ -28,11 +28,11 @@ const OUTSIDE_VARIANTS: Variants = {
 const INSIDE_VARIANTS: Variants = {
   hidden: (shouldReduceMotion: boolean) => {
     return {
-      maxHeight: shouldReduceMotion ? '12rem' : '3rem',
+      maxHeight: shouldReduceMotion ? '12rem' : '3rem'
     }
   },
   shown: {
-    maxHeight: '12rem',
+    maxHeight: '12rem'
   }
 }
 
@@ -52,7 +52,8 @@ export default function ErrorNotice(
           <motion.div
             className="Notice-message" custom={shouldReduceMotion} variants={INSIDE_VARIANTS}
             initial="hidden" animate="shown" exit="hidden"
-          >{children}</motion.div>
+          >{children}
+          </motion.div>
           {onXClick && <button className="Notice-button" type="button" onClick={onXClick}>✗</button>}
         </motion.div>
       )}

@@ -1,6 +1,7 @@
 export interface User {
   id: string
   login: string
+  avatar_url: string // eslint-disable-line camelcase
 }
 
 export interface SearchResults {
@@ -53,28 +54,28 @@ export function buildURL(parts: string[], params?: object): URL {
 }
 
 export async function fetchUserEventsPage(login: string, page: number): Promise<Event[]> {
-    const url: URL = buildURL(['users', login, 'events'])
-    url.searchParams.set('page', page.toString())
-    const response: Response = await fetch(url.toString())
-    const events: Event[] = await response.json()
-    const eventsWithDates: Event[] = events.map(event => {
-      return { ...event, created_at: new Date(event.created_at) }
-    })
-    return eventsWithDates
+  const url: URL = buildURL(['users', login, 'events'])
+  url.searchParams.set('page', page.toString())
+  const response: Response = await fetch(url.toString())
+  const events: Event[] = await response.json()
+  const eventsWithDates: Event[] = events.map(event => {
+    return { ...event, created_at: new Date(event.created_at) }
+  })
+  return eventsWithDates
 }
 
 export async function fetchUserEventsPilot(login: string): Promise<[Event[], number]> {
-    const url: URL = buildURL(['users', login, 'events'])
-    url.searchParams.set('page', '1')
-    const response: Response = await fetch(url.toString())
-    const events: Event[] = await response.json()
-    const eventsWithDates: Event[] = events.map(event => {
-      return { ...event, created_at: new Date(event.created_at) }
-    })
-    const linkHeader: string | null = response.headers.get('link')
-    let lastPageNumber: number = 1
-    if (linkHeader) lastPageNumber = parseInt(linkHeader.match(/events\?page=(\d+)>; rel="last"/)![1])
-    return [eventsWithDates, lastPageNumber]
+  const url: URL = buildURL(['users', login, 'events'])
+  url.searchParams.set('page', '1')
+  const response: Response = await fetch(url.toString())
+  const events: Event[] = await response.json()
+  const eventsWithDates: Event[] = events.map(event => {
+    return { ...event, created_at: new Date(event.created_at) }
+  })
+  const linkHeader: string | null = response.headers.get('link')
+  let lastPageNumber: number = 1
+  if (linkHeader) lastPageNumber = parseInt(linkHeader.match(/events\?page=(\d+)>; rel="last"/)![1])
+  return [eventsWithDates, lastPageNumber]
 }
 
 export async function fetchUserEventsAll(login: string): Promise<Event[]> {
