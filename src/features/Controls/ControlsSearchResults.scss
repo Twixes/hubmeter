@@ -13,7 +13,9 @@
 }
 
 .ControlsSearchResults-user {
-  transition: background var(--duration-short) var(--timing-function-standard), border-color var(--duration-short) var(--timing-function-standard);
+  transition:
+    background var(--duration-short) var(--timing-function-standard),
+    border-color var(--duration-short) var(--timing-function-standard);
   display: flex;
   flex-direction: row;
   align-items: center;

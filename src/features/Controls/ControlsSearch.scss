@@ -8,7 +8,9 @@
 }
 
 .ControlsSearch-button {
-  transition: var(--duration-short) var(--timing-function-standard);
+  transition:
+    background var(--duration-short) var(--timing-function-standard),
+    color var(--duration-short) var(--timing-function-standard);
   padding: 0;
   height: 3rem;
   width: 3rem;

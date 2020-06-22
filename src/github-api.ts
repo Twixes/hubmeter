@@ -53,7 +53,9 @@ async function checkForProblem(response: Response, ignoreStatuses: number[] = []
     const rateLimitReset: Date = new Date(rateLimitResetEpoch)
     const deltaMinutes: number = Math.ceil((rateLimitResetEpoch - Date.now()) / 60_000)
     throw Error(
+      // eslint-disable-next-line no-irregular-whitespace
       `GitHub rate limit exceeded for now. Try again in ${deltaMinutes} min ` +
+      // eslint-disable-next-line no-irregular-whitespace
       `at ${rateLimitReset.getHours() % 12 || 12}:${rateLimitReset.getMinutes().toString().padStart(2, '0')} ` +
       `${rateLimitReset.getHours() >= 12 ? 'PM' : 'AM'}.`
     )
@@ -117,6 +119,7 @@ export async function fetchUser(login: string): Promise<User> {
   const url: URL = buildURL(['users', login])
   const response: Response = await fetch(url.toString())
   await checkForProblem(response, [404])
+  // eslint-disable-next-line no-irregular-whitespace
   if (response.status === 404) throw Error(`User ${login} doesn't exist.`)
   const user: User = await response.json()
   return user

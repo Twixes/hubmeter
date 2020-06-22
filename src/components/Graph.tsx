@@ -104,18 +104,21 @@ export default function Graph({ dataPoints }: Props): JSX.Element {
               className="Graph-overlay-caption"
               initial={{
                 x: `calc(-50% + ${((captionPoint[2] + 0.5) / dataPoints.length) * vectorWidth}px)`,
-                y: 'calc(-100% - 1rem)', opacity: 0
+                y: 'calc(-100% - 1rem)',
+                opacity: 0
               }}
               animate={{
                 x: `calc(-50% + ${((captionPoint[2] + 0.5) / dataPoints.length) * vectorWidth}px)`,
-                y: `0%`, opacity: 1
+                y: '0%',
+                opacity: 1
               }}
               exit={{
                 x: `calc(-50% + ${((captionPoint[2] + 0.5) / dataPoints.length) * vectorWidth}px)`,
-                y: 'calc(-100% - 1rem)', opacity: 0
+                y: 'calc(-100% - 1rem)',
+                opacity: 0
               }}
             >
-                {captionPoint[0]}<br/>{captionPoint[1]} {captionPoint[1] === 1 ? 'event' : 'events'}
+              {captionPoint[0]}<br/>{captionPoint[1]} {captionPoint[1] === 1 ? 'event' : 'events'}
             </motion.figcaption>}
           </AnimatePresence>
           {vectorOverlayElements}
