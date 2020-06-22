@@ -59,6 +59,7 @@
       }
     },
     "rules": {
+      "max-len": [1, 120],
       "no-unused-vars": "off",
       "jsx-quotes": [
         "error",
