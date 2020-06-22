@@ -54,7 +54,7 @@ async function checkForProblem(response: Response, ignoreStatuses: number[] = []
     const deltaMinutes: number = Math.ceil((rateLimitResetEpoch - Date.now()) / 60_000)
     throw Error(
       // eslint-disable-next-line no-irregular-whitespace
-      `GitHub rate limit exceeded for now. Try again in ${deltaMinutes} min ` +
+      `Exceeded GitHub rate limit for now. Try again in ${deltaMinutes} min ` +
       // eslint-disable-next-line no-irregular-whitespace
       `at ${rateLimitReset.getHours() % 12 || 12}:${rateLimitReset.getMinutes().toString().padStart(2, '0')} ` +
       `${rateLimitReset.getHours() >= 12 ? 'PM' : 'AM'}.`

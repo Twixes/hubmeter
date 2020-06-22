@@ -5,7 +5,6 @@
   width: 100%;
   height: 16rem;
   padding: 0.75rem;
-  overflow: hidden;
 }
 
 .Graph-container {
@@ -23,13 +22,22 @@
 }
 
 .Graph-overlay-caption {
+  @extend %card;
   position: absolute;
   text-align: center;
+  padding: 0;
   border-radius: 0.25rem;
-  background: var(--color-background);
+  background: var(--color-accent);
   color: var(--color-foreground);
   line-height: 1;
+}
+
+.Graph-overlay-caption-contents {
+  width: 100%;
+  height: 100%;
   padding: 0.25rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .Graph-overlay-part {
@@ -38,6 +46,6 @@
     transition: fill var(--duration-instant) var(--timing-function-standard);
   }
   &:hover svg {
-    fill: rgba(0, 0, 0, 0.2);
+    fill: rgba(0, 0, 0, 0.25);
   }
 }
