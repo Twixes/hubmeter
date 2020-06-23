@@ -7,10 +7,15 @@
   padding: 0.75rem;
 }
 
-.Graph-container {
+.Graph-container,
+.Graph-subcontainer {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.Graph-subcontainer {
+  transform-origin: bottom;
 }
 
 .Graph-main,
@@ -48,4 +53,16 @@
   &:hover svg {
     fill: rgba(0, 0, 0, 0.25);
   }
+}
+
+.Graph-overlay-legend-x-container {
+  height: 2rem;
+}
+
+.Graph-overlay-legend-x {
+  transform: rotate(-30deg);
+  transform-origin: bottom right;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 1vmax;
 }
