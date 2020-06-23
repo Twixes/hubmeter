@@ -130,10 +130,7 @@ export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
                       y: 'calc(-0.75rem)',
                       opacity: 0
                     }}
-                  >
-                    <div className="Graph-overlay-caption-contents">
-                      {captionPoint[0]}<br/>{captionPoint[1]} {captionPoint[1] === 1 ? 'event' : 'events'}
-                    </div>
+                  >{captionPoint[0]}<br/>{captionPoint[1]} {captionPoint[1] === 1 ? 'event' : 'events'}
                   </motion.figcaption>}
                 </AnimatePresence>
                 {vectorOverlayElements}
