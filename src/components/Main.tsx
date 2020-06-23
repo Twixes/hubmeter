@@ -27,7 +27,7 @@ function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | nul
   return login ? null : (
     <AnimatePresence initial={false}>
       <motion.h1
-        variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }}
+        variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }} style={{ margin: '0.5rem 0' }}
         initial="hidden" animate="shown" exit="hidden" positionTransition
       >
         {children}
