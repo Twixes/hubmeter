@@ -1,4 +1,4 @@
-import React, { useEffect, ReactChild, useMemo } from 'react'
+import React, { useEffect, ReactChild, useMemo, useState } from 'react'
 import { Route, useParams, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -43,7 +43,13 @@ export default function Main(): JSX.Element {
   const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
 
-  const randomQuestion: string = useMemo(() => QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)], [login])
+  const [randomQuestion, setRandomQuestion] = useState(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
+
+  useEffect(() => {
+      setRandomQuestion(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
+      const titleElement = document.querySelector('title');
+      titleElement!.innerText = login || 'HubMeter'
+  }, [login])
 
   useEffect(() => {
     setErrorMessage(null)
