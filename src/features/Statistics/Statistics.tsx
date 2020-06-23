@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { errorMessageState, currentUserState, eventsState, userEventsState } from '../../atoms'
-import { fetchUserEventsAll } from '../../github-api'
+import { fetchUserEventsAll, Event } from '../../github-api'
 import { Params } from '../../components/App'
 import Graph, { DataPoint } from '../../components/Graph'
 import './Statistics.scss'
@@ -11,6 +11,7 @@ import Spinner from '../../components/Spinner'
 
 const hourNumbers: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const HOURS: string[] = hourNumbers.map(hour => `${hour} AM`).concat(hourNumbers.map(hour => `${hour} PM`))
+const DAYS_OF_WEEK: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 const VARIANTS: Variants = {
   hidden: {
@@ -43,15 +44,20 @@ export default function Statistics(): JSX.Element {
     }
   }, [setErrorMessage, currentUser, events, setEvents])
 
-  const [byHourPoints] = useMemo(() => {
+  const [byHourPoints, byDayOfWeekPoints] = useMemo(() => {
     const byHourPointsTentative: DataPoint[] = HOURS.map(hour => [hour, 0])
+    const byDayOfWeekPointsTentative: DataPoint[] = DAYS_OF_WEEK.map(dayOfWeek => [dayOfWeek, 0])
     if (currentUser && events[currentUser.login.toLowerCase()]) {
-      for (const event of events[currentUser.login.toLowerCase()]!) {
+      const userEvents: Event[] = events[currentUser.login.toLowerCase()]!
+      const oldestEventCreatedAt: Date = userEvents[userEvents.length-1].created_at
+      for (const event of userEvents) {
         byHourPointsTentative[event.created_at.getUTCHours()][1] += 1
+        console.log(event.created_at.getUTCDate())
+        byDayOfWeekPointsTentative[(event.created_at.getUTCDay() + 6) % 7][1] += 1
       }
     }
-    byHourPointsTentative.push(...byHourPointsTentative.splice(0, 6))
-    return [byHourPointsTentative]
+    byHourPointsTentative.push(...byHourPointsTentative.splice(0, 6)) // rearrange to make points start with 6 AM
+    return [byHourPointsTentative, byDayOfWeekPointsTentative]
   }, [events, currentUser])
 
   return (
@@ -65,8 +71,14 @@ export default function Statistics(): JSX.Element {
               className="Statistics" variants={VARIANTS}
               initial="hidden" animate="shown" exit="hidden" positionTransition
             >
-              <h1>By hour</h1>
-              <Graph dataPoints={byHourPoints} isLoading={!wereEventsLoaded}/>
+              <section>
+                <h1>By hour</h1>
+                <Graph dataPoints={byHourPoints} isLoading={!wereEventsLoaded}/>
+              </section>
+              <section>
+                <h1>By day of week</h1>
+                <Graph dataPoints={byDayOfWeekPoints} isLoading={!wereEventsLoaded}/>
+              </section>
             </motion.div>
           )
         }
