@@ -47,11 +47,11 @@ export default function Controls(): JSX.Element {
   })
 
   useEffect(() => {
-    if (!currentUser) return
-    setCurrentLoginInput(currentUser.login)
-    setMatchingUser(currentUser)
-    history.replace(`/${currentUser.login}`)
-  }, [currentUser, setCurrentLoginInput, setMatchingUser, history])
+    if (currentUser) {
+      setCurrentLoginInput(currentUser.login)
+      setMatchingUser(currentUser)
+    }
+  }, [currentUser, setCurrentLoginInput, setMatchingUser])
 
   useEffect(() => {
     setCurrentLoginInput(login || '')

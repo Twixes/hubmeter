@@ -1,5 +1,5 @@
-import React, { useEffect, ReactChild } from 'react'
-import { Route, useParams } from 'react-router-dom'
+import React, { useEffect, ReactChild, useMemo } from 'react'
+import { Route, useParams, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
 import { fetchUser } from '../github-api'
@@ -14,7 +14,7 @@ const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'release on Friday',
   'pull all-nighters',
   'work the night shift',
-  'git up at the crack of dawn',
+  'Git up at the crack of dawn',
   'code on weekends',
   'commit at high noon',
   'push in the morning',
@@ -38,26 +38,30 @@ function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | nul
 
 export default function Main(): JSX.Element {
   const { login } = useParams<Params>()
+  const history = useHistory()
 
   const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
 
+  const randomQuestion: string = useMemo(() => QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)], [login])
+
   useEffect(() => {
+    setErrorMessage(null)
     if (login) {
-      if (!currentUser || currentUser.login !== login) {
+      if (!currentUser || currentUser.login.toLowerCase() !== login.toLowerCase()) {
         fetchUser(login).then(user => {
           setCurrentUser(user)
           setErrorMessage(null)
+          history.replace(`/${user.login}`)
         }).catch((error: Error) => {
           setCurrentUser(null)
           setErrorMessage(error.message)
         })
+      } else if (currentUser.login !== login) {
+        setCurrentUser(null)
       }
-    } else {
-      setCurrentUser(null)
-      setErrorMessage(null)
     }
-  }, [login, setErrorMessage, currentUser, setCurrentUser])
+  }, [login, setErrorMessage, currentUser, setCurrentUser, history])
 
   return (
     <motion.main
@@ -70,7 +74,7 @@ export default function Main(): JSX.Element {
         shouldDisplay={Boolean(errorMessage)} indication="!" onXClick={() => { setErrorMessage(null) }}
       >{errorMessage || ''}
       </Notice>
-      <HomeHeadline>{`…${QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)]}?`}</HomeHeadline>
+      <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics}/>
     </motion.main>
   )
