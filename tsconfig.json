@@ -19,7 +19,10 @@
     "noEmit": true,
     "noImplicitReturns": true,
     "noUnusedParameters": true,
-    "jsx": "react"
+    "jsx": "react",
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/"
   },
   "include": [
     "src"
