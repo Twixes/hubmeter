@@ -12,7 +12,7 @@ import 'focus-visible'
 import App from './components/App'
 import './index.scss'
 
-Sentry.init({ dsn: "https://eaa5d3bc32f640ceb2f8090656940497@o173795.ingest.sentry.io/5288711" })
+Sentry.init({ dsn: 'https://eaa5d3bc32f640ceb2f8090656940497@o173795.ingest.sentry.io/5288711' })
 posthog.init('AfWAhZKo9pPPH8blum1SKbPAWPixyRGOuaxC_laQNAc', { api_host: 'https://app.posthog.com' })
 
 ReactDOM.render(
