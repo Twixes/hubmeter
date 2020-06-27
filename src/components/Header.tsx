@@ -32,7 +32,7 @@ export default function Header(): JSX.Element {
           >
             <circle cx="20" cy="20" r="18" strokeWidth="4"/>
             <motion.line
-              className="Header-clock-hand" transition={{ type: 'spring', damping: 24, stiffness: 120, mass: 2 }}
+              className="Header-clock-hand" transition={{ type: 'spring', damping: 22, stiffness: 140, mass: 2 }}
               initial={{ rotate: clockHandRotation }} animate={{ rotate: clockHandRotation }}
               x1="20" y1="22" x2="20" y2="7" strokeWidth="4"
             />
