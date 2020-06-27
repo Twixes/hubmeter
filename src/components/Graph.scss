@@ -7,15 +7,10 @@
   padding: 0.75rem;
 }
 
-.Graph-container,
-.Graph-subcontainer {
+.Graph-container {
   position: relative;
   width: 100%;
   height: 100%;
-}
-
-.Graph-subcontainer {
-  transform-origin: bottom;
 }
 
 .Graph-main,
@@ -24,6 +19,14 @@
   flex-direction: row;
   position: absolute;
   margin: 0;
+}
+
+.Graph-main {
+  transform-origin: bottom;
+}
+
+.Graph-main-marker {
+  fill: var(--color-accent-pale);
 }
 
 .Graph-overlay-caption {
@@ -38,20 +41,22 @@
 }
 
 .Graph-overlay-part {
-  margin: 0;
-  & svg {
-    transition: fill var(--duration-instant) var(--timing-function-standard);
-  }
-  &:hover svg {
+  transition: fill var(--duration-instant) var(--timing-function-standard);
+  &:hover {
     fill: rgba(0, 0, 0, 0.25);
   }
 }
 
-.Graph-overlay-legend-x-container {
+.Graph-legend-x {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.Graph-legend-x-value-container {
   height: 2rem;
 }
 
-.Graph-overlay-legend-x {
+.Graph-legend-x-value {
   transform: rotate(-30deg);
   transform-origin: bottom right;
   text-align: right;

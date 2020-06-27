@@ -6,8 +6,10 @@
   --color-accent: #{$color-accent};
   --color-shadow: #{$color-shadow};
   --opacity-dim: #{$opacity-dim};
-  --color-accent-dim: #{$color-accent-dim};
+  --opacity-pale: #{$opacity-pale};
   --color-foreground-dim: #{$color-foreground-dim};
+  --color-accent-dim: #{$color-accent-dim};
+  --color-accent-pale: #{$color-accent-pale};
   --font-family-stack: #{inspect($font-family-stack)};
   --font-weight: #{$font-weight};
   --duration-instant: #{$duration-instant};
