@@ -29,17 +29,17 @@ export default function Statistics(): JSX.Element {
   const currentUser = useRecoilValue(currentUserState)
   // const [userEvents, setUserEvents] = useRecoilState(userEventsState({ login: login!.toLowerCase() }))
   const [events, setEvents] = useRecoilState(eventsState)
-  const [wereEventsLoaded, setWereEventsLoaded] = useState<boolean>(false)
+  const [areEventsLoaded, setAreEventsLoaded] = useState(false)
 
   useEffect(() => {
     if (currentUser && !events[currentUser.login.toLowerCase()]) {
-      setWereEventsLoaded(false)
+      // setAreEventsLoaded(false)
       fetchUserEventsAll(currentUser.login).then(newEvents => {
         setEvents({ ...events, [currentUser.login.toLowerCase()]: newEvents })
-        setWereEventsLoaded(true)
+        setAreEventsLoaded(true)
       }).catch((error: Error) => {
         setErrorMessage(error.message)
-        setWereEventsLoaded(false)
+        setAreEventsLoaded(false)
       })
     }
   }, [setErrorMessage, currentUser, events, setEvents])
@@ -49,7 +49,7 @@ export default function Statistics(): JSX.Element {
     const byDayOfWeekPointsTentative: DataPoint[] = DAYS_OF_WEEK.map(dayOfWeek => [dayOfWeek, 0])
     if (currentUser && events[currentUser.login.toLowerCase()]) {
       const userEvents: Event[] = events[currentUser.login.toLowerCase()]!
-      const oldestEventCreatedAt: Date = userEvents[userEvents.length-1].created_at
+      const oldestEventCreatedAt: Date | null = userEvents.length ? userEvents[userEvents.length - 1].created_at : null
       for (const event of userEvents) {
         byHourPointsTentative[event.created_at.getUTCHours()][1] += 1
         console.log(event.created_at.getUTCDate())
@@ -73,11 +73,11 @@ export default function Statistics(): JSX.Element {
             >
               <section>
                 <h1>By hour</h1>
-                <Graph dataPoints={byHourPoints} isLoading={!wereEventsLoaded}/>
+                <Graph dataPoints={byHourPoints} isLoading={!areEventsLoaded}/>
               </section>
               <section>
                 <h1>By day of week</h1>
-                <Graph dataPoints={byDayOfWeekPoints} isLoading={!wereEventsLoaded}/>
+                <Graph dataPoints={byDayOfWeekPoints} isLoading={!areEventsLoaded}/>
               </section>
             </motion.div>
           )
