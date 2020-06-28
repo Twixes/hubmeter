@@ -1,4 +1,4 @@
-import React, { useMemo, useState, Dispatch, SetStateAction } from 'react'
+import React, { useMemo, useState, useLayoutEffect, Dispatch, SetStateAction, MutableRefObject } from 'react'
 import useSize from '@react-hook/size'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { roundCommands, SVGCommand } from 'svg-round-corners'
@@ -14,35 +14,78 @@ interface Props {
 }
 
 const CORNER_RADIUS: number = 4
-const GRAPH_VARIANTS: Variants = {
+const TRANSITION = { type: 'spring', damping: 18 }
+const OPACITY_VARIANTS: Variants = {
   hidden: {
-    opacity: 0,
+    opacity: 0
+  },
+  shown: {
+    opacity: 1
+  }
+}
+const EXPANSION_VARIANTS: Variants = {
+  hidden: {
     scaleY: 0
   },
   shown: {
-    opacity: 1,
     scaleY: 1
   }
 }
 
-function drawRoundedBarGraphWithOverlay(
-  points: DataPoint[], width: number, height: number, setCaptionPoint: Dispatch<SetStateAction<CaptionPoint | null>>
-): [JSX.Element, JSX.Element[]] {
+function generateXLegend(
+  points: DataPoint[], width: number, xLegendRefs: MutableRefObject<(HTMLDivElement | null)[]>
+): JSX.Element {
   if (!points.length) throw Error('No data points to draw')
   const columnWidth: number = width / points.length
-  const maxY: number = Math.max(...points.map(([, y]) => y)) || Infinity // fall back to 1 to avoid division by 0
-  const markerElements: JSX.Element[] = []
-  const markerSpace: number = 10 ** Math.floor(Math.log10(maxY)) * height / maxY
-  for (let markerY = height - 1; markerY > 0; markerY -= markerSpace) {
-    markerElements.push(<rect className="Graph-main-marker" x={0} y={Math.round(markerY)} width={width} height={1} />)
+  const xLegendValueElements: JSX.Element[] = []
+  for (const [i, [x]] of points.entries()) {
+    xLegendValueElements.push(
+      <div
+        className="Graph-legend-x-value-container" style={{ width: columnWidth }} key={`Graph-legend-x-value-${i + 1}`}
+      ><div className="Graph-legend-x-value" ref={ref => { xLegendRefs.current[i] = ref }}>{x}</div>
+      </div>
+    )
   }
-  let xPosition: number = 0
-  let yPosition: number = height
+  return (
+    <motion.div
+      className="Graph-legend-x" transition={TRANSITION} variants={OPACITY_VARIANTS}
+      initial="hidden" animate="shown" exit="hidden"
+    >{xLegendValueElements}</motion.div>
+  )
+}
+
+function drawRoundedBarGraphWithOverlay(
+  points: DataPoint[], width: number, height: number, setCaptionPoint: Dispatch<SetStateAction<CaptionPoint | null>>,
+  xLegendHeight: number
+): [JSX.Element, JSX.Element[]] {
+  if (!points.length) throw Error('No data points to draw')
+  console.log('##########', xLegendHeight)
+  if (xLegendHeight > 0) height -= xLegendHeight
+  const maxY: number = Math.max(...points.map(([, y]) => y)) || 10 // fall back to 10 to avoid division by 0
+  let markerValue: number = 10 ** Math.floor(Math.log10(maxY))
+  let markerSpace: number = markerValue * height / maxY
+  if (height / markerSpace < 2) {
+    // ensure that at least 2 markers will be displayed
+    markerValue /= 10
+    markerSpace /= 10
+  }
+  const markerElements: JSX.Element[] = []
+  for (let markerY = height - 1; markerY > 0; markerY -= markerSpace) {
+    markerElements.push(
+      <motion.rect
+        className="Graph-main-marker" x={0} y={Math.round(markerY)} width={width} height={1} transition={TRANSITION}
+        variants={OPACITY_VARIANTS} initial="hidden" animate="shown" exit="hidden"
+      />
+    )
+  }
+  const columnWidth: number = width / points.length
   const overlayElements: JSX.Element[] = []
   const mainCommands: SVGCommand[] = [
-    { marker: 'M', values: { x: width, y: yPosition + 1 } },
-    { marker: 'L', values: { x: xPosition, y: yPosition } }
+    { marker: 'M', values: { x: width, y: height + 1 } },
+    { marker: 'L', values: { x: 0, y: height + 1 } }
   ]
+  let xPosition: number = 0
+  let yPosition: number = height
   for (const [i, [x, y]] of points.entries()) {
     const overlayCommands: SVGCommand[] = [
       { marker: 'M', values: { x: columnWidth, y: height } },
@@ -61,43 +104,49 @@ function drawRoundedBarGraphWithOverlay(
       <svg
         viewBox={`0 0 ${columnWidth} ${height}`} xmlns="http://www.w3.org/2000/svg"
         width={columnWidth} height={height} fill="transparent"
-        className="Graph-overlay-part" key={`Graph-overlay-part-${i}`} style={{ width: columnWidth }}
+        className="Graph-overlay-part" key={`Graph-overlay-part-${i + 1}`} style={{ width: columnWidth }}
         onMouseEnter={() => { setCaptionPoint([x, y, i]) }} onMouseLeave={() => { setCaptionPoint(null) }}
       >
-        <path d={roundCommands(overlayCommands, CORNER_RADIUS).path}/>
+        <motion.path
+          className="Graph-main-path" variants={EXPANSION_VARIANTS} initial="hidden" animate="shown" exit="hidden"
+          transition={TRANSITION} d={roundCommands(overlayCommands, CORNER_RADIUS).path}
+        />
       </svg>
     )
   }
   mainCommands.push({ marker: 'Z', values: { x: xPosition, y: yPosition } })
-  return [(
+  const mainElement: JSX.Element = (
     <svg viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg" width={width} height={height}>
-      {markerElements}<path d={roundCommands(mainCommands, CORNER_RADIUS).path}/>
+      {markerElements}
+      <motion.path
+        className="Graph-main-path" variants={EXPANSION_VARIANTS} initial="hidden" animate="shown" exit="hidden"
+        transition={TRANSITION} d={roundCommands(mainCommands, CORNER_RADIUS).path}
+      />
     </svg>
-  ), overlayElements]
-}
-
-function generateXLegend(points: DataPoint[], width: number): JSX.Element {
-  if (!points.length) throw Error('No data points to draw.')
-  const columnWidth: number = width / points.length
-  const elements: JSX.Element[] = points.map(([x,]) => (
-    <div className="Graph-legend-x-value-container" style={{ width: columnWidth }}>
-      <div className="Graph-legend-x-value">{x}</div>
-    </div>
-  ))
-  return (
-    <div className="Graph-legend-x">{elements}</div>
   )
+  return [mainElement, overlayElements]
 }
 
 export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
   const vectorRef = React.useRef<HTMLDivElement | null>(null)
+  const xLegendRefs = React.useRef<(HTMLDivElement | null)[]>([])
   const [vectorWidth, vectorHeight] = useSize(vectorRef)
+  const [xLegendHeight, setXLegendHeight] = useState<number>(0)
   const [captionPoint, setCaptionPoint] = useState<CaptionPoint | null>(null)
 
-  const [vectorMainElement, vectorOverlayElements, xLegendElement] = useMemo(() => isLoading ? Array(3).fill(null) : [
-    ...drawRoundedBarGraphWithOverlay(dataPoints, vectorWidth, vectorHeight, setCaptionPoint),
-    generateXLegend(dataPoints, vectorWidth)
-  ], [dataPoints, isLoading, vectorWidth, vectorHeight])
+  const xLegendElement = useMemo(() => isLoading ? null : (
+    generateXLegend(dataPoints, vectorWidth, xLegendRefs)
+  ), [isLoading, dataPoints, vectorWidth])
+
+  const [vectorMainElement, vectorOverlayElements] = useMemo(() => isLoading ? [null, null] : (
+    drawRoundedBarGraphWithOverlay(dataPoints, vectorWidth, vectorHeight, setCaptionPoint, xLegendHeight)
+  ), [isLoading, dataPoints, vectorWidth, vectorHeight, xLegendHeight])
+
+  useLayoutEffect(() => {
+    setXLegendHeight(Math.max(
+      ...xLegendRefs.current.filter(ref => Boolean(ref)).map(ref => ref!.getBoundingClientRect().height)
+    ))
+  })
 
   return (
     <div className="Graph">
@@ -105,11 +154,9 @@ export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
         <AnimatePresence>
           {isLoading ? <Spinner color="var(--color-accent)"/> : (
             <>
-              <motion.figure
-                className="Graph-main" variants={GRAPH_VARIANTS} initial="hidden" animate="shown" exit="hidden"
-                transition={{ type: 'spring', damping: 18 }}
-              >{vectorMainElement}
-              </motion.figure>
+              <figure className="Graph-main">
+                {vectorMainElement}
+              </figure>
               <figure className="Graph-overlay">
                 <AnimatePresence>
                   {captionPoint && <motion.figcaption
