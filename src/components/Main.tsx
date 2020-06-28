@@ -46,8 +46,8 @@ export default function Main(): JSX.Element {
   const [randomQuestion, setRandomQuestion] = useState(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
 
   useEffect(() => {
-      setRandomQuestion(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
-      const titleElement = document.querySelector('title');
+    setRandomQuestion(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
+    const titleElement = document.querySelector('title')
       titleElement!.innerText = login || 'HubMeter'
   }, [login])
 
