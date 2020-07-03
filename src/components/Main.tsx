@@ -14,7 +14,7 @@ const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
   'release on Friday',
   'pull all-nighters',
   'work the night shift',
-  'Git up at the crack of dawn',
+  'git up at the crack of dawn',
   'code on weekends',
   'commit at high noon',
   'push in the morning',
