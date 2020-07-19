@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useLayoutEffect, Dispatch, SetStateAction, MutableRefObject } from 'react'
+import React, { useMemo, useState, useRef, useLayoutEffect, Dispatch, SetStateAction, MutableRefObject } from 'react'
 import useSize from '@react-hook/size'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { roundCommands, SVGCommand } from 'svg-round-corners'
@@ -128,8 +128,8 @@ function drawRoundedBarGraphWithOverlay(
 }
 
 export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
-  const vectorRef = React.useRef<HTMLDivElement | null>(null)
-  const xLegendRefs = React.useRef<(HTMLDivElement | null)[]>([])
+  const vectorRef = useRef<HTMLDivElement | null>(null)
+  const xLegendRefs = useRef<(HTMLDivElement | null)[]>([])
   const [vectorWidth, vectorHeight] = useSize(vectorRef)
   const [xLegendHeight, setXLegendHeight] = useState<number>(0)
   const [captionPoint, setCaptionPoint] = useState<CaptionPoint | null>(null)
