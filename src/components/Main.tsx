@@ -3,7 +3,7 @@ import { Route, useParams, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AnimatePresence, motion } from 'framer-motion'
 import { fetchUser } from '../github-api'
-import { errorMessageState, currentUserState } from '../atoms'
+import { errorMessageState, isCurrentUserLoadingState, currentUserState } from '../atoms'
 import { Params } from './App'
 import Notice from './Notice'
 import Controls from '../features/Controls/Controls'
@@ -42,6 +42,7 @@ export default function Main(): JSX.Element {
 
   const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
+  const [isCurrentUserLoading, setIsCurrentUserLoading] = useRecoilState(isCurrentUserLoadingState)
 
   const [randomQuestion, setRandomQuestion] = useState(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
 
@@ -56,12 +57,15 @@ export default function Main(): JSX.Element {
     if (login) {
       if (!currentUser || currentUser.login.toLowerCase() !== login.toLowerCase()) {
         fetchUser(login).then(user => {
+          setIsCurrentUserLoading(true)
           setCurrentUser(user)
           setErrorMessage(null)
           history.replace(`/${user.login}`)
         }).catch((error: Error) => {
           setCurrentUser(null)
           setErrorMessage(error.message)
+        }).finally(() => {
+          setIsCurrentUserLoading(false)
         })
       } else if (currentUser.login !== login) {
         setCurrentUser(null)

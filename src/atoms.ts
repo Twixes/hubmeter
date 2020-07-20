@@ -6,32 +6,50 @@ export const errorMessageState = atom<string | null>({
   default: null
 })
 
+export const isCurrentUserLoadingState = atom<boolean>({
+  key: 'isCurrentUserLoading',
+  default: false
+})
+
 export const currentUserState = atom<User | null>({
   key: 'currentUser',
   default: null
 })
 
-export const eventsState = atom<{ [login: string]: Event[] | undefined }>({
-  key: 'events',
-  default: {}
+export const areEventsLoadingState = atom<boolean>({
+  key: 'areEventsLoading',
+  default: false
+})
+
+export const loginToUserEventsState = atom<Map<string, Event[] | undefined>>({
+  key: 'loginToUserEvents',
+  default: new Map()
+})
+
+export const timeZoneUTCOffsetState = atom<number>({
+  key: 'timeZoneUTCOffset',
+  default: 0
+})
+
+export const eventTypesFilterState = atom<Set<EventType>>({
+  key: 'eventTypesFilter',
+  default: new Set()
 })
 
 export const userEventsState = selectorFamily<Event[] | undefined, { login: string }>({
   key: 'userEvents',
   get: ({ login }) => ({ get }) => {
-    return get(eventsState)[login]
+    if (!login) return undefined
+    const userEvents = get(loginToUserEventsState).get(login)
+    const eventTypesFilter = get(eventTypesFilterState)
+    if (!userEvents || !eventTypesFilter.size) return userEvents
+    return userEvents.filter((event: Event) => eventTypesFilter.has(event.type))
   },
   set: ({ login }) => ({ set }, newEvents: Event[] | undefined | DefaultValue) => {
-    set(eventsState, prevEventsState => { return { ...prevEventsState, [login]: newEvents } })
-  }
-})
-
-export const userEventsFilteredState = selectorFamily<Event[] | undefined, { login: string, eventTypes: EventType[] }>({
-  key: 'userEventsFiltered',
-  get: ({ login, eventTypes }) => ({ get }) => {
-    const events: Event[] | undefined = get(userEventsState({ login: login }))
-    if (!eventTypes) return events
-    const eventTypesSet: Set<EventType> = new Set(eventTypes)
-    return events ? events.filter((event: Event) => eventTypesSet.has(event.type)) : undefined
+    if (login) set(loginToUserEventsState, prevState => {
+      const newState = new Map(prevState)
+      newState.set(login, newEvents as Event[])
+      return newState
+    })
   }
 })
