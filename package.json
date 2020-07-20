@@ -66,47 +66,6 @@
     "*.{json,css,scss}": "prettier --write",
     "*.{js,jsx,ts,tsx}": "standardx --fix"
   },
-  "eslintConfig": {
-    "env": {
-      "browser": true
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "rules": {
-      "max-len": [
-        1,
-        120
-      ],
-      "no-unused-vars": "off",
-      "jsx-quotes": [
-        "error",
-        "prefer-double"
-      ],
-      "react/jsx-closing-tag-location": "off",
-      "react/jsx-closing-bracket-location": [
-        "error",
-        "line-aligned"
-      ],
-      "react/jsx-tag-spacing": [
-        "error",
-        {
-          "closingSlash": "never",
-          "beforeSelfClosing": "never",
-          "afterOpening": "never",
-          "beforeClosing": "never"
-        }
-      ],
-      "space-before-function-paren": [
-        "error",
-        {
-          "named": "never"
-        }
-      ]
-    }
-  },
   "standardx": {
     "parser": "@typescript-eslint/parser",
     "plugins": [
