@@ -48,7 +48,7 @@ export default function Main(): JSX.Element {
   useEffect(() => {
     setRandomQuestion(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
     const titleElement = document.querySelector('title')
-      titleElement!.innerText = login || 'HubMeter'
+    titleElement!.innerText = login || 'HubMeter'
   }, [login])
 
   useEffect(() => {
@@ -76,10 +76,7 @@ export default function Main(): JSX.Element {
     >
       <HomeHeadline>Do</HomeHeadline>
       <Controls/>
-      <Notice
-        shouldDisplay={Boolean(errorMessage)} indication="!" onXClick={() => { setErrorMessage(null) }}
-      >{errorMessage || ''}
-      </Notice>
+      <Notice message={errorMessage} indication="!" onXClick={() => { setErrorMessage(null) }}/>
       <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics}/>
     </motion.main>

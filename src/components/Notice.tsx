@@ -3,8 +3,7 @@ import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-moti
 import './Notice.scss'
 
 interface Props {
-  children: ReactChild
-  shouldDisplay: boolean
+  message: ReactChild | null
   indication: string
   onXClick?: () => void
   initialAnimatePresence?: boolean
@@ -37,13 +36,13 @@ const INSIDE_VARIANTS: Variants = {
 }
 
 export default function ErrorNotice(
-  { children, shouldDisplay, indication, onXClick, initialAnimatePresence }: Props
+  { message, indication, onXClick, initialAnimatePresence }: Props
 ): JSX.Element | null {
   const shouldReduceMotion = useReducedMotion()
 
   return (
     <AnimatePresence initial={initialAnimatePresence}>
-      {!shouldDisplay ? null : (
+      {!message ? null : (
         <motion.div
           className="Notice" custom={shouldReduceMotion} variants={OUTSIDE_VARIANTS}
           initial="hidden" animate="shown" exit="hidden" positionTransition
@@ -52,7 +51,7 @@ export default function ErrorNotice(
           <motion.div
             className="Notice-message" custom={shouldReduceMotion} variants={INSIDE_VARIANTS}
             initial="hidden" animate="shown" exit="hidden"
-          >{children}
+          >{message}
           </motion.div>
           {onXClick && <button className="Notice-button" type="button" onClick={onXClick}>✗</button>}
         </motion.div>
