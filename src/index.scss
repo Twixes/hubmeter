@@ -48,10 +48,8 @@ h1 {
   margin: 1rem 0;
   font-size: 1.75rem;
   font-style: italic;
-  text-shadow:
-    0 0 .033em #fff, 0 0 .08em #fff,
-    0 0 .1em var(--color-accent), 0 0 .2em var(--color-accent),
-    0 0 .3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
+  text-shadow: 0 0 0.033em #fff, 0 0 0.08em #fff, 0 0 0.1em var(--color-accent), 0 0 0.2em var(--color-accent),
+    0 0 0.3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
 }
 
 button,
@@ -66,7 +64,7 @@ button {
   border-radius: 0.5rem;
 }
 
-input[type="search"]::-webkit-search-cancel-button {
+input[type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
 

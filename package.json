@@ -14,6 +14,13 @@
   },
   "homepage": "https://hubmeter.live",
   "private": true,
+  "scripts": {
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "lint": "standardx '**/*.{ts,tsx}' --verbose | snazzy",
+    "fix": "standardx '**/*.{ts,tsx}' --fix",
+    "test": "npm run lint && react-scripts test"
+  },
   "dependencies": {
     "@react-hook/size": "^2.1.0",
     "@sentry/browser": "^5.18.0",
@@ -44,15 +51,20 @@
     "@types/react-router-dom": "^5.1.5",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
     "snazzy": "^8.0.0",
     "standardx": "^5.0.0"
   },
-  "scripts": {
-    "build": "react-scripts build",
-    "start": "react-scripts start",
-    "lint": "standardx '**/*.{ts,tsx}' --verbose | snazzy",
-    "fix": "standardx '**/*.{ts,tsx}' --fix",
-    "test": "npm run lint && react-scripts test"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{json,css,scss}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": "standardx"
   },
   "eslintConfig": {
     "env": {

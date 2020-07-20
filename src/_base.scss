@@ -46,8 +46,6 @@ $timing-function-standard: cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 0.5rem;
   background: var(--color-foreground);
   color: var(--color-accent);
-  box-shadow:
-    0 0 0.09375rem var(--color-shadow), 0 0.125rem 0.1875rem var(--color-shadow),
-    0 0.25rem 0.375rem var(--color-shadow), 0 0.5rem 0.75rem var(--color-shadow),
-    0 1rem 1.5rem var(--color-shadow);
+  box-shadow: 0 0 0.09375rem var(--color-shadow), 0 0.125rem 0.1875rem var(--color-shadow),
+    0 0.25rem 0.375rem var(--color-shadow), 0 0.5rem 0.75rem var(--color-shadow), 0 1rem 1.5rem var(--color-shadow);
 }

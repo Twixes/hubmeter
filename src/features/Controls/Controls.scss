@@ -1,7 +1,8 @@
 @keyframes Controls-typing-indicator-bounce {
   0% {
     transform: translateY(0);
-  } 100% {
+  }
+  100% {
     transform: translateY(-0.25em);
   }
 }
@@ -46,8 +47,8 @@
 
 .Controls-indicator-typing {
   & span {
-    animation:
-      Controls-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite alternate;
+    animation: Controls-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite
+      alternate;
     display: inline-block;
     @for $i from 1 through 3 {
       &:nth-child(#{$i}) {
