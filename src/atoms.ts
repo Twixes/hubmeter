@@ -31,9 +31,9 @@ export const timeZoneUTCOffsetState = atom<number>({
   default: 0
 })
 
-export const eventTypesFilterState = atom<Set<EventType>>({
+export const eventTypesFilterState = atom<Set<EventType> | null>({
   key: 'eventTypesFilter',
-  default: new Set()
+  default: null
 })
 
 export const userEventsState = selectorFamily<Event[] | undefined, { login: string }>({
@@ -42,7 +42,7 @@ export const userEventsState = selectorFamily<Event[] | undefined, { login: stri
     if (!login) return undefined
     const userEvents = get(loginToUserEventsState).get(login)
     const eventTypesFilter = get(eventTypesFilterState)
-    if (!userEvents || !eventTypesFilter.size) return userEvents
+    if (!userEvents || !eventTypesFilter) return userEvents
     return userEvents.filter((event: Event) => eventTypesFilter.has(event.type))
   },
   set: ({ login }) => ({ set }, newEvents: Event[] | undefined | DefaultValue) => {
