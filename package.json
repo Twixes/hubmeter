@@ -17,8 +17,8 @@
   "scripts": {
     "build": "react-scripts build",
     "start": "react-scripts start",
-    "lint": "standardx '**/*.{ts,tsx}' --verbose | snazzy",
-    "fix": "standardx '**/*.{ts,tsx}' --fix",
+    "lint": "standardx '**/*.{js,jsx,ts,tsx}' --verbose | snazzy",
+    "fix": "standardx '**/*.{js,jsx,ts,tsx}' --fix",
     "test": "npm run lint && react-scripts test"
   },
   "dependencies": {
