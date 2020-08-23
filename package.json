@@ -19,7 +19,7 @@
     "start": "react-scripts start",
     "lint": "standardx '**/*.{js,jsx,ts,tsx}' --verbose | snazzy",
     "fix": "standardx '**/*.{js,jsx,ts,tsx}' --fix",
-    "test": "npm run lint && react-scripts test"
+    "test": "yarn lint && react-scripts test"
   },
   "dependencies": {
     "@react-hook/size": "^2.1.0",
