@@ -45,7 +45,7 @@ export default function ErrorNotice(
       {!message ? null : (
         <motion.div
           className="Notice" custom={shouldReduceMotion} variants={OUTSIDE_VARIANTS}
-          initial="hidden" animate="shown" exit="hidden" positionTransition
+          initial="hidden" animate="shown" exit="hidden" layout
         >
           <div className="Notice-indicator">{indication}</div>
           <motion.div

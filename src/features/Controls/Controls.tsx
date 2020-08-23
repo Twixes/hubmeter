@@ -92,7 +92,7 @@ export default function Controls(): JSX.Element {
   }
 
   return (
-    <motion.form className="Controls" ref={formRef} onSubmit={onFormSubmit} positionTransition>
+    <motion.form className="Controls" ref={formRef} onSubmit={onFormSubmit} layout>
       <ControlsSearch
         currentLoginInput={currentLoginInput} setCurrentLoginInput={setCurrentLoginInput} matchingUser={matchingUser}
         setMatchingUser={setMatchingUser} selectedUser={selectedUser} setSelectedUser={setSelectedUser}
