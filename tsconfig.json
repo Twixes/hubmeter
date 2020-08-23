@@ -13,6 +13,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "incremental": true,
     "noImplicitReturns": true,
     "noUnusedParameters": true,
     "jsx": "react",
