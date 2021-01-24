@@ -87,7 +87,7 @@ export default function Main(): JSX.Element {
   return (
     <motion.main className="Main" style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}>
       <HomeHeadline>Do</HomeHeadline>
-      <Controls/>
+      <Controls />
       <Notice
         message={errorMessage}
         indication="!"
@@ -96,7 +96,7 @@ export default function Main(): JSX.Element {
         }}
       />
       <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
-      <Route path="/:login" component={Statistics}/>
+      <Route path="/:login" component={Statistics} />
     </motion.main>
   )
 }

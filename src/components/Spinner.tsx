@@ -19,7 +19,7 @@ const VARIANTS: Variants = {
 export default function Spinner({ color }: Props): JSX.Element {
   return (
     <motion.div className="Spinner-container" variants={VARIANTS} initial="hidden" animate="shown" exit="hidden">
-      <div className="Spinner" style={color ? { borderLeftColor: color, borderRightColor: color } : {}}/>
+      <div className="Spinner" style={color ? { borderLeftColor: color, borderRightColor: color } : {}} />
     </motion.div>
   )
 }

@@ -19,9 +19,9 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      <Header/>
-      <Route path="/:login?" component={Main}/>
-      <Footer/>
+      <Header />
+      <Route path="/:login?" component={Main} />
+      <Footer />
     </>
   )
 }

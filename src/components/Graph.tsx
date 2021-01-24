@@ -211,7 +211,7 @@ export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
       <div className="Graph-container" ref={vectorRef}>
         <AnimatePresence>
           {isLoading ? (
-            <Spinner color="var(--color-accent)"/>
+            <Spinner color="var(--color-accent)" />
           ) : (
             <>
               <figure className="Graph-main">{vectorMainElement}</figure>
@@ -237,7 +237,7 @@ export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
                       }}
                     >
                       {captionPoint[0]}
-                      <br/>
+                      <br />
                       {captionPoint[1]} {captionPoint[1] === 1 ? 'event' : 'events'}
                     </motion.figcaption>
                   )}

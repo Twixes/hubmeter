@@ -22,7 +22,7 @@ declare module 'svg-round-corners' {
    * @param {number} round Number of decimal digits to round values
    * @returns {array} Sequence of commands containing arcs in place or corners
    */
-  export function roundCommands(cmds: SVGCommand[], r: number, round?: number): { path: string, commands: SVGCommand[] }
+  export function roundCommands(cmds: SVGCommand[], r: number, round?: number): { path: string; commands: SVGCommand[] }
 
   /**
    * This is a shorthand for parsePath() and roundCommands().

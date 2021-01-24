@@ -24,7 +24,7 @@ ReactDOM.render(
       <RecoilRoot>
         <CookiesProvider>
           <BrowserRouter>
-            <App/>
+            <App />
           </BrowserRouter>
         </CookiesProvider>
       </RecoilRoot>

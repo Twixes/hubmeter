@@ -42,7 +42,7 @@ export default function Header(): JSX.Element {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="20" cy="20" r="18" strokeWidth="4"/>
+            <circle cx="20" cy="20" r="18" strokeWidth="4" />
             <motion.line
               className="Header-clock-hand"
               transition={{ type: 'spring', damping: 22, stiffness: 140, mass: 2 }}

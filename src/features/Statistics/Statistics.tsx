@@ -67,7 +67,7 @@ export default function Statistics(): JSX.Element {
     <AnimatePresence>
       {(() => {
         if (errorMessage) return null
-        if (isCurrentUserLoading) return <Spinner/>
+        if (isCurrentUserLoading) return <Spinner />
         if (currentUser) {
           return (
             <motion.div
@@ -80,11 +80,11 @@ export default function Statistics(): JSX.Element {
             >
               <section>
                 <h1>By hour</h1>
-                <Graph dataPoints={[[2, 3]]} isLoading={areEventsLoading}/>
+                <Graph dataPoints={[[2, 3]]} isLoading={areEventsLoading} />
               </section>
               <section>
                 <h1>By day of week</h1>
-                <Graph dataPoints={[[2, 3]]} isLoading={areEventsLoading}/>
+                <Graph dataPoints={[[2, 3]]} isLoading={areEventsLoading} />
               </section>
             </motion.div>
           )
