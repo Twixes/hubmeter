@@ -62,8 +62,8 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,scss,md}": "prettier --write",
-    "*.{js,jsx,ts,tsx}": "yarn lint --fix"
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": "./node_modules/.bin/prettier --write",
+    "*.{js,jsx,ts,tsx}": "./node_modules/.bin/eslint --fix"
   },
   "browserslist": {
     "production": [
