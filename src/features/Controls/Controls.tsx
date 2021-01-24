@@ -18,9 +18,7 @@ export default function Controls(): JSX.Element {
   const buttonRef = useRef<HTMLButtonElement | null>(null)
   const navigationRefs = useRef<(HTMLElement | null)[]>(Array<HTMLElement | null>(5).fill(null))
 
-  const [currentLoginInput, setCurrentLoginInput] = useState<string>(
-    (currentUser ? currentUser.login : login) || ''
-  )
+  const [currentLoginInput, setCurrentLoginInput] = useState<string>((currentUser ? currentUser.login : login) || '')
   const [matchingUser, setMatchingUser] = useState<User | null>(currentUser)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [currentSearchResults, setCurrentSearchResults] = useState<User[]>([])
@@ -30,12 +28,12 @@ export default function Controls(): JSX.Element {
   const [currentNavigationIndex, setCurrentNavigationIndex] = useState(0)
 
   const linkLogin: string = selectedUser ? selectedUser.login : matchingUser ? matchingUser.login : currentLoginInput
-  const isSearchShown: boolean = Boolean(
+  const isSearchShown = Boolean(
     currentLoginInput && !isTypingInProgress && !isSearchHiddenOverride !== false && currentSearchResults.length
   )
-  const isSubmitEnabled: boolean = Boolean(
+  const isSubmitEnabled = Boolean(
     currentLoginInput &&
-    (didSearchErrorOccur || isTypingInProgress || (!isTypingInProgress && (matchingUser || selectedUser)))
+      (didSearchErrorOccur || isTypingInProgress || (!isTypingInProgress && (matchingUser || selectedUser)))
   )
 
   useOutsideClickHandler(formRef, () => {
@@ -94,20 +92,36 @@ export default function Controls(): JSX.Element {
   return (
     <motion.form className="Controls" ref={formRef} onSubmit={onFormSubmit} layout>
       <ControlsSearch
-        currentLoginInput={currentLoginInput} setCurrentLoginInput={setCurrentLoginInput} matchingUser={matchingUser}
-        setMatchingUser={setMatchingUser} selectedUser={selectedUser} setSelectedUser={setSelectedUser}
-        setIsSearchHiddenOverride={setIsSearchHiddenOverride} isTypingInProgress={isTypingInProgress}
-        setIsTypingInProgress={setIsTypingInProgress} didSearchErrorOccur={didSearchErrorOccur}
-        setDidSearchErrorOccur={setDidSearchErrorOccur} setCurrentSearchResults={setCurrentSearchResults}
-        setCurrentNavigationIndex={setCurrentNavigationIndex} isSearchShown={isSearchShown}
-        isSubmitEnabled={isSubmitEnabled} navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
-        buttonRef={buttonRef} navigationRefs={navigationRefs}
+        currentLoginInput={currentLoginInput}
+        setCurrentLoginInput={setCurrentLoginInput}
+        matchingUser={matchingUser}
+        setMatchingUser={setMatchingUser}
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+        setIsSearchHiddenOverride={setIsSearchHiddenOverride}
+        isTypingInProgress={isTypingInProgress}
+        setIsTypingInProgress={setIsTypingInProgress}
+        didSearchErrorOccur={didSearchErrorOccur}
+        setDidSearchErrorOccur={setDidSearchErrorOccur}
+        setCurrentSearchResults={setCurrentSearchResults}
+        setCurrentNavigationIndex={setCurrentNavigationIndex}
+        isSearchShown={isSearchShown}
+        isSubmitEnabled={isSubmitEnabled}
+        navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
+        buttonRef={buttonRef}
+        navigationRefs={navigationRefs}
       />
       <ControlsSearchResults
-        setCurrentLoginInput={setCurrentLoginInput} matchingUser={matchingUser} setSelectedUser={setSelectedUser}
-        currentSearchResults={currentSearchResults} setIsSearchHiddenOverride={setIsSearchHiddenOverride}
-        setCurrentNavigationIndex={setCurrentNavigationIndex} isSearchShown={isSearchShown} buttonRef={buttonRef}
-        navigationRefs={navigationRefs} submit={submit}
+        setCurrentLoginInput={setCurrentLoginInput}
+        matchingUser={matchingUser}
+        setSelectedUser={setSelectedUser}
+        currentSearchResults={currentSearchResults}
+        setIsSearchHiddenOverride={setIsSearchHiddenOverride}
+        setCurrentNavigationIndex={setCurrentNavigationIndex}
+        isSearchShown={isSearchShown}
+        buttonRef={buttonRef}
+        navigationRefs={navigationRefs}
+        submit={submit}
         navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
       />
     </motion.form>

@@ -23,14 +23,29 @@ interface Props {
   navigationRefs: MutableRefObject<(HTMLElement | null)[]>
 }
 
-const MAX_SEARCH_RESULTS_SHOWN: number = 4
+const MAX_SEARCH_RESULTS_SHOWN = 4
 
 export default function ControlsSearch({
-  currentLoginInput, setCurrentLoginInput, matchingUser, setMatchingUser, selectedUser, setSelectedUser,
-  setIsSearchHiddenOverride, isTypingInProgress, setIsTypingInProgress, didSearchErrorOccur, setDidSearchErrorOccur,
-  setCurrentSearchResults, setCurrentNavigationIndex, isSearchShown, isSubmitEnabled,
-  navigateSearchResultsWithKeyboard, buttonRef, navigationRefs
-}: Props) {
+  currentLoginInput,
+  setCurrentLoginInput,
+  matchingUser,
+  setMatchingUser,
+  selectedUser,
+  setSelectedUser,
+  setIsSearchHiddenOverride,
+  isTypingInProgress,
+  setIsTypingInProgress,
+  didSearchErrorOccur,
+  setDidSearchErrorOccur,
+  setCurrentSearchResults,
+  setCurrentNavigationIndex,
+  isSearchShown,
+  isSubmitEnabled,
+  navigateSearchResultsWithKeyboard,
+  buttonRef,
+  navigationRefs
+}: Props): JSX.Element {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const [typingTimeout, setTypingTimeout] = useState(setTimeout(() => {}, 0))
 
   function onLoginInputChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -43,23 +58,25 @@ export default function ControlsSearch({
     setIsTypingInProgress(true)
     setDidSearchErrorOccur(false)
     clearTimeout(typingTimeout)
-    setTypingTimeout(setTimeout(async () => {
-      if (originalValue) {
-        try {
-          const users = await fetchSearchUsers(originalValue)
-          if (element.value !== originalValue) return // cancel if input value has changed in the meantime
-          if (users.length && users[0].login.toLowerCase() === originalValue.toLowerCase()) setMatchingUser(users[0])
-          setCurrentSearchResults(users.slice(0, MAX_SEARCH_RESULTS_SHOWN))
-        } catch (error) {
-          setDidSearchErrorOccur(true)
-          setCurrentSearchResults([])
-        } finally {
+    setTypingTimeout(
+      setTimeout(async () => {
+        if (originalValue) {
+          try {
+            const users = await fetchSearchUsers(originalValue)
+            if (element.value !== originalValue) return // cancel if input value has changed in the meantime
+            if (users.length && users[0].login.toLowerCase() === originalValue.toLowerCase()) setMatchingUser(users[0])
+            setCurrentSearchResults(users.slice(0, MAX_SEARCH_RESULTS_SHOWN))
+          } catch (error) {
+            setDidSearchErrorOccur(true)
+            setCurrentSearchResults([])
+          } finally {
+            setIsTypingInProgress(false)
+          }
+        } else {
           setIsTypingInProgress(false)
         }
-      } else {
-        setIsTypingInProgress(false)
-      }
-    }, 500))
+      }, 500)
+    )
     setCurrentNavigationIndex(0)
   }
 
@@ -90,22 +107,29 @@ export default function ControlsSearch({
     }
   }
 
-  const anchorAttributes: {[attribute: string]: string} = {}
+  const anchorAttributes: { [attribute: string]: string } = {}
   let currentIndicatorElement: JSX.Element
   if (isTypingInProgress) {
     currentIndicatorElement = (
-      <div className="Controls-indicator-typing"><span>.</span><span>.</span><span>.</span></div>
+      <div className="Controls-indicator-typing">
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </div>
     )
   } else if (currentLoginInput && didSearchErrorOccur) {
     anchorAttributes.href = `https://github.com/${currentLoginInput}`
     currentIndicatorElement = (
-      <div className="Controls-indicator-mark" key="exclamation-mark">!</div>
+      <div className="Controls-indicator-mark" key="exclamation-mark">
+        !
+      </div>
     )
   } else if (selectedUser) {
     anchorAttributes.href = `https://github.com/${selectedUser.login}`
     currentIndicatorElement = (
       <div
-        className="Controls-indicator-avatar" style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
+        className="Controls-indicator-avatar"
+        style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
         key="avatar"
       />
     )
@@ -113,13 +137,16 @@ export default function ControlsSearch({
     anchorAttributes.href = `https://github.com/${matchingUser.login}`
     currentIndicatorElement = (
       <div
-        className="Controls-indicator-avatar" style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
+        className="Controls-indicator-avatar"
+        style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
         key="avatar"
       />
     )
   } else {
     currentIndicatorElement = (
-      <div className="Controls-indicator-mark" key="question-mark">?</div>
+      <div className="Controls-indicator-mark" key="question-mark">
+        ?
+      </div>
     )
   }
 
@@ -134,16 +161,33 @@ export default function ControlsSearch({
         </div>
       </a>
       <input
-        className="Controls-login" type="search" name="login"
-        ref={ref => { navigationRefs.current[0] = ref as HTMLInputElement }} tabIndex={0}
-        value={selectedUser ? selectedUser.login : currentLoginInput} maxLength={39}
-        spellCheck={false} placeholder="GitHub user/org" autoCapitalize="off" autoComplete="off" autoCorrect="off"
-        autoFocus onChange={onLoginInputChange} onFocus={onLoginInputFocus} onKeyDown={onLoginInputKeyDown}
+        className="Controls-login"
+        type="search"
+        name="login"
+        ref={(ref) => {
+          navigationRefs.current[0] = ref as HTMLInputElement
+        }}
+        tabIndex={0}
+        value={selectedUser ? selectedUser.login : currentLoginInput}
+        maxLength={39}
+        spellCheck={false}
+        placeholder="GitHub user/org"
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
+        autoFocus
+        onChange={onLoginInputChange}
+        onFocus={onLoginInputFocus}
+        onKeyDown={onLoginInputKeyDown}
       />
       <button
-        className="ControlsSearch-button" type="submit" disabled={!isSubmitEnabled} ref={buttonRef}
+        className="ControlsSearch-button"
+        type="submit"
+        disabled={!isSubmitEnabled}
+        ref={buttonRef}
         style={isSearchShown ? { borderBottomRightRadius: 0 } : {}}
-      >→
+      >
+        →
       </button>
     </div>
   )

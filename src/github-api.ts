@@ -45,7 +45,7 @@ interface Problem {
   message: string
 }
 
-const ROOT_API_URL: string = 'https://api.github.com/'
+const ROOT_API_URL = 'https://api.github.com/'
 
 async function checkForProblem(response: Response, ignoreStatuses: number[] = []): Promise<void> {
   if (response.status === 403) {
@@ -53,11 +53,9 @@ async function checkForProblem(response: Response, ignoreStatuses: number[] = []
     const rateLimitReset: Date = new Date(rateLimitResetEpoch)
     const deltaMinutes: number = Math.ceil((rateLimitResetEpoch - Date.now()) / 60_000)
     throw Error(
-      // eslint-disable-next-line no-irregular-whitespace
-      `Exceeded GitHub rate limit for now. Try again in ${deltaMinutes} min ` +
-      // eslint-disable-next-line no-irregular-whitespace
-      `at ${rateLimitReset.getHours() % 12 || 12}:${rateLimitReset.getMinutes().toString().padStart(2, '0')} ` +
-      `${rateLimitReset.getHours() >= 12 ? 'PM' : 'AM'}.`
+      `Exceeded GitHub rate limit for now. Try again in ${deltaMinutes} min at ${
+        rateLimitReset.getHours() % 12 || 12
+      }:${rateLimitReset.getMinutes().toString().padStart(2, '0')} ${rateLimitReset.getHours() >= 12 ? 'PM' : 'AM'}.`
     )
   } else if (!response.ok && !ignoreStatuses.includes(response.status)) {
     const problem: Problem = await response.json()
@@ -65,7 +63,7 @@ async function checkForProblem(response: Response, ignoreStatuses: number[] = []
   }
 }
 
-export function buildURL(parts: string[], params?: object): URL {
+export function buildURL(parts: string[], params?: Record<string, any>): URL {
   const url: URL = new URL(`${ROOT_API_URL}${parts.map(encodeURIComponent).join('/')}`)
   if (params) for (const [key, value] of Object.entries(params)) url.searchParams.append(key, value)
   return url
@@ -77,7 +75,7 @@ export async function fetchUserEventsPage(login: string, page: number): Promise<
   const response: Response = await fetch(url.toString())
   await checkForProblem(response)
   const events: Event[] = await response.json()
-  const eventsWithDates: Event[] = events.map(event => {
+  const eventsWithDates: Event[] = events.map((event) => {
     return { ...event, created_at: new Date(event.created_at) }
   })
   return eventsWithDates
@@ -89,11 +87,11 @@ export async function fetchUserEventsPilot(login: string): Promise<[Event[], num
   const response: Response = await fetch(url.toString())
   await checkForProblem(response)
   const events: Event[] = await response.json()
-  const eventsWithDates: Event[] = events.map(event => {
+  const eventsWithDates: Event[] = events.map((event) => {
     return { ...event, created_at: new Date(event.created_at) }
   })
   const linkHeader: string | null = response.headers.get('link')
-  let lastPageNumber: number = 1
+  let lastPageNumber = 1
   if (linkHeader) lastPageNumber = parseInt(linkHeader.match(/events\?page=(\d+)>; rel="last"/)![1])
   return [eventsWithDates, lastPageNumber]
 }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import './Header.scss'
 
-function calculateCurrentClockHandRotation(extraRotations: number = 0): number {
+function calculateCurrentClockHandRotation(extraRotations = 0): number {
   const now = new Date()
   const hoursPrecise = now.getHours() + now.getMinutes() / 60
   return Math.round((hoursPrecise / 12 + extraRotations) * 360)
@@ -25,16 +25,33 @@ export default function Header(): JSX.Element {
 
   return (
     <header className="Header">
-      <Link to="/" className="Header-link" onClick={() => { setExtraRotations(extraRotations + 1) }}>
+      <Link
+        to="/"
+        className="Header-link"
+        onClick={() => {
+          setExtraRotations(extraRotations + 1)
+        }}
+      >
         <div className="Header-logo">
           <svg
-            id="Header-clock" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+            id="Header-clock"
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <circle cx="20" cy="20" r="18" strokeWidth="4"/>
             <motion.line
-              className="Header-clock-hand" transition={{ type: 'spring', damping: 22, stiffness: 140, mass: 2 }}
-              initial={{ rotate: clockHandRotation }} animate={{ rotate: clockHandRotation }}
-              x1="20" y1="22" x2="20" y2="7" strokeWidth="4"
+              className="Header-clock-hand"
+              transition={{ type: 'spring', damping: 22, stiffness: 140, mass: 2 }}
+              initial={{ rotate: clockHandRotation }}
+              animate={{ rotate: clockHandRotation }}
+              x1="20"
+              y1="22"
+              x2="20"
+              y2="7"
+              strokeWidth="4"
             />
           </svg>
           <div className="Header-name">HubMeter</div>
@@ -43,11 +60,17 @@ export default function Header(): JSX.Element {
       <nav className="Header-nav">
         <a href="https://www.producthunt.com/posts/hubmeter">
           <svg
-            className="Header-icon" width="32" height="32" viewBox="0 0 32 32" fill="none"
+            className="Header-icon"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fillRule="evenodd" clipRule="evenodd" d="M16 32C24.8365 32 32 24.8365 32 16C32 7.16347 24.8365 0 16
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M16 32C24.8365 32 32 24.8365 32 16C32 7.16347 24.8365 0 16
               0C7.16347 0 0 7.16347 0 16C0 24.8365 7.16347 32 16 32ZM18.1333 16.0001V15.9999C19.4588 15.9999 20.5333
               14.9254 20.5333 13.5999C20.5333 12.2745 19.4588 11.1999 18.1333
               11.1999V11.2001H13.6V16.0001H18.1333ZM18.1333 8.00008V7.99995C21.2261 7.99995 23.7333 10.5071 23.7333
@@ -58,11 +81,17 @@ export default function Header(): JSX.Element {
         </a>
         <a href="http://github.com/Twixes/hubmeter">
           <svg
-            className="Header-icon" width="32" height="31" viewBox="0 0 32 31" fill="none"
+            className="Header-icon"
+            width="32"
+            height="31"
+            viewBox="0 0 32 31"
+            fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fillRule="evenodd" clipRule="evenodd" d="M15.9985 -3.05176e-05C7.16437 -3.05176e-05 0 7.11511 0
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M15.9985 -3.05176e-05C7.16437 -3.05176e-05 0 7.11511 0
               15.8927C0 22.9142 4.58406 28.8703 10.942 30.9718C11.7425 31.1181 12.0343 30.6274 12.0343
               30.206C12.0343 29.8284 12.0205 28.8294 12.0126 27.5035C7.56218 28.4635 6.62317 25.3728 6.62317
               25.3728C5.89534 23.5367 4.84632 23.0479 4.84632 23.0479C3.39361 22.0625 4.95633 22.082 4.95633

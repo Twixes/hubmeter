@@ -2,7 +2,13 @@ import React, { useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { errorMessageState, isCurrentUserLoadingState, currentUserState, areEventsLoadingState, userEventsState } from '../../atoms'
+import {
+  errorMessageState,
+  isCurrentUserLoadingState,
+  currentUserState,
+  areEventsLoadingState,
+  userEventsState
+} from '../../atoms'
 import { fetchUserEventsAll } from '../../github-api'
 import { Params } from '../../components/App'
 import Graph from '../../components/Graph'
@@ -27,20 +33,27 @@ export default function Statistics(): JSX.Element {
   const isCurrentUserLoading = useRecoilValue(isCurrentUserLoadingState)
   const currentUser = useRecoilValue(currentUserState)
 
-  const loadUserEvents = useCallback((login: string) => {
-    if (areEventsLoading) {
-      console.warn('User events already are loading!')
-    } else {
-      setAreEventsLoading(true)
-      fetchUserEventsAll(login).then(newEvents => {
-        setUserEvents(newEvents)
-      }).catch((error: Error) => {
-        setErrorMessage(error.message)
-      }).finally(() => {
-        setAreEventsLoading(false)
-      })
-    }
-  }, [areEventsLoading, setUserEvents, setAreEventsLoading, setErrorMessage])
+  const loadUserEvents = useCallback(
+    (login: string) => {
+      if (areEventsLoading) {
+        console.warn('User events already are loading!')
+      } else {
+        setAreEventsLoading(true)
+        fetchUserEventsAll(login)
+          .then((newEvents) => {
+            setUserEvents(newEvents)
+            return newEvents
+          })
+          .finally(() => {
+            setAreEventsLoading(false)
+          })
+          .catch((error: Error) => {
+            setErrorMessage(error.message)
+          })
+      }
+    },
+    [areEventsLoading, setUserEvents, setAreEventsLoading, setErrorMessage]
+  )
 
   useEffect(() => {
     if (currentUser && !userEvents) {
@@ -56,8 +69,12 @@ export default function Statistics(): JSX.Element {
         if (currentUser) {
           return (
             <motion.div
-              className="Statistics" variants={VARIANTS}
-              initial="hidden" animate="shown" exit="hidden" layout
+              className="Statistics"
+              variants={VARIANTS}
+              initial="hidden"
+              animate="shown"
+              exit="hidden"
+              layout
             >
               <section>
                 <h1>By hour</h1>

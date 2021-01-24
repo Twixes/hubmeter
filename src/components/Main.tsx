@@ -10,7 +10,8 @@ import Controls from '../features/Controls/Controls'
 import Statistics from '../features/Statistics/Statistics'
 import './Main.scss'
 
-const QUESTIONS: string[] = [ // "Do ${subject} ${question}?"
+const QUESTIONS: string[] = [
+  // "Do ${subject} ${question}?"
   'release on Friday',
   'pull all-nighters',
   'work the night shift',
@@ -27,8 +28,12 @@ function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | nul
   return login ? null : (
     <AnimatePresence initial={false}>
       <motion.h1
-        variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }} style={{ margin: '0.5rem 0' }}
-        initial="hidden" animate="shown" exit="hidden" layout
+        variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }}
+        style={{ margin: '0.5rem 0' }}
+        initial="hidden"
+        animate="shown"
+        exit="hidden"
+        layout
       >
         {children}
       </motion.h1>
@@ -56,31 +61,38 @@ export default function Main(): JSX.Element {
     setErrorMessage(null)
     if (login) {
       if (!currentUser || currentUser.login.toLowerCase() !== login.toLowerCase()) {
-        fetchUser(login).then(user => {
-          setIsCurrentUserLoading(true)
-          setCurrentUser(user)
-          setErrorMessage(null)
-          history.replace(`/${user.login}`)
-        }).catch((error: Error) => {
-          setCurrentUser(null)
-          setErrorMessage(error.message)
-        }).finally(() => {
-          setIsCurrentUserLoading(false)
-        })
+        fetchUser(login)
+          .then((user) => {
+            setIsCurrentUserLoading(true)
+            setCurrentUser(user)
+            setErrorMessage(null)
+            history.replace(`/${user.login}`)
+            return user
+          })
+          .finally(() => {
+            setIsCurrentUserLoading(false)
+          })
+          .catch((error: Error) => {
+            setCurrentUser(null)
+            setErrorMessage(error.message)
+          })
       } else if (currentUser.login !== login) {
         setCurrentUser(null)
       }
     }
-  }, [login, setErrorMessage, currentUser, setCurrentUser, history])
+  }, [login, setErrorMessage, currentUser, setCurrentUser, history, setIsCurrentUserLoading])
 
   return (
-    <motion.main
-      className="Main"
-      style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}
-    >
+    <motion.main className="Main" style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}>
       <HomeHeadline>Do</HomeHeadline>
       <Controls/>
-      <Notice message={errorMessage} indication="!" onXClick={() => { setErrorMessage(null) }}/>
+      <Notice
+        message={errorMessage}
+        indication="!"
+        onXClick={() => {
+          setErrorMessage(null)
+        }}
+      />
       <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics}/>
     </motion.main>

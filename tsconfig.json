@@ -15,10 +15,11 @@
     "noEmit": true,
     "noImplicitReturns": true,
     "noUnusedParameters": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "sourceMap": true,
     "inlineSources": true,
-    "sourceRoot": "/"
+    "sourceRoot": "/",
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
 }
