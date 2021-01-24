@@ -16,6 +16,7 @@
     "start": "react-scripts start",
     "lint": "eslint .",
     "fix": "eslint . --fix",
+    "format": "prettier . --write",
     "test": "yarn lint && react-scripts test"
   },
   "dependencies": {

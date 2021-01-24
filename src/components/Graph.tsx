@@ -79,8 +79,7 @@ function drawRoundedBarGraphWithOverlay(
   setCaptionPoint: Dispatch<SetStateAction<CaptionPoint | null>>,
   xLegendHeight: number
 ): [JSX.Element, JSX.Element[]] {
-  if (!points.length) throw Error('No data points to draw')
-  console.log('##########', xLegendHeight)
+  if (!points.length) throw new Error('No data points to draw')
   if (xLegendHeight > 0) height -= xLegendHeight
   const maxY: number = Math.max(...points.map(([, y]) => y)) || 10 // fall back to 10 to avoid division by 0
   let markerValue: number = 10 ** Math.floor(Math.log10(maxY))

@@ -1,16 +1,23 @@
 /* eslint-env jest */
 
 import {
-  User, Event, buildURL, fetchUserEventsPage, fetchUserEventsAll, fetchSearchUsers, fetchUser, fetchUserEventsPilot
+  User,
+  Event,
+  buildApiUrl,
+  fetchUserEventsPage,
+  fetchUserEventsAll,
+  fetchSearchUsers,
+  fetchUser,
+  fetchUserEventsPilot
 } from './github-api'
 
 describe('#buildURL()', () => {
   it('should return proper user events URL', () => {
-    const url = buildURL(['users', 'Twixes', 'events'])
+    const url = buildApiUrl(['users', 'Twixes', 'events'])
     expect(url.toString()).toEqual('https://api.github.com/users/Twixes/events')
   })
   it('should return proper search users URL with parameter', () => {
-    const url = buildURL(['search', 'users'], { q: 'Twixes' })
+    const url = buildApiUrl(['search', 'users'], { q: 'Twixes' })
     expect(url.toString()).toEqual('https://api.github.com/search/users?q=Twixes')
   })
 })

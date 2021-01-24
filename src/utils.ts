@@ -11,3 +11,9 @@ export function useOutsideClickHandler(ref: RefObject<HTMLElement>, handleClickO
     }
   }, [ref, handleClickOutside])
 }
+
+export function formatTime(date: Date): string {
+  return `${date.getHours() % 12 || 12}:${date.getMinutes().toString().padStart(2, '0')} ${
+    date.getHours() >= 12 ? 'PM' : 'AM'
+  }`
+}
