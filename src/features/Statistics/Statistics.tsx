@@ -80,11 +80,23 @@ export default function Statistics(): JSX.Element {
             >
               <section>
                 <h1>By hour</h1>
-                <Graph dataPoints={[[2, 3]]} isLoading={areEventsLoading} />
+                <Graph
+                  dataPoints={[
+                    [2, 3],
+                    [3, 2]
+                  ]}
+                  isLoading={areEventsLoading}
+                />
               </section>
               <section>
                 <h1>By day of week</h1>
-                <Graph dataPoints={[[2, 3]]} isLoading={areEventsLoading} />
+                <Graph
+                  dataPoints={[
+                    [2, 3],
+                    [3, 2]
+                  ]}
+                  isLoading={areEventsLoading}
+                />
               </section>
             </motion.div>
           )

@@ -1,3 +1,5 @@
+import { request } from 'http'
+
 import { formatTime } from './utils'
 
 export interface User {
@@ -70,7 +72,14 @@ async function throwOnProblem(response: Response, ignoredStatuses: number[] = []
 }
 
 export async function fetchFromApi(url: URL, ignoredErrorStatuses?: number[]): Promise<Response> {
-  const response: Response = await fetch(url.toString())
+  const username = localStorage.getItem('username')
+  const pat = localStorage.getItem('pat')
+  let fetchOptions: RequestInit | undefined
+  if (username && pat) {
+    console.info(`Using GitHub as user ${username}`)
+    fetchOptions = { headers: new Headers([['Authorization', `Basic ${btoa(username + ':' + pat)}`]]) }
+  }
+  const response: Response = await fetch(url.toString(), fetchOptions)
   await throwOnProblem(response, ignoredErrorStatuses)
   return response
 }
@@ -105,7 +114,6 @@ export async function fetchUserEventsAll(login: string): Promise<Event[]> {
   const promises: Promise<Event[]>[] = []
   for (let page = 2; page <= lastPageNumber; page++) promises.push(fetchUserEventsPage(login, page))
   const pages: Event[][] = await Promise.all(promises)
-  console.log(pages.flat().concat(pilotEvents))
   return pages.flat().concat(pilotEvents)
 }
 
@@ -122,6 +130,5 @@ export async function fetchUser(login: string): Promise<User> {
   const response = await fetchFromApi(url, [404])
   if (response.status === 404) throw new Error(`User ${login} doesn't exist.`)
   const user: User = await response.json()
-  console.log(user)
   return user
 }

@@ -98,6 +98,7 @@ function drawRoundedBarGraphWithOverlay(
         className="Graph-main-marker"
         x={0}
         y={Math.round(markerY)}
+        key={`marker-${markerY}`}
         width={width}
         height={1}
         transition={TRANSITION}

@@ -88,13 +88,7 @@ export default function Main(): JSX.Element {
     <motion.main className="Main" style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}>
       <HomeHeadline>Do</HomeHeadline>
       <Controls />
-      <Notice
-        message={errorMessage}
-        indication="!"
-        onXClick={() => {
-          setErrorMessage(null)
-        }}
-      />
+      <Notice message={errorMessage} />
       <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
       <Route path="/:login" component={Statistics} />
     </motion.main>

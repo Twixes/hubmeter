@@ -71,13 +71,14 @@ describe('#fetchSearchUsers()', () => {
 
 describe('#fetchUser()', () => {
   it('should return a user', async () => {
-    const user: User | null = await fetchUser('twixes')
+    const user = await fetchUser('twixes')
     expect(user!.id).toBeDefined()
     expect(user!.login).toBeDefined()
     expect(user!.avatar_url).toBeDefined()
   })
-  it('should return null if user does not exist', async () => {
-    const user: User | null = await fetchUser('twixesssssssssssssssssssssssssssssssssssssssssssssssss')
-    expect(user).toBeNull()
+  it('should throw error if user does not exist', async () => {
+    const nonexistentLogin = 'twixesdfghjkl'
+    const user = await fetchUser(nonexistentLogin)
+    expect(user).toThrowError(new Error(`User ${nonexistentLogin} doesn't exist.`))
   })
 })

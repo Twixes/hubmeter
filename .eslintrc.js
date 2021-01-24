@@ -10,7 +10,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'promise', 'simple-import-sort'],
   extends: ['react-app', 'plugin:@typescript-eslint/recommended', 'plugin:promise/recommended', 'prettier'],
-  ignorePatterns: ['bin', 'dist', 'node_modules'],
+  ignorePatterns: ['bin', 'build', 'dist', 'node_modules'],
   rules: {
     'space-before-function-paren': [
       'error',

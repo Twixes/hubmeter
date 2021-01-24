@@ -5,7 +5,7 @@ import React, { ReactChild } from 'react'
 
 interface Props {
   message: ReactChild | null
-  indication: string
+  indicator?: string
   onXClick?: () => void
   initialAnimatePresence?: boolean
 }
@@ -36,9 +36,9 @@ const INSIDE_VARIANTS: Variants = {
   }
 }
 
-export default function ErrorNotice({
+export default function Notice({
   message,
-  indication,
+  indicator = '!',
   onXClick,
   initialAnimatePresence
 }: Props): JSX.Element | null {
@@ -56,7 +56,7 @@ export default function ErrorNotice({
           exit="hidden"
           layout
         >
-          <div className="Notice-indicator">{indication}</div>
+          <div className="Notice-indicator">{indicator}</div>
           <motion.div
             className="Notice-message"
             custom={shouldReduceMotion}
