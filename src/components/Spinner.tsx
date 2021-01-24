@@ -1,6 +1,7 @@
-import React from 'react'
-import { motion, Variants } from 'framer-motion'
 import './Spinner.scss'
+
+import { motion, Variants } from 'framer-motion'
+import React from 'react'
 
 interface Props {
   color?: string

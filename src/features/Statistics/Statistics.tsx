@@ -1,19 +1,21 @@
-import React, { useEffect, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import './Statistics.scss'
+
 import { AnimatePresence, motion, Variants } from 'framer-motion'
+import React, { useCallback, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useRecoilState, useRecoilValue } from 'recoil'
+
 import {
+  areEventsLoadingState,
+  currentUserState,
   errorMessageState,
   isCurrentUserLoadingState,
-  currentUserState,
-  areEventsLoadingState,
   userEventsState
 } from '../../atoms'
-import { fetchUserEventsAll } from '../../github-api'
 import { Params } from '../../components/App'
 import Graph from '../../components/Graph'
-import './Statistics.scss'
 import Spinner from '../../components/Spinner'
+import { fetchUserEventsAll } from '../../github-api'
 
 const VARIANTS: Variants = {
   hidden: {

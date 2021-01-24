@@ -1,8 +1,10 @@
-import React, { useMemo, useState, useRef, useLayoutEffect, Dispatch, SetStateAction, MutableRefObject } from 'react'
-import useSize from '@react-hook/size'
-import { motion, AnimatePresence, Variants } from 'framer-motion'
-import { roundCommands, SVGCommand } from 'svg-round-corners'
 import './Graph.scss'
+
+import useSize from '@react-hook/size'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
+import React, { Dispatch, MutableRefObject, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { roundCommands, SVGCommand } from 'svg-round-corners'
+
 import Spinner from './Spinner'
 
 export type DataPoint = [Date | string | number, number]

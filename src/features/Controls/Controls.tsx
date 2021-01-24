@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef, FormEvent, KeyboardEvent } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import './Controls.scss'
+
 import { motion } from 'framer-motion'
-import { useOutsideClickHandler } from '../../utils'
-import { User } from '../../github-api'
+import React, { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+
 import { currentUserState } from '../../atoms'
+import { User } from '../../github-api'
+import { useOutsideClickHandler } from '../../utils'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
-import './Controls.scss'
 
 export default function Controls(): JSX.Element {
   const currentUser = useRecoilValue(currentUserState)

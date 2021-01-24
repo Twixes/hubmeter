@@ -1,6 +1,8 @@
-import React, { useState, ChangeEvent, KeyboardEvent, Dispatch, SetStateAction, MutableRefObject } from 'react'
-import { fetchSearchUsers, User } from '../../github-api'
 import './ControlsSearch.scss'
+
+import React, { ChangeEvent, Dispatch, KeyboardEvent, MutableRefObject, SetStateAction, useState } from 'react'
+
+import { fetchSearchUsers, User } from '../../github-api'
 
 interface Props {
   currentLoginInput: string

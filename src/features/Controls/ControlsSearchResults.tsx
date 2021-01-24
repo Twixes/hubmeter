@@ -1,7 +1,9 @@
-import React, { KeyboardEvent, MutableRefObject, Dispatch, SetStateAction } from 'react'
-import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
-import { User } from '../../github-api'
 import './ControlsSearchResults.scss'
+
+import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
+import React, { Dispatch, KeyboardEvent, MutableRefObject, SetStateAction } from 'react'
+
+import { User } from '../../github-api'
 
 interface Props {
   setCurrentLoginInput: Dispatch<SetStateAction<string>>
@@ -32,12 +34,19 @@ const VARIANTS: Variants = {
   }
 }
 
-export default function ControlsSearchResults(
-  {
-    setCurrentLoginInput, matchingUser, setSelectedUser, currentSearchResults, setIsSearchHiddenOverride,
-    setCurrentNavigationIndex, buttonRef, navigationRefs, isSearchShown, submit, navigateSearchResultsWithKeyboard
-  }: Props
-): JSX.Element {
+export default function ControlsSearchResults({
+  setCurrentLoginInput,
+  matchingUser,
+  setSelectedUser,
+  currentSearchResults,
+  setIsSearchHiddenOverride,
+  setCurrentNavigationIndex,
+  buttonRef,
+  navigationRefs,
+  isSearchShown,
+  submit,
+  navigateSearchResultsWithKeyboard
+}: Props): JSX.Element {
   const shouldReduceMotion = useReducedMotion()
 
   function setUserFromSearch(user: User) {
@@ -78,32 +87,44 @@ export default function ControlsSearchResults(
 
   return (
     <AnimatePresence>
-      {isSearchShown && <motion.ul
-        className="ControlsSearchResults" custom={[shouldReduceMotion, currentSearchResults.length]} variants={VARIANTS}
-        initial="hidden" animate="shown" exit="hidden"
-      >
-        {currentSearchResults.map((user, index) => (
-          <li
-            className="ControlsSearchResults-user" key={user.login} tabIndex={index + 1}
-            ref={ref => { navigationRefs.current[1 + index] = ref as HTMLLIElement }}
-            onClick={() => { setUserFromSearch(user) }} onKeyDown={onSearchResultKeyDownGenerator(user)}
-            onFocus={() => { setSelectedUser(user) }}
-          >
-            <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer" tabIndex={-1}>
-              <div className="Controls-indicator" style={{ opacity: 1 }}>
-                <div
-                  className="Controls-indicator-avatar"
-                  style={{ backgroundImage: `url(${user.avatar_url}&s=144` }}
-                />
-              </div>
-            </a>
-            <div className="Controls-login">
-              {user.login}
-            </div>
-          </li>
-        )
-        )}
-      </motion.ul>}
+      {isSearchShown && (
+        <motion.ul
+          className="ControlsSearchResults"
+          custom={[shouldReduceMotion, currentSearchResults.length]}
+          variants={VARIANTS}
+          initial="hidden"
+          animate="shown"
+          exit="hidden"
+        >
+          {currentSearchResults.map((user, index) => (
+            <li
+              className="ControlsSearchResults-user"
+              key={user.login}
+              tabIndex={index + 1}
+              ref={(ref) => {
+                navigationRefs.current[1 + index] = ref as HTMLLIElement
+              }}
+              onClick={() => {
+                setUserFromSearch(user)
+              }}
+              onKeyDown={onSearchResultKeyDownGenerator(user)}
+              onFocus={() => {
+                setSelectedUser(user)
+              }}
+            >
+              <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer" tabIndex={-1}>
+                <div className="Controls-indicator" style={{ opacity: 1 }}>
+                  <div
+                    className="Controls-indicator-avatar"
+                    style={{ backgroundImage: `url(${user.avatar_url}&s=144` }}
+                  />
+                </div>
+              </a>
+              <div className="Controls-login">{user.login}</div>
+            </li>
+          ))}
+        </motion.ul>
+      )}
     </AnimatePresence>
   )
 }

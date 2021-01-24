@@ -1,14 +1,14 @@
 /* eslint-env jest */
 
 import {
-  User,
-  Event,
   buildApiUrl,
-  fetchUserEventsPage,
-  fetchUserEventsAll,
+  Event,
   fetchSearchUsers,
   fetchUser,
-  fetchUserEventsPilot
+  fetchUserEventsAll,
+  fetchUserEventsPage,
+  fetchUserEventsPilot,
+  User
 } from './github-api'
 
 describe('#buildURL()', () => {

@@ -1,5 +1,6 @@
-import { atom, selectorFamily, DefaultValue } from 'recoil'
-import { User, EventType, Event } from './github-api'
+import { atom, DefaultValue, selectorFamily } from 'recoil'
+
+import { Event, EventType, User } from './github-api'
 
 export const errorMessageState = atom<string | null>({
   key: 'errorMessage',
@@ -46,10 +47,11 @@ export const userEventsState = selectorFamily<Event[] | undefined, { login: stri
     return userEvents.filter((event: Event) => eventTypesFilter.has(event.type))
   },
   set: ({ login }) => ({ set }, newEvents: Event[] | undefined | DefaultValue) => {
-    if (login) set(loginToUserEventsState, prevState => {
-      const newState = new Map(prevState)
-      newState.set(login, newEvents as Event[])
-      return newState
-    })
+    if (login)
+      set(loginToUserEventsState, (prevState) => {
+        const newState = new Map(prevState)
+        newState.set(login, newEvents as Event[])
+        return newState
+      })
   }
 })

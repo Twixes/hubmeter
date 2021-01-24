@@ -1,14 +1,16 @@
-import React, { useEffect, ReactChild, useMemo, useState } from 'react'
-import { Route, useParams, useHistory } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import './Main.scss'
+
 import { AnimatePresence, motion } from 'framer-motion'
-import { fetchUser } from '../github-api'
-import { errorMessageState, isCurrentUserLoadingState, currentUserState } from '../atoms'
-import { Params } from './App'
-import Notice from './Notice'
+import React, { ReactChild, useEffect, useMemo, useState } from 'react'
+import { Route, useHistory, useParams } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+
+import { currentUserState, errorMessageState, isCurrentUserLoadingState } from '../atoms'
 import Controls from '../features/Controls/Controls'
 import Statistics from '../features/Statistics/Statistics'
-import './Main.scss'
+import { fetchUser } from '../github-api'
+import { Params } from './App'
+import Notice from './Notice'
 
 const QUESTIONS: string[] = [
   // "Do ${subject} ${question}?"

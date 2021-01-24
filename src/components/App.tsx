@@ -1,9 +1,10 @@
+import posthog from 'posthog-js'
 import React from 'react'
 import { Route, useHistory } from 'react-router-dom'
-import posthog from 'posthog-js'
+
+import Footer from './Footer'
 import Header from './Header'
 import Main from './Main'
-import Footer from './Footer'
 
 export interface Params {
   login: string | undefined

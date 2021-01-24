@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import './Header.scss'
+
+import { motion } from 'framer-motion'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function calculateCurrentClockHandRotation(extraRotations = 0): number {
   const now = new Date()
