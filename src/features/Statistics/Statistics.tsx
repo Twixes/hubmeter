@@ -16,6 +16,7 @@ import { Params } from '../../components/App'
 import Graph from '../../components/Graph'
 import Spinner from '../../components/Spinner'
 import { fetchUserEventsAll } from '../../github-api'
+import { aggregateByDayOfWeek, aggregateByHour } from './data-processing'
 
 const VARIANTS: Variants = {
     hidden: {
@@ -67,7 +68,7 @@ export default function Statistics(): JSX.Element {
         <AnimatePresence>
             {(() => {
                 if (errorMessage) return null
-                if (isCurrentUserLoading) return <Spinner />
+                if (isCurrentUserLoading || !userEvents) return <Spinner />
                 if (currentUser) {
                     return (
                         <motion.div
@@ -80,23 +81,11 @@ export default function Statistics(): JSX.Element {
                         >
                             <section>
                                 <h1>By hour</h1>
-                                <Graph
-                                    dataPoints={[
-                                        [2, 3],
-                                        [3, 2]
-                                    ]}
-                                    isLoading={areEventsLoading}
-                                />
+                                <Graph dataPoints={aggregateByHour(userEvents)} isLoading={areEventsLoading} />
                             </section>
                             <section>
                                 <h1>By day of week</h1>
-                                <Graph
-                                    dataPoints={[
-                                        [2, 3],
-                                        [3, 2]
-                                    ]}
-                                    isLoading={areEventsLoading}
-                                />
+                                <Graph dataPoints={aggregateByDayOfWeek(userEvents)} isLoading={areEventsLoading} />
                             </section>
                         </motion.div>
                     )

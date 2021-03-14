@@ -7,11 +7,11 @@ const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const HOURS: string[] = HOUR_NUMBERS.map((hour) => `${hour} AM`).concat(HOUR_NUMBERS.map((hour) => `${hour} PM`))
 const DAYS_OF_WEEK: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-export function getHours(date: Date): number {
+function getHours(date: Date): number {
     return date.getUTCHours()
 }
 
-export function getDayOfWeek(date: Date): number {
+function getDayOfWeek(date: Date): number {
     const dayOfWeekSundayInitial = date.getUTCDay()
     // JS uses Sunday as the initial day of the week, IMO Monday is a saner choice
     const dayOfWeekMondayInitial = dayOfWeekSundayInitial ? dayOfWeekSundayInitial - 1 : 6
@@ -19,7 +19,7 @@ export function getDayOfWeek(date: Date): number {
 }
 
 /** ISO 8601 week number. */
-export function getWeek(date: Date): number {
+function getWeek(date: Date): number {
     const dowOffset = 1 // First day of the week is Monday, for ISO 8601 compliance
     const newYear = new Date(date.getFullYear(), 0, 1)
     let day = newYear.getDay() - dowOffset // The day of week the year begins on
