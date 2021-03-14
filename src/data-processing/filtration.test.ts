@@ -24,10 +24,10 @@ describe('#filterByEventType()', () => {
 
         expect(results).toStrictEqual(testEvents)
     })
-    it('should return no events if provided filter allows no event type', () => {
+    it('should return all events if provided filter allows no event type', () => {
         const results = filterByEventType(testEvents, [])
 
-        expect(results).toHaveLength(0)
+        expect(results).toStrictEqual(testEvents)
     })
     it('should return only events of types allowed by provided filter', () => {
         const results = filterByEventType(testEvents, [EventType.PullRequestEvent, EventType.PushEvent])

@@ -5,6 +5,6 @@ export type Filterable = Pick<Event, 'type'>
 export function filterByEventType<T extends Filterable>(events: T[], only?: Set<EventType> | EventType[]): T[] {
     if (!only) return events
     const onlySet: Set<EventType> = Array.isArray(only) ? new Set(only) : only
-    if (!onlySet.size) return []
+    if (!onlySet.size) return events
     return events.filter(({ type }) => onlySet.has(type))
 }
