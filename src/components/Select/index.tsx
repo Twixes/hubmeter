@@ -1,6 +1,5 @@
 import './index.scss'
 
-import useLocalStorage from '@rehooks/local-storage'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
 import React, {
     Dispatch,
