@@ -21,13 +21,13 @@ interface Props {
 const VARIANTS: Variants = {
     hidden: ([shouldReduceMotion, numberOfResults]: [boolean, number]) => {
         return {
-            height: shouldReduceMotion ? `${numberOfResults * 3}rem` : 0,
+            height: shouldReduceMotion ? `${numberOfResults * 0.75}rem` : 0,
             opacity: shouldReduceMotion ? 0 : 1
         }
     },
     shown: ([, numberOfResults]: [boolean, number]) => {
         return {
-            height: `${numberOfResults * 3}rem`,
+            height: `${numberOfResults * 0.75}rem`,
             opacity: 1
         }
     }
@@ -41,8 +41,8 @@ export default function Select({ localStorageKey }: Props): JSX.Element {
 
     return (
         <AnimatePresence>
-            <motion.ul
-                className="ControlsSearchResults"
+            <motion.div
+                className="Select"
                 custom={[shouldReduceMotion, Object.keys(options).length]}
                 variants={VARIANTS}
                 initial="hidden"
@@ -50,7 +50,7 @@ export default function Select({ localStorageKey }: Props): JSX.Element {
                 exit="hidden"
             >
                 {Object.entries(options).map(([optionKey, optionName], index) => (
-                    <li className="ControlsSearchResults-user" key={optionKey} tabIndex={index + 1}>
+                    <div className="Select-option" key={optionKey} tabIndex={index + 1}>
                         <input
                             id={optionKey}
                             type="checkbox"
@@ -58,9 +58,9 @@ export default function Select({ localStorageKey }: Props): JSX.Element {
                             onChange={(e) => toggleOption(optionKey as EventType, e.target.checked)}
                         />
                         <label htmlFor={optionKey}>{optionName}</label>
-                    </li>
+                    </div>
                 ))}
-            </motion.ul>
+            </motion.div>
         </AnimatePresence>
     )
 }
