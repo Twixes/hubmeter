@@ -13,9 +13,12 @@ import React, {
 
 import { EventType, eventTypeToName, User } from '../../github-api'
 import useLocalStorageSet from '../../hooks/useLocalStorageSet'
+import { capitalize } from '../../utils'
 
 interface Props {
+    label: string
     localStorageKey: string
+    options: [string, string][]
 }
 
 const VARIANTS: Variants = {
@@ -33,34 +36,47 @@ const VARIANTS: Variants = {
     }
 }
 
-export default function Select({ localStorageKey }: Props): JSX.Element {
+function humanizeAllowedEventTypes(selectedOptions: Set<EventType>): string {
+    if (!selectedOptions.size || selectedOptions.size === Object.keys(EventType).length) return 'All'
+    return `Only: ${Array.from(selectedOptions)
+        .map((key) => eventTypeToName[key])
+        .join(', ')}`
+}
+
+export default function Select({ label, localStorageKey, options }: Props): JSX.Element {
     const shouldReduceMotion = useReducedMotion()
     const [selectedOptions, toggleOption] = useLocalStorageSet<EventType>(localStorageKey)
 
-    const options = Object.entries(eventTypeToName)
+    const humanAllowedEventTypes = humanizeAllowedEventTypes(selectedOptions)
 
     return (
-        <AnimatePresence>
-            <motion.div
-                className="Select"
-                custom={[shouldReduceMotion, Object.keys(options).length]}
-                variants={VARIANTS}
-                initial="hidden"
-                animate="shown"
-                exit="hidden"
-            >
-                {options.map(([optionKey, optionName], index) => (
-                    <div className="Select-option" key={optionKey} tabIndex={index + 1}>
-                        <input
-                            id={optionKey}
-                            type="checkbox"
-                            checked={selectedOptions.has(optionKey as EventType)}
-                            onChange={(e) => toggleOption(optionKey as EventType, e.target.checked)}
-                        />
-                        <label htmlFor={optionKey}>{optionName}</label>
-                    </div>
-                ))}
-            </motion.div>
-        </AnimatePresence>
+        <>
+            <div className="SelectBox">
+                <i>{label}</i>
+                <span className="SelectBox-summary">{humanAllowedEventTypes}</span>
+            </div>
+            <AnimatePresence>
+                <motion.div
+                    className="SelectOptions"
+                    custom={[shouldReduceMotion, options.length]}
+                    variants={VARIANTS}
+                    initial="hidden"
+                    animate="shown"
+                    exit="hidden"
+                >
+                    {options.map(([optionKey, optionName], index) => (
+                        <div key={optionKey} tabIndex={index + 1}>
+                            <input
+                                id={optionKey}
+                                type="checkbox"
+                                checked={selectedOptions.has(optionKey as EventType)}
+                                onChange={(e) => toggleOption(optionKey as EventType, e.target.checked)}
+                            />
+                            <label htmlFor={optionKey}>{capitalize(optionName)}</label>
+                        </div>
+                    ))}
+                </motion.div>
+            </AnimatePresence>
+        </>
     )
 }

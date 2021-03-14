@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil'
 
 import { currentUserState } from '../../atoms'
 import Select from '../../components/Select'
-import { User } from '../../github-api'
+import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../utils'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
@@ -133,7 +133,9 @@ export default function Controls(): JSX.Element {
                 submit={submit}
                 navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
             />
-            <Select localStorageKey="filters" />
+            {currentUser && (
+                <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
+            )}
         </motion.form>
     )
 }

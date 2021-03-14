@@ -12,8 +12,26 @@ export function useOutsideClickHandler(ref: RefObject<HTMLElement>, handleClickO
     }, [ref, handleClickOutside])
 }
 
+/** Extract hours out of date, adjusting for timezone. */
+export function getHours(date: Date): number {
+    return date.getUTCHours()
+}
+
+/** Extract day of week out of date, adjusting for timezone. */
+export function getDayOfWeek(date: Date): number {
+    const dayOfWeekSundayInitial = date.getUTCDay()
+    // JS uses Sunday as the initial day of the week, IMO Monday is a saner choice
+    const dayOfWeekMondayInitial = dayOfWeekSundayInitial ? dayOfWeekSundayInitial - 1 : 6
+    return dayOfWeekMondayInitial
+}
+
 export function formatTime(date: Date): string {
-    return `${date.getHours() % 12 || 12}:${date.getMinutes().toString().padStart(2, '0')} ${
-        date.getHours() >= 12 ? 'PM' : 'AM'
+    return `${getHours(date) % 12 || 12}:${date.getMinutes().toString().padStart(2, '0')} ${
+        getHours(date) >= 12 ? 'PM' : 'AM'
     }`
+}
+
+export function capitalize(text: string): string {
+    text = text.trim()
+    return text.charAt(0).toUpperCase() + text.slice(1)
 }
