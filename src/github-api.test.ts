@@ -77,8 +77,7 @@ describe('#fetchUser()', () => {
     expect(user!.avatar_url).toBeDefined()
   })
   it('should throw error if user does not exist', async () => {
-    const nonexistentLogin = 'twixesdfghjkl'
-    const user = await fetchUser(nonexistentLogin)
-    expect(user).toThrowError(new Error(`User ${nonexistentLogin} doesn't exist.`))
+    const nonexistentLogin = 'jdiofvunioieu'
+    return expect(fetchUser(nonexistentLogin)).rejects.toThrow(`User ${nonexistentLogin} doesn't exist.`)
   })
 })

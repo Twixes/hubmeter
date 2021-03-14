@@ -1,5 +1,3 @@
-import { request } from 'http'
-
 import { formatTime } from './utils'
 
 export interface User {
@@ -72,8 +70,8 @@ async function throwOnProblem(response: Response, ignoredStatuses: number[] = []
 }
 
 export async function fetchFromApi(url: URL, ignoredErrorStatuses?: number[]): Promise<Response> {
-  const username = localStorage.getItem('username')
-  const pat = localStorage.getItem('pat')
+  const username = localStorage.getItem('username') || process?.env.USERNAME
+  const pat = localStorage.getItem('pat') || process?.env.PAT
   let fetchOptions: RequestInit | undefined
   if (username && pat) {
     console.info(`Using GitHub as user ${username}`)
