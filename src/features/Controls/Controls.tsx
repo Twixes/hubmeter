@@ -133,7 +133,7 @@ export default function Controls(): JSX.Element {
                 submit={submit}
                 navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
             />
-            {currentUser && (
+            {login && (
                 <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
             )}
         </motion.form>
