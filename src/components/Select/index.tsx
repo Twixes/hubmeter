@@ -11,7 +11,7 @@ import React, {
     useMemo
 } from 'react'
 
-import { EventType, User } from '../../github-api'
+import { EventType, eventTypeToName, User } from '../../github-api'
 import useLocalStorageSet from '../../hooks/useLocalStorageSet'
 
 interface Props {
@@ -37,7 +37,7 @@ export default function Select({ localStorageKey }: Props): JSX.Element {
     const shouldReduceMotion = useReducedMotion()
     const [selectedOptions, toggleOption] = useLocalStorageSet<EventType>(localStorageKey)
 
-    const options = EventType
+    const options = Object.entries(eventTypeToName)
 
     return (
         <AnimatePresence>
@@ -49,7 +49,7 @@ export default function Select({ localStorageKey }: Props): JSX.Element {
                 animate="shown"
                 exit="hidden"
             >
-                {Object.entries(options).map(([optionKey, optionName], index) => (
+                {options.map(([optionKey, optionName], index) => (
                     <div className="Select-option" key={optionKey} tabIndex={index + 1}>
                         <input
                             id={optionKey}

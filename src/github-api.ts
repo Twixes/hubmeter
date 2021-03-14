@@ -39,6 +39,24 @@ export enum EventType {
     WatchEvent = 'WatchEvent'
 }
 
+export const eventTypeToName: Record<EventType, string> = {
+    [EventType.CommitCommentEvent]: 'Commit comment',
+    [EventType.CreateEvent]: 'Git branch or tag created',
+    [EventType.DeleteEvent]: 'Git branch or tag deleted',
+    [EventType.ForkEvent]: 'Repository forked',
+    [EventType.GollumEvent]: 'Wiki activity',
+    [EventType.IssueCommentEvent]: 'Issue comment activity',
+    [EventType.IssuesEvent]: 'Issue activity',
+    [EventType.MemberEvent]: 'Repository collaboration activity',
+    [EventType.PublicEvent]: 'Repository made public',
+    [EventType.PullRequestEvent]: 'Pull request activity',
+    [EventType.PullRequestReviewCommentEvent]: 'Pull request review comment',
+    [EventType.PushEvent]: 'Commit(s) pushed',
+    [EventType.ReleaseEvent]: 'Release published',
+    [EventType.SponsorshipEvent]: 'Sponsorship activity',
+    [EventType.WatchEvent]: 'Star given'
+}
+
 export interface Event {
     id: string
     type: EventType
