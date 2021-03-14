@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 type ToggleItem<T> = (key: T, include: boolean) => void
 
-export default function useLocalStorageSet<T>(key: string): [Set<T>, ToggleItem<T>] {
+export function useLocalStorageSet<T>(key: string): [Set<T>, ToggleItem<T>] {
     const readValue: () => Set<T> = () => {
         const item = window.localStorage.getItem(key)
         return item ? new Set(JSON.parse(item)) : new Set()

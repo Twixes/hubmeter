@@ -1,17 +1,3 @@
-import { RefObject, useEffect } from 'react'
-
-export function useOutsideClickHandler(ref: RefObject<HTMLElement>, handleClickOutside: () => void): void {
-    useEffect(() => {
-        function handleClick(event: MouseEvent) {
-            if (ref.current && !ref.current.contains(event.target as Node)) handleClickOutside()
-        }
-        document.addEventListener('mousedown', handleClick)
-        return () => {
-            document.removeEventListener('mousedown', handleClick)
-        }
-    }, [ref, handleClickOutside])
-}
-
 /** Extract hours out of date, adjusting for timezone. */
 export function getHours(date: Date): number {
     return date.getUTCHours()

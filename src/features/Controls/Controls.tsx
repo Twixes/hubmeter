@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil'
 import { currentUserState } from '../../atoms'
 import Select from '../../components/Select'
 import { eventTypeToName, User } from '../../github-api'
-import { useOutsideClickHandler } from '../../utils'
+import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
 

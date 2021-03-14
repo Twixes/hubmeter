@@ -12,7 +12,7 @@ import React, {
 } from 'react'
 
 import { EventType, eventTypeToName, User } from '../../github-api'
-import useLocalStorageSet from '../../hooks/useLocalStorageSet'
+import { useLocalStorageSet } from '../../hooks/useLocalStorageSet'
 import { capitalize } from '../../utils'
 
 interface Props {
