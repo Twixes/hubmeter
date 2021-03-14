@@ -51,7 +51,7 @@ export default function Select({ label, localStorageKey, options }: Props): JSX.
 
     return (
         <>
-            <div className="SelectBox">
+            <div className="SelectBox" title={humanAllowedEventTypes}>
                 <i>{label}</i>
                 <span className="SelectBox-summary">{humanAllowedEventTypes}</span>
             </div>
