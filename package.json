@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@react-hook/size": "^2.1.1",
+        "@rehooks/local-storage": "^2.4.0",
         "@sentry/browser": "^6.2.2",
         "@testing-library/jest-dom": "^5.11.9",
         "@testing-library/react": "^11.2.5",

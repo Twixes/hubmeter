@@ -1,7 +1,7 @@
 import './Statistics.scss'
 
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
@@ -16,7 +16,9 @@ import { Params } from '../../components/App'
 import Graph from '../../components/Graph'
 import Spinner from '../../components/Spinner'
 import { aggregateByDayOfWeek, aggregateByHour } from '../../data-processing/aggregation'
-import { fetchUserEventsAll } from '../../github-api'
+import { filterByEventType } from '../../data-processing/filtration'
+import { EventType, fetchUserEventsAll } from '../../github-api'
+import useLocalStorageSet from '../../hooks/useLocalStorageSet'
 
 const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const HOURS: string[] = HOUR_NUMBERS.map((hour) => `${hour} AM`).concat(HOUR_NUMBERS.map((hour) => `${hour} PM`))
@@ -39,6 +41,13 @@ export default function Statistics(): JSX.Element {
     const [userEvents, setUserEvents] = useRecoilState(userEventsState({ login: login!.toLowerCase() }))
     const isCurrentUserLoading = useRecoilValue(isCurrentUserLoadingState)
     const currentUser = useRecoilValue(currentUserState)
+
+    const [selectedOptions] = useLocalStorageSet<EventType>('filters')
+
+    const userEventsFiltered = useMemo(() => userEvents && filterByEventType(userEvents, selectedOptions), [
+        userEvents,
+        selectedOptions
+    ])
 
     const loadUserEvents = useCallback(
         (login: string) => {
@@ -72,7 +81,7 @@ export default function Statistics(): JSX.Element {
         <AnimatePresence>
             {(() => {
                 if (errorMessage) return null
-                if (isCurrentUserLoading || !userEvents) return <Spinner />
+                if (isCurrentUserLoading || !userEventsFiltered) return <Spinner />
                 if (currentUser) {
                     return (
                         <motion.div
@@ -86,7 +95,7 @@ export default function Statistics(): JSX.Element {
                             <section>
                                 <h1>By hour</h1>
                                 <Graph
-                                    dataPoints={aggregateByHour(userEvents)}
+                                    dataPoints={aggregateByHour(userEventsFiltered)}
                                     labeling={HOURS}
                                     isLoading={areEventsLoading}
                                 />
@@ -94,7 +103,7 @@ export default function Statistics(): JSX.Element {
                             <section>
                                 <h1>By day of week</h1>
                                 <Graph
-                                    dataPoints={aggregateByDayOfWeek(userEvents)}
+                                    dataPoints={aggregateByDayOfWeek(userEventsFiltered)}
                                     labeling={DAYS_OF_WEEK}
                                     isLoading={areEventsLoading}
                                 />
