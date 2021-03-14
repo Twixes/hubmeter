@@ -1,75 +1,75 @@
 @keyframes Controls-typing-indicator-bounce {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-0.25em);
-  }
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-0.25em);
+    }
 }
 
 .Controls {
-  z-index: 10;
-  display: grid;
-  grid-auto-flow: row;
-  gap: 0.75rem;
-  position: relative;
-  border-radius: 0.5rem;
+    z-index: 10;
+    display: grid;
+    grid-auto-flow: row;
+    gap: 0.75rem;
+    position: relative;
+    border-radius: 0.5rem;
 }
 
 .Controls-indicator {
-  transition: opacity var(--duration-short) var(--timing-function-standard);
-  opacity: var(--opacity-dim);
-  font-size: 1.125rem;
-  text-align: center;
-  line-height: 1.5rem;
-  height: 1.5rem;
-  width: 1.5rem;
-  border-radius: 0.25rem;
-  overflow: hidden;
-  user-select: none;
-  & > div {
-    height: 100%;
-    width: 100%;
+    transition: opacity var(--duration-short) var(--timing-function-standard);
+    opacity: var(--opacity-dim);
+    font-size: 1.125rem;
+    text-align: center;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
     border-radius: 0.25rem;
-  }
+    overflow: hidden;
+    user-select: none;
+    & > div {
+        height: 100%;
+        width: 100%;
+        border-radius: 0.25rem;
+    }
 }
 
 .Controls-indicator-avatar {
-  background-size: contain;
-  background-repeat: no-repeat;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .Controls-indicator-typing,
 .Controls-indicator-mark {
-  background: var(--color-accent);
-  color: var(--color-foreground);
+    background: var(--color-accent);
+    color: var(--color-foreground);
 }
 
 .Controls-indicator-typing {
-  & span {
-    animation: Controls-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite
-      alternate;
-    display: inline-block;
-    @for $i from 1 through 3 {
-      &:nth-child(#{$i}) {
-        animation-delay: calc(#{$i - 1} * var(--duration-long) / 15);
-      }
+    & span {
+        animation: Controls-typing-indicator-bounce calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite
+            alternate;
+        display: inline-block;
+        @for $i from 1 through 3 {
+            &:nth-child(#{$i}) {
+                animation-delay: calc(#{$i - 1} * var(--duration-long) / 15);
+            }
+        }
     }
-  }
 }
 
 .Controls-login {
-  flex-grow: 1;
-  width: 0;
-  height: 3rem;
-  padding: 0;
-  margin-left: 0.75rem;
-  line-height: 3rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  &::placeholder {
-    color: var(--color-accent-dim);
-    opacity: 1;
-  }
+    flex-grow: 1;
+    width: 0;
+    height: 3rem;
+    padding: 0;
+    margin-left: 0.75rem;
+    line-height: 3rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    &::placeholder {
+        color: var(--color-accent-dim);
+        opacity: 1;
+    }
 }

@@ -19,33 +19,33 @@ $breakpoint-width-desktop: 118rem;
 $timing-function-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
 %width-control {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 120rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  @media screen and (min-width: $breakpoint-width-tablet) {
-    padding-left: 4rem;
-    padding-right: 4rem;
-  }
-  @media screen and (min-width: $breakpoint-width-laptop) {
-    padding-left: 8rem;
-    padding-right: 8rem;
-  }
-  @media screen and (min-width: $breakpoint-width-desktop) {
-    padding-left: 12rem;
-    padding-right: 12rem;
-  }
+    margin: 0 auto;
+    width: 100%;
+    max-width: 120rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    @media screen and (min-width: $breakpoint-width-tablet) {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+    @media screen and (min-width: $breakpoint-width-laptop) {
+        padding-left: 8rem;
+        padding-right: 8rem;
+    }
+    @media screen and (min-width: $breakpoint-width-desktop) {
+        padding-left: 12rem;
+        padding-right: 12rem;
+    }
 }
 
 %card {
-  transition: border-radius var(--duration-short) var(--timing-function-standard);
-  display: flex;
-  padding: 0 0.75rem;
-  margin: 0;
-  border-radius: 0.5rem;
-  background: var(--color-foreground);
-  color: var(--color-accent);
-  box-shadow: 0 0 0.09375rem var(--color-shadow), 0 0.125rem 0.1875rem var(--color-shadow),
-    0 0.25rem 0.375rem var(--color-shadow), 0 0.5rem 0.75rem var(--color-shadow), 0 1rem 1.5rem var(--color-shadow);
+    transition: border-radius var(--duration-short) var(--timing-function-standard);
+    display: flex;
+    padding: 0 0.75rem;
+    margin: 0;
+    border-radius: 0.5rem;
+    background: var(--color-foreground);
+    color: var(--color-accent);
+    box-shadow: 0 0 0.09375rem var(--color-shadow), 0 0.125rem 0.1875rem var(--color-shadow),
+        0 0.25rem 0.375rem var(--color-shadow), 0 0.5rem 0.75rem var(--color-shadow), 0 1rem 1.5rem var(--color-shadow);
 }

@@ -19,16 +19,16 @@ Sentry.init({ dsn: 'https://eaa5d3bc32f640ceb2f8090656940497@o173795.ingest.sent
 posthog.init('AfWAhZKo9pPPH8blum1SKbPAWPixyRGOuaxC_laQNAc', { api_host: 'https://app.posthog.com' })
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ErrorBoundary fallback={<h1>An error occurred. Reload the page.</h1>}>
-      <RecoilRoot>
-        <CookiesProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </CookiesProvider>
-      </RecoilRoot>
-    </ErrorBoundary>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <ErrorBoundary fallback={<h1>An error occurred. Reload the page.</h1>}>
+            <RecoilRoot>
+                <CookiesProvider>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </CookiesProvider>
+            </RecoilRoot>
+        </ErrorBoundary>
+    </React.StrictMode>,
+    document.getElementById('root')
 )

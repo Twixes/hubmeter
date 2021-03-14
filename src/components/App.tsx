@@ -7,21 +7,21 @@ import Header from './Header'
 import Main from './Main'
 
 export interface Params {
-  login: string | undefined
+    login: string | undefined
 }
 
 export default function App(): JSX.Element {
-  const history = useHistory()
+    const history = useHistory()
 
-  history.listen(() => {
-    posthog.capture('$pageview')
-  })
+    history.listen(() => {
+        posthog.capture('$pageview')
+    })
 
-  return (
-    <>
-      <Header />
-      <Route path="/:login?" component={Main} />
-      <Footer />
-    </>
-  )
+    return (
+        <>
+            <Header />
+            <Route path="/:login?" component={Main} />
+            <Footer />
+        </>
+    )
 }

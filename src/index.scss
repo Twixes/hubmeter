@@ -1,81 +1,81 @@
 @import './src/_base.scss';
 
 :root {
-  --color-background: #{$color-background};
-  --color-foreground: #{$color-foreground};
-  --color-accent: #{$color-accent};
-  --color-shadow: #{$color-shadow};
-  --opacity-dim: #{$opacity-dim};
-  --opacity-pale: #{$opacity-pale};
-  --color-foreground-dim: #{$color-foreground-dim};
-  --color-accent-dim: #{$color-accent-dim};
-  --color-accent-pale: #{$color-accent-pale};
-  --font-family-stack: #{inspect($font-family-stack)};
-  --font-weight: #{$font-weight};
-  --duration-instant: #{$duration-instant};
-  --duration-short: #{$duration-short};
-  --duration-medium: #{$duration-medium};
-  --duration-long: #{$duration-long};
-  --timing-function-standard: #{$timing-function-standard};
+    --color-background: #{$color-background};
+    --color-foreground: #{$color-foreground};
+    --color-accent: #{$color-accent};
+    --color-shadow: #{$color-shadow};
+    --opacity-dim: #{$opacity-dim};
+    --opacity-pale: #{$opacity-pale};
+    --color-foreground-dim: #{$color-foreground-dim};
+    --color-accent-dim: #{$color-accent-dim};
+    --color-accent-pale: #{$color-accent-pale};
+    --font-family-stack: #{inspect($font-family-stack)};
+    --font-weight: #{$font-weight};
+    --duration-instant: #{$duration-instant};
+    --duration-short: #{$duration-short};
+    --duration-medium: #{$duration-medium};
+    --duration-long: #{$duration-long};
+    --timing-function-standard: #{$timing-function-standard};
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: var(--color-foreground);
+    background: var(--color-accent);
+    color: var(--color-foreground);
 }
 
 html,
 body {
-  height: 100%;
-  cursor: auto;
+    height: 100%;
+    cursor: auto;
 }
 
 body {
-  margin: 0;
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-family-stack);
-  font-weight: var(--font-weight);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-family-stack);
+    font-weight: var(--font-weight);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  color: inherit;
+    color: inherit;
 }
 
 h1 {
-  margin: 1rem 0;
-  font-size: 1.75rem;
-  font-style: italic;
-  text-shadow: 0 0 0.033em #fff, 0 0 0.08em #fff, 0 0 0.1em var(--color-accent), 0 0 0.2em var(--color-accent),
-    0 0 0.3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
+    margin: 1rem 0;
+    font-size: 1.75rem;
+    font-style: italic;
+    text-shadow: 0 0 0.033em #fff, 0 0 0.08em #fff, 0 0 0.1em var(--color-accent), 0 0 0.2em var(--color-accent),
+        0 0 0.3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
 }
 
 button,
 input {
-  border: none;
-  font-size: 1.5rem;
-  text-overflow: ellipsis;
+    border: none;
+    font-size: 1.5rem;
+    text-overflow: ellipsis;
 }
 
 button {
-  transition: border-radius var(--duration-short) var(--timing-function-standard);
-  border-radius: 0.5rem;
+    transition: border-radius var(--duration-short) var(--timing-function-standard);
+    border-radius: 0.5rem;
 }
 
 input[type='search']::-webkit-search-cancel-button {
-  -webkit-appearance: none;
+    -webkit-appearance: none;
 }
 
 input,
 .js-focus-visible :focus:not(.focus-visible) {
-  outline: none;
+    outline: none;
 }
 
 #root {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
 }
