@@ -7,13 +7,9 @@ import React, { Dispatch, MutableRefObject, SetStateAction, useLayoutEffect, use
 
 import Spinner from './Spinner'
 
-export type DataPoint = [Date | string | number, number]
-type CaptionPoint = [Date | string | number, number, number]
-
-interface Props {
-    dataPoints: DataPoint[]
-    isLoading?: boolean
-}
+export type DataPoint = [string | number, number]
+export type Labeling = Record<string | number, string> | string[]
+type CaptionPoint = [string | number, number, number]
 
 const CORNER_RADIUS = 4
 const TRANSITION = { type: 'spring', damping: 18 }
@@ -37,7 +33,8 @@ const EXPANSION_VARIANTS: Variants = {
 function generateXLegend(
     points: DataPoint[],
     width: number,
-    xLegendRefs: MutableRefObject<(HTMLDivElement | null)[]>
+    xLegendRefs: MutableRefObject<(HTMLDivElement | null)[]>,
+    labeling?: Labeling
 ): JSX.Element {
     if (!points.length) throw Error('No data points to draw')
     const columnWidth: number = width / points.length
@@ -55,7 +52,7 @@ function generateXLegend(
                         xLegendRefs.current[i] = ref
                     }}
                 >
-                    {x}
+                    {labeling?.[x as number] ?? x /* as number is slightly hacky, but does avoid TS complaints */}
                 </div>
             </div>
         )
@@ -180,18 +177,23 @@ function drawRoundedBarGraphWithOverlay(
     return [mainElement, overlayElements]
 }
 
-export default function Graph({ dataPoints, isLoading }: Props): JSX.Element {
+export interface GraphProps {
+    dataPoints: DataPoint[]
+    labeling?: Labeling
+    isLoading?: boolean
+}
+
+export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): JSX.Element {
     const vectorRef = useRef<HTMLDivElement | null>(null)
     const xLegendRefs = useRef<(HTMLDivElement | null)[]>([])
     const [vectorWidth, vectorHeight] = useSize(vectorRef)
     const [xLegendHeight, setXLegendHeight] = useState<number>(0)
     const [captionPoint, setCaptionPoint] = useState<CaptionPoint | null>(null)
 
-    const xLegendElement = useMemo(() => (isLoading ? null : generateXLegend(dataPoints, vectorWidth, xLegendRefs)), [
-        isLoading,
-        dataPoints,
-        vectorWidth
-    ])
+    const xLegendElement = useMemo(
+        () => (isLoading ? null : generateXLegend(dataPoints, vectorWidth, xLegendRefs, labeling)),
+        [isLoading, dataPoints, vectorWidth]
+    )
 
     const [vectorMainElement, vectorOverlayElements] = useMemo(
         () =>

@@ -18,6 +18,10 @@ import Spinner from '../../components/Spinner'
 import { fetchUserEventsAll } from '../../github-api'
 import { aggregateByDayOfWeek, aggregateByHour } from './data-processing'
 
+const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+const HOURS: string[] = HOUR_NUMBERS.map((hour) => `${hour} AM`).concat(HOUR_NUMBERS.map((hour) => `${hour} PM`))
+const DAYS_OF_WEEK: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
 const VARIANTS: Variants = {
     hidden: {
         opacity: 0
@@ -81,11 +85,19 @@ export default function Statistics(): JSX.Element {
                         >
                             <section>
                                 <h1>By hour</h1>
-                                <Graph dataPoints={aggregateByHour(userEvents)} isLoading={areEventsLoading} />
+                                <Graph
+                                    dataPoints={aggregateByHour(userEvents)}
+                                    labeling={HOURS}
+                                    isLoading={areEventsLoading}
+                                />
                             </section>
                             <section>
                                 <h1>By day of week</h1>
-                                <Graph dataPoints={aggregateByDayOfWeek(userEvents)} isLoading={areEventsLoading} />
+                                <Graph
+                                    dataPoints={aggregateByDayOfWeek(userEvents)}
+                                    labeling={DAYS_OF_WEEK}
+                                    isLoading={areEventsLoading}
+                                />
                             </section>
                         </motion.div>
                     )
