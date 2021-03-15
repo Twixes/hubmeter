@@ -2,6 +2,7 @@
 
 .ControlsSearchResults {
     @extend %card;
+    z-index: 1000;
     position: absolute;
     flex-direction: column;
     top: 3rem;

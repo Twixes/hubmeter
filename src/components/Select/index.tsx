@@ -22,15 +22,13 @@ interface Props {
 }
 
 const VARIANTS: Variants = {
-    hidden: ([shouldReduceMotion, numberOfResults]: [boolean, number]) => {
+    hidden: ([shouldReduceMotion]: [boolean]) => {
         return {
-            height: shouldReduceMotion ? `${numberOfResults * 0.75}rem` : 0,
             opacity: shouldReduceMotion ? 0 : 1
         }
     },
-    shown: ([, numberOfResults]: [boolean, number]) => {
+    shown: () => {
         return {
-            height: `${numberOfResults * 0.75}rem`,
             opacity: 1
         }
     }
@@ -57,16 +55,16 @@ export default function Select({ label, localStorageKey, options }: Props): JSX.
                 <span className="SelectBox-summary">{humanAllowedEventTypes}</span>
             </div>
             <AnimatePresence>
-                <motion.div
+                <motion.ul
                     className="SelectOptions"
-                    custom={[shouldReduceMotion, options.length]}
+                    custom={[shouldReduceMotion]}
                     variants={VARIANTS}
                     initial="hidden"
                     animate="shown"
                     exit="hidden"
                 >
                     {options.map(([optionKey, optionName], index) => (
-                        <div key={optionKey} tabIndex={index + 1}>
+                        <li key={optionKey} tabIndex={index + 1}>
                             <input
                                 id={optionKey}
                                 type="checkbox"
@@ -74,9 +72,9 @@ export default function Select({ label, localStorageKey, options }: Props): JSX.
                                 onChange={(e) => toggleOption(optionKey as EventType, e.target.checked)}
                             />
                             <label htmlFor={optionKey}>{capitalize(optionName)}</label>
-                        </div>
+                        </li>
                     ))}
-                </motion.div>
+                </motion.ul>
             </AnimatePresence>
         </>
     )

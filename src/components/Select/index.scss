@@ -31,6 +31,16 @@
 
 .SelectOptions {
     @extend %card;
+    padding: 0.25rem 0.75rem;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    list-style: none;
+    li {
+        display: flex;
+        align-items: center;
+        height: 2rem;
+    }
+    label {
+        padding-left: 0.5rem;
+    }
 }
