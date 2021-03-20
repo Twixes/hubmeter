@@ -37,9 +37,7 @@ const VARIANTS: Variants = {
 function humanizeAllowedEventTypes(selectedOptions: Set<EventType>): string {
     if (!selectedOptions.size) return 'None'
     if (selectedOptions.size === Object.keys(EventType).length) return 'All'
-    return `Only: ${Array.from(selectedOptions)
-        .map((key) => eventTypeToName[key])
-        .join(', ')}`
+    return 'Only selected'
 }
 
 export default function Select({ label, localStorageKey, options }: Props): JSX.Element {
