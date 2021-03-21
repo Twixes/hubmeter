@@ -25,12 +25,15 @@ describe('#filterByEventType()', () => {
         expect(results).toStrictEqual(testEvents)
     })
     it('should return no events if provided filter allows no event type', () => {
-        const results = filterByEventType(testEvents, [])
+        const results = filterByEventType(testEvents, {})
 
         expect(results).toHaveLength(0)
     })
     it('should return only events of types allowed by provided filter', () => {
-        const results = filterByEventType(testEvents, [EventType.PullRequestEvent, EventType.PushEvent])
+        const results = filterByEventType(testEvents, {
+            [EventType.PullRequestEvent]: true,
+            [EventType.PushEvent]: true
+        })
 
         expect(results).toStrictEqual([
             {
@@ -45,7 +48,7 @@ describe('#filterByEventType()', () => {
         ])
     })
     it('should return no events if no types allowed by provided filter are in input', () => {
-        const results = filterByEventType(testEvents, [EventType.SponsorshipEvent])
+        const results = filterByEventType(testEvents, { [EventType.SponsorshipEvent]: true })
 
         expect(results).toHaveLength(0)
     })

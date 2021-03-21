@@ -12,13 +12,43 @@ import React, {
 } from 'react'
 
 import { EventType, eventTypeToName, User } from '../../github-api'
-import { useLocalStorageSet } from '../../hooks/useLocalStorageSet'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { capitalize } from '../../utils'
 
 interface Props {
     label: string
     localStorageKey: string
     options: [string, string][]
+}
+
+const initialSelectState = Object.fromEntries(Object.keys(EventType).map((key) => [key, false])) as Record<
+    EventType,
+    boolean
+>
+
+export function useEventTypeSelection(): [
+    Record<EventType, boolean>,
+    (eventType: EventType, newState: boolean) => void
+] {
+    const [eventTypeSelection, setEventTypeSelection] = useLocalStorage<Record<EventType, boolean>>('event-types', {
+        ...initialSelectState
+    })
+    return [
+        eventTypeSelection,
+        (eventType, newState) => setEventTypeSelection((currentState) => ({ ...currentState, [eventType]: newState }))
+    ]
+}
+
+function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, short = true): string {
+    const selectedCount = Object.values(selectedOptions).filter(Boolean).length
+    if (!selectedCount) return 'None'
+    if (selectedCount === Object.keys(EventType).length) return 'All'
+    if (!short)
+        return `Only selected: ${Object.entries(selectedOptions)
+            .filter(([, value]) => value)
+            .map(([key]) => eventTypeToName[key as EventType])
+            .join(', ')}`
+    return 'Only selected'
 }
 
 const VARIANTS: Variants = {
@@ -34,23 +64,15 @@ const VARIANTS: Variants = {
     }
 }
 
-function humanizeAllowedEventTypes(selectedOptions: Set<EventType>): string {
-    if (!selectedOptions.size) return 'None'
-    if (selectedOptions.size === Object.keys(EventType).length) return 'All'
-    return 'Only selected'
-}
-
-export default function Select({ label, localStorageKey, options }: Props): JSX.Element {
+export default function Select({ label }: Props): JSX.Element {
     const shouldReduceMotion = useReducedMotion()
-    const [selectedOptions, toggleOption] = useLocalStorageSet<EventType>(localStorageKey)
-
-    const humanAllowedEventTypes = humanizeAllowedEventTypes(selectedOptions)
+    const [eventTypeSelection, setEventTypeState] = useEventTypeSelection()
 
     return (
         <>
-            <div className="SelectBox" title={humanAllowedEventTypes}>
+            <div className="SelectBox" title={humanizeAllowedEventTypes(eventTypeSelection, false)}>
                 <i>{label}</i>
-                <span className="SelectBox-summary">{humanAllowedEventTypes}</span>
+                <span className="SelectBox-summary">{humanizeAllowedEventTypes(eventTypeSelection)}</span>
             </div>
             <AnimatePresence>
                 <motion.ul
@@ -61,15 +83,15 @@ export default function Select({ label, localStorageKey, options }: Props): JSX.
                     animate="shown"
                     exit="hidden"
                 >
-                    {options.map(([optionKey, optionName], index) => (
-                        <li key={optionKey} tabIndex={index + 1}>
+                    {Object.entries(eventTypeSelection).map(([key, value], index) => (
+                        <li key={key} tabIndex={index + 1}>
                             <input
-                                id={optionKey}
+                                id={key}
                                 type="checkbox"
-                                checked={selectedOptions.has(optionKey as EventType)}
-                                onChange={(e) => toggleOption(optionKey as EventType, e.target.checked)}
+                                checked={value}
+                                onChange={(e) => setEventTypeState(key as EventType, e.target.checked)}
                             />
-                            <label htmlFor={optionKey}>{capitalize(optionName)}</label>
+                            <label htmlFor={key}>{capitalize(eventTypeToName[key as EventType])}</label>
                         </li>
                     ))}
                 </motion.ul>
