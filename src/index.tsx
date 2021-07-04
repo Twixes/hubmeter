@@ -22,11 +22,9 @@ ReactDOM.render(
     <React.StrictMode>
         <ErrorBoundary
             fallback={
-                <h1>
-                    An error occurred and has been registered for analysis.
-                    <br />
-                    Please reload the page.
-                </h1>
+                <main className="Main" style={{ textAlign: 'center' }}>
+                    <h1>An error occurred. Please reload the page.</h1>
+                </main>
             }
         >
             <RecoilRoot>
