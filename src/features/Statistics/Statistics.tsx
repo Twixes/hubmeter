@@ -45,10 +45,10 @@ export default function Statistics(): JSX.Element {
 
     const [selectedOptions] = useEventTypeSelection()
 
-    const userEventsFiltered = useMemo(() => userEvents && filterByEventType(userEvents, selectedOptions), [
-        userEvents,
-        selectedOptions
-    ])
+    const userEventsFiltered = useMemo(
+        () => userEvents && filterByEventType(userEvents, selectedOptions),
+        [userEvents, selectedOptions]
+    )
 
     const loadUserEvents = useCallback(
         (login: string) => {

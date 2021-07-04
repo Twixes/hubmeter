@@ -39,19 +39,23 @@ export const eventTypesFilterState = atom<Set<EventType> | null>({
 
 export const userEventsState = selectorFamily<Event[] | undefined, { login: string }>({
     key: 'userEvents',
-    get: ({ login }) => ({ get }) => {
-        if (!login) return undefined
-        const userEvents = get(loginToUserEventsState).get(login)
-        const eventTypesFilter = get(eventTypesFilterState)
-        if (!userEvents || !eventTypesFilter) return userEvents
-        return userEvents.filter((event: Event) => eventTypesFilter.has(event.type))
-    },
-    set: ({ login }) => ({ set }, newEvents: Event[] | undefined | DefaultValue) => {
-        if (login)
-            set(loginToUserEventsState, (prevState) => {
-                const newState = new Map(prevState)
-                newState.set(login, newEvents as Event[])
-                return newState
-            })
-    }
+    get:
+        ({ login }) =>
+        ({ get }) => {
+            if (!login) return undefined
+            const userEvents = get(loginToUserEventsState).get(login)
+            const eventTypesFilter = get(eventTypesFilterState)
+            if (!userEvents || !eventTypesFilter) return userEvents
+            return userEvents.filter((event: Event) => eventTypesFilter.has(event.type))
+        },
+    set:
+        ({ login }) =>
+        ({ set }, newEvents: Event[] | undefined | DefaultValue) => {
+            if (login)
+                set(loginToUserEventsState, (prevState) => {
+                    const newState = new Map(prevState)
+                    newState.set(login, newEvents as Event[])
+                    return newState
+                })
+        }
 })
