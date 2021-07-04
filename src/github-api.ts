@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { formatTime } from './utils'
 
 export interface User {
@@ -62,7 +64,7 @@ export interface Event {
     type: EventType
     actor: User
     repo: Repo
-    created_at: Date // eslint-disable-line camelcase
+    created_at: DateTime // eslint-disable-line camelcase
 }
 
 const ROOT_API_URL = 'https://api.github.com/'
@@ -75,9 +77,8 @@ export function buildApiUrl(parts: string[], params?: Record<string, any>): URL 
 
 async function throwOnProblem(response: Response, ignoredStatuses: number[] = []): Promise<void> {
     if (response.status === 403) {
-        const rateLimitResetEpoch: number = parseInt(response.headers.get('X-Ratelimit-Reset')!) * 1000
-        const rateLimitReset: Date = new Date(rateLimitResetEpoch)
-        const deltaMinutes: number = Math.ceil((rateLimitResetEpoch - Date.now()) / 60_000)
+        const rateLimitReset: DateTime = DateTime.fromSeconds(parseInt(response.headers.get('X-Ratelimit-Reset')!))
+        const deltaMinutes: number = Math.ceil(rateLimitReset.diffNow().minutes)
         throw new Error(
             `Exceeded GitHub rate limit for now. Try again in ${deltaMinutes} min at ${formatTime(rateLimitReset)}.`
         )
@@ -104,25 +105,25 @@ export async function fetchUserEventsPage(login: string, page: number): Promise<
     const url: URL = buildApiUrl(['users', login, 'events'])
     url.searchParams.set('page', page.toString())
     const response = await fetchFromApi(url)
-    const events: Event[] = await response.json()
-    const eventsWithDates: Event[] = events.map((event) => {
-        return { ...event, created_at: new Date(event.created_at) }
+    const eventsRaw = await response.json()
+    const eventsParsed: Event[] = eventsRaw.map((event: Record<string, any>) => {
+        return { ...event, created_at: DateTime.fromISO(event.created_at) }
     })
-    return eventsWithDates
+    return eventsParsed
 }
 
 export async function fetchUserEventsPilot(login: string): Promise<[Event[], number]> {
     const url: URL = buildApiUrl(['users', login, 'events'])
     url.searchParams.set('page', '1')
     const response = await fetchFromApi(url)
-    const events: Event[] = await response.json()
-    const eventsWithDates: Event[] = events.map((event) => {
-        return { ...event, created_at: new Date(event.created_at) }
+    const eventsRaw = await response.json()
+    const eventsParsed: Event[] = eventsRaw.map((event: Record<string, any>) => {
+        return { ...event, created_at: DateTime.fromISO(event.created_at) }
     })
     const linkHeader: string | null = response.headers.get('link')
     let lastPageNumber = 1
     if (linkHeader) lastPageNumber = parseInt(linkHeader.match(/events\?page=(\d+)>; rel="last"/)![1])
-    return [eventsWithDates, lastPageNumber]
+    return [eventsParsed, lastPageNumber]
 }
 
 export async function fetchUserEventsAll(login: string): Promise<Event[]> {

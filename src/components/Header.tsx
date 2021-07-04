@@ -1,12 +1,13 @@
 import './Header.scss'
 
 import { motion } from 'framer-motion'
+import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function calculateCurrentClockHandRotation(extraRotations = 0): number {
-    const now = new Date()
-    const hoursPrecise = now.getHours() + now.getMinutes() / 60
+    const now = DateTime.local()
+    const hoursPrecise = now.hour + now.minute / 60
     return Math.round((hoursPrecise / 12 + extraRotations) * 360)
 }
 

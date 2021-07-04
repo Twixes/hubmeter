@@ -21,3 +21,12 @@ export function aggregateByDayOfWeek(events: Aggregatable[]): DataPoint[] {
     }
     return Array.from(dataPointMap.entries())
 }
+
+export function aggregateByWorkweek(events: Aggregatable[]): DataPoint[] {
+    const dataPointMap: Map<number, number> = new Map([...Array(7).keys()].map((n) => [n, 0]))
+    for (const { created_at } of events) {
+        const dayOfWeek = getDayOfWeek(created_at)
+        dataPointMap.set(dayOfWeek, dataPointMap.get(dayOfWeek)! + 1)
+    }
+    return Array.from(dataPointMap.entries())
+}

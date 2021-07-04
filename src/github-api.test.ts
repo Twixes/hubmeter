@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import { DateTime } from 'luxon'
+
 import {
     buildApiUrl,
     Event,
@@ -30,7 +32,7 @@ describe('#fetchUserEventsPage()', () => {
         expect(events[0].type).toBeDefined()
         expect(events[0].actor).toBeDefined()
         expect(events[0].repo).toBeDefined()
-        expect(events[0].created_at).toBeInstanceOf(Date)
+        expect(events[0].created_at).toBeInstanceOf(DateTime)
     })
 })
 
@@ -42,7 +44,7 @@ describe('#fetchUserEventsPilot()', () => {
         expect(events[0].type).toBeDefined()
         expect(events[0].actor).toBeDefined()
         expect(events[0].repo).toBeDefined()
-        expect(events[0].created_at).toBeInstanceOf(Date)
+        expect(events[0].created_at).toBeInstanceOf(DateTime)
         expect(lastPageNumber).toBeGreaterThanOrEqual(1)
     })
 })
@@ -55,7 +57,7 @@ describe('#fetchUserEventsAll()', () => {
         expect(events[0].type).toBeDefined()
         expect(events[0].actor).toBeDefined()
         expect(events[0].repo).toBeDefined()
-        expect(events[0].created_at).toBeInstanceOf(Date)
+        expect(events[0].created_at).toBeInstanceOf(DateTime)
     })
 })
 

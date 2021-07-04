@@ -1,20 +1,17 @@
+import { DateTime } from 'luxon'
+
 /** Extract hours out of date, adjusting for timezone. */
-export function getHours(date: Date): number {
-    return date.getUTCHours()
+export function getHours(date: DateTime): number {
+    return date.hour
 }
 
-/** Extract day of week out of date, adjusting for timezone. */
-export function getDayOfWeek(date: Date): number {
-    const dayOfWeekSundayInitial = date.getUTCDay()
-    // JS uses Sunday as the initial day of the week, IMO Monday is a saner choice
-    const dayOfWeekMondayInitial = dayOfWeekSundayInitial ? dayOfWeekSundayInitial - 1 : 6
-    return dayOfWeekMondayInitial
+/** Extract day of week out of date, adjusting for timezone. 0-based indexing starting with Monday. */
+export function getDayOfWeek(date: DateTime): number {
+    return date.plus(0).weekday - 1
 }
 
-export function formatTime(date: Date): string {
-    return `${getHours(date) % 12 || 12}:${date.getMinutes().toString().padStart(2, '0')} ${
-        getHours(date) >= 12 ? 'PM' : 'AM'
-    }`
+export function formatTime(date: DateTime): string {
+    return date.toLocaleString(DateTime.TIME_SIMPLE)
 }
 
 export function capitalize(text: string): string {

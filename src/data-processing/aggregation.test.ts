@@ -1,16 +1,18 @@
 /* eslint-env jest */
 
-import { Aggregatable, aggregateByDayOfWeek, aggregateByHour } from './aggregation'
+import { DateTime } from 'luxon'
+
+import { Aggregatable, aggregateByDayOfWeek, aggregateByHour, aggregateByWorkweek } from './aggregation'
 
 const testEvents: Aggregatable[] = [
     {
-        created_at: new Date('2021-03-14 21:09Z')
+        created_at: DateTime.fromISO('2021-03-14T21:09Z')
     },
     {
-        created_at: new Date('2021-03-12 21:54Z')
+        created_at: DateTime.fromISO('2021-03-12T21:54Z')
     },
     {
-        created_at: new Date('2021-03-14 20:20Z')
+        created_at: DateTime.fromISO('2021-03-14T20:20Z')
     }
 ]
 
@@ -49,6 +51,22 @@ describe('#aggregateByHour()', () => {
 
 describe('#aggregateByDayOfWeek()', () => {
     it('should aggregate events by day of week into data points', () => {
+        const results = aggregateByDayOfWeek(testEvents)
+
+        expect(results).toStrictEqual([
+            [0, 0], // Mon
+            [1, 0], // Tue
+            [2, 0], // Wed
+            [3, 0], // Thu
+            [4, 1], // Fri
+            [5, 0], // Sat
+            [6, 2] // Sun
+        ])
+    })
+})
+
+describe('#aggregateByWorkweek()', () => {
+    it('should aggregate events by workweek into data points', () => {
         const results = aggregateByDayOfWeek(testEvents)
 
         expect(results).toStrictEqual([
