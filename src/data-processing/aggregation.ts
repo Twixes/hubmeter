@@ -31,12 +31,18 @@ export enum WeekAggregationMode {
 }
 
 export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMode): DataPoint[] {
-    const eventCreatedAtValues = events.map((event) => event.created_at.toMillis())
+    // Cloning created_ats to avoid same internal mutability problems as with getDayOfWeek
+    let eventCreatedAts: DateTime[] = events.map((event) => event.created_at.plus(0))
+    if (mode === WeekAggregationMode.Weekend) {
+        eventCreatedAts = eventCreatedAts.filter((createdAt) => createdAt.weekday > 5)
+    } else if (mode === WeekAggregationMode.Workweek) {
+        eventCreatedAts = eventCreatedAts.filter((createdAt) => createdAt.weekday <= 5)
+    }
+    const eventCreatedAtValues = eventCreatedAts.map((createdAt) => createdAt.toMillis())
     const earliestDateTime = DateTime.fromMillis(Math.min(...eventCreatedAtValues))
     const latestDateTime = DateTime.fromMillis(Math.max(...eventCreatedAtValues))
     const earliestWeekStart = earliestDateTime.startOf('week')
     const latestWeekStart = latestDateTime.startOf('week')
-    const eventCreatedAts = eventCreatedAtValues.map((value) => DateTime.fromMillis(value))
     const dataPointMap: Map<string, number> = new Map()
     let nextWeekStart = earliestWeekStart
     while (nextWeekStart <= latestWeekStart) {
@@ -48,11 +54,6 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
         nextWeekStart = nextWeekStart.plus({ weeks: 1 })
     }
     for (const createdAt of eventCreatedAts) {
-        if (mode === WeekAggregationMode.Weekend) {
-            if (createdAt.weekday <= 5) continue
-        } else if (mode === WeekAggregationMode.Workweek) {
-            if (createdAt.weekday > 5) continue
-        }
         let eventWeek = createdAt.startOf('week')
         if (mode === WeekAggregationMode.Weekend) {
             eventWeek = eventWeek.plus({ days: 5 })
