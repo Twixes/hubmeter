@@ -7,6 +7,9 @@ export function getHours(date: DateTime): number {
 
 /** Extract day of week out of date, adjusting for timezone. 0-based indexing starting with Monday. */
 export function getDayOfWeek(date: DateTime): number {
+    // Cloning with .plus(0) because otherwise Recoil, which is all about immutability,
+    // complains when Luxon caches the DateTime's weekday data in an internally mutable way
+    // Subtracting 1 to convert from 1-based to 0-based indexing
     return date.plus(0).weekday - 1
 }
 

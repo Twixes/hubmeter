@@ -2,17 +2,23 @@
 
 import { DateTime } from 'luxon'
 
-import { Aggregatable, aggregateByDayOfWeek, aggregateByHour, aggregateByWorkweek } from './aggregation'
+import {
+    Aggregatable,
+    aggregateByDayOfWeek,
+    aggregateByHour,
+    aggregateByWeek,
+    WeekAggregationMode
+} from './aggregation'
 
 const testEvents: Aggregatable[] = [
     {
-        created_at: DateTime.fromISO('2021-03-14T21:09Z')
+        created_at: DateTime.fromISO('2021-03-14T21:09')
     },
     {
-        created_at: DateTime.fromISO('2021-03-12T21:54Z')
+        created_at: DateTime.fromISO('2021-03-12T21:54')
     },
     {
-        created_at: DateTime.fromISO('2021-03-14T20:20Z')
+        created_at: DateTime.fromISO('2021-03-14T20:20')
     }
 ]
 
@@ -65,18 +71,16 @@ describe('#aggregateByDayOfWeek()', () => {
     })
 })
 
-describe('#aggregateByWorkweek()', () => {
+describe('#aggregateByWeek()', () => {
     it('should aggregate events by workweek into data points', () => {
-        const results = aggregateByDayOfWeek(testEvents)
+        const results = aggregateByWeek(testEvents, WeekAggregationMode.Workweek)
 
-        expect(results).toStrictEqual([
-            [0, 0],
-            [1, 0],
-            [2, 0],
-            [3, 0],
-            [4, 1],
-            [5, 0],
-            [6, 2]
-        ])
+        expect(results).toStrictEqual([['2021-03-08', 1]])
+    })
+
+    it('should aggregate events by weekend into data points', () => {
+        const results = aggregateByWeek(testEvents, WeekAggregationMode.Weekend)
+
+        expect(results).toStrictEqual([['2021-03-13', 2]])
     })
 })

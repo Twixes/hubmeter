@@ -20,7 +20,15 @@ posthog.init('AfWAhZKo9pPPH8blum1SKbPAWPixyRGOuaxC_laQNAc', { api_host: 'https:/
 
 ReactDOM.render(
     <React.StrictMode>
-        <ErrorBoundary fallback={<h1>An error occurred. Reload the page.</h1>}>
+        <ErrorBoundary
+            fallback={
+                <h1>
+                    An error occurred and has been registered for analysis.
+                    <br />
+                    Please reload the page.
+                </h1>
+            }
+        >
             <RecoilRoot>
                 <CookiesProvider>
                     <BrowserRouter>

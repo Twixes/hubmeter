@@ -16,7 +16,12 @@ import { Params } from '../../components/App'
 import Graph from '../../components/Graph'
 import { useEventTypeSelection } from '../../components/Select'
 import Spinner from '../../components/Spinner'
-import { aggregateByDayOfWeek, aggregateByHour } from '../../data-processing/aggregation'
+import {
+    aggregateByDayOfWeek,
+    aggregateByHour,
+    aggregateByWeek,
+    WeekAggregationMode
+} from '../../data-processing/aggregation'
 import { filterByEventType } from '../../data-processing/filtration'
 import { EventType, fetchUserEventsAll } from '../../github-api'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
@@ -49,7 +54,6 @@ export default function Statistics(): JSX.Element {
         () => userEvents && filterByEventType(userEvents, selectedOptions),
         [userEvents, selectedOptions]
     )
-
     const loadUserEvents = useCallback(
         (login: string) => {
             if (areEventsLoading) {
@@ -106,6 +110,20 @@ export default function Statistics(): JSX.Element {
                                 <Graph
                                     dataPoints={aggregateByDayOfWeek(userEventsFiltered)}
                                     labeling={DAYS_OF_WEEK}
+                                    isLoading={areEventsLoading}
+                                />
+                            </section>
+                            <section>
+                                <h1>By workweek</h1>
+                                <Graph
+                                    dataPoints={aggregateByWeek(userEventsFiltered, WeekAggregationMode.Workweek)}
+                                    isLoading={areEventsLoading}
+                                />
+                            </section>
+                            <section>
+                                <h1>By weekend</h1>
+                                <Graph
+                                    dataPoints={aggregateByWeek(userEventsFiltered, WeekAggregationMode.Weekend)}
                                     isLoading={areEventsLoading}
                                 />
                             </section>
