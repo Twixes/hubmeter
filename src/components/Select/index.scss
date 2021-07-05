@@ -31,14 +31,17 @@
 
 .SelectOptions {
     @extend %card;
-    padding: 0.25rem 0.75rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-flow: column;
     list-style: none;
     li {
         display: flex;
         align-items: center;
         height: 2rem;
+        padding: 1.25rem 0;
+        &:not(:last-child) {
+            border-bottom: solid 1px var(--color-shadow);
+        }
     }
     label {
         padding-left: 0.5rem;

@@ -112,6 +112,7 @@ export default function ControlsSearch({
 
     const anchorAttributes: { [attribute: string]: string } = {}
     let currentIndicatorElement: JSX.Element
+    let isQuestionMarkShown = false
     if (isTypingInProgress) {
         currentIndicatorElement = (
             <div className="Controls-indicator-typing">
@@ -146,6 +147,7 @@ export default function ControlsSearch({
             />
         )
     } else {
+        isQuestionMarkShown = true
         currentIndicatorElement = (
             <div className="Controls-indicator-mark" key="question-mark">
                 ?
@@ -159,7 +161,7 @@ export default function ControlsSearch({
             style={isSearchShown ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}
         >
             <a {...anchorAttributes} target="_blank" rel="noopener noreferrer">
-                <div className="Controls-indicator" style={{ opacity: isSubmitEnabled ? 1 : '' }}>
+                <div className="Controls-indicator" style={{ opacity: isQuestionMarkShown ? '' : 1 }}>
                     {currentIndicatorElement}
                 </div>
             </a>

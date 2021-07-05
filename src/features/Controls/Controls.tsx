@@ -6,7 +6,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
 import { currentUserState } from '../../atoms'
-import Select from '../../components/Select'
+import { Select } from '../../components/Select'
 import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
 import ControlsSearch from './ControlsSearch'

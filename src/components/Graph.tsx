@@ -193,7 +193,7 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
 
     const xLegendElement = useMemo(
         () => (isLoading ? null : generateXLegend(dataPoints, vectorWidth, xLegendRefs, labeling)),
-        [isLoading, dataPoints, vectorWidth]
+        [isLoading, dataPoints, vectorWidth, labeling]
     )
 
     const [vectorMainElement, vectorOverlayElements] = useMemo(

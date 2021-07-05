@@ -15,7 +15,7 @@ import { EventType, eventTypeToName, User } from '../../github-api'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { capitalize } from '../../utils'
 
-interface Props {
+export interface SelectProps {
     label: string
     localStorageKey: string
     options: [string, string][]
@@ -64,7 +64,7 @@ const VARIANTS: Variants = {
     }
 }
 
-export default function Select({ label }: Props): JSX.Element {
+export function Select({ label }: SelectProps): JSX.Element {
     const shouldReduceMotion = useReducedMotion()
     const [eventTypeSelection, setEventTypeState] = useEventTypeSelection()
 
