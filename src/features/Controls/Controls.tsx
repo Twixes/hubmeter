@@ -1,5 +1,8 @@
+/** @jsxImportSource @emotion/react */
+
 import './Controls.scss'
 
+import { css } from '@emotion/react'
 import { motion } from 'framer-motion'
 import React, { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -11,6 +14,12 @@ import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
+
+const controlsGrid = css({
+    display: 'grid',
+    gridGap: '0.75rem',
+    '@media screen and (min-width: 38rem)': { gridTemplateColumns: 'repeat(2, 1fr)' }
+})
 
 export default function Controls(): JSX.Element {
     const currentUser = useRecoilValue(currentUserState)
@@ -134,7 +143,10 @@ export default function Controls(): JSX.Element {
                 navigateSearchResultsWithKeyboard={navigateSearchResultsWithKeyboard}
             />
             {login && (
-                <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
+                <div css={controlsGrid}>
+                    <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
+                    <Select label="Foo" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
+                </div>
             )}
         </motion.form>
     )

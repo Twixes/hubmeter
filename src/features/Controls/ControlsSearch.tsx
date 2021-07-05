@@ -1,8 +1,36 @@
-import './ControlsSearch.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import React, { ChangeEvent, Dispatch, KeyboardEvent, MutableRefObject, SetStateAction, useState } from 'react'
 
 import { fetchSearchUsers, User } from '../../github-api'
+import { card, expandableExpandedTop } from '../../styles'
+
+const controlsSearch = css({
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 0
+})
+
+const controlsSearchButton = css({
+    transition:
+        'background var(--duration-short) var(--timing-function-standard), color var(--duration-short) var(--timing-function-standard)',
+    padding: 0,
+    height: '3rem',
+    width: '3rem',
+    textAlign: 'center',
+    lineHeight: '3rem',
+    userSelect: 'none',
+    cursor: 'pointer',
+    '&:not(:disabled):active': {
+        background: 'var(--color-accent)',
+        color: 'var(--color-foreground)'
+    },
+    '&:disabled': {
+        opacity: 'var(--opacity-dim)',
+        cursor: 'default'
+    }
+})
 
 interface Props {
     currentLoginInput: string
@@ -156,10 +184,7 @@ export default function ControlsSearch({
     }
 
     return (
-        <div
-            className="ControlsSearch"
-            style={isSearchShown ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}
-        >
+        <div css={[card, controlsSearch, isSearchShown && expandableExpandedTop]}>
             <a {...anchorAttributes} target="_blank" rel="noopener noreferrer">
                 <div className="Controls-indicator" style={{ opacity: isQuestionMarkShown ? '' : 1 }}>
                     {currentIndicatorElement}
@@ -186,7 +211,7 @@ export default function ControlsSearch({
                 onKeyDown={onLoginInputKeyDown}
             />
             <button
-                className="ControlsSearch-button"
+                css={controlsSearchButton}
                 type="submit"
                 disabled={!isSubmitEnabled}
                 ref={buttonRef}
