@@ -11,6 +11,7 @@ import {
     currentUserState,
     errorMessageState,
     isCurrentUserLoadingState,
+    timeZoneUtcOffsetState,
     userEventsState
 } from '../../atoms'
 import { Params } from '../../components/App'
@@ -24,6 +25,7 @@ import {
     WeekAggregationMode
 } from '../../data-processing/aggregation'
 import { filterByEventType } from '../../data-processing/filtration'
+import { transformUsingTimeZone } from '../../data-processing/transformation'
 import { EventType, fetchUserEventsAll } from '../../github-api'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { breakpointWidthTablet } from '../../styles'
@@ -60,14 +62,15 @@ export default function Statistics(): JSX.Element {
     const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
     const [areEventsLoading, setAreEventsLoading] = useRecoilState(areEventsLoadingState)
     const [userEvents, setUserEvents] = useRecoilState(userEventsState({ login: login!.toLowerCase() }))
+    const timeZoneUtcOffset = useRecoilValue(timeZoneUtcOffsetState)
     const isCurrentUserLoading = useRecoilValue(isCurrentUserLoadingState)
     const currentUser = useRecoilValue(currentUserState)
 
     const [selectedOptions] = useEventTypeSelection()
 
     const userEventsFiltered = useMemo(
-        () => userEvents && filterByEventType(userEvents, selectedOptions),
-        [userEvents, selectedOptions]
+        () => userEvents && transformUsingTimeZone(filterByEventType(userEvents, selectedOptions), timeZoneUtcOffset),
+        [userEvents, timeZoneUtcOffset, selectedOptions]
     )
     const loadUserEvents = useCallback(
         (login: string) => {

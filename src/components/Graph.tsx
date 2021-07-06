@@ -41,7 +41,7 @@ const graphLegendXValue = css({
     transformOrigin: 'top right',
     width: 'fit-content',
     textAlign: 'right',
-    whiteSpace: 'nowrap',
+    whiteSpace: 'pre',
     fontSize: '0.75rem'
 })
 
@@ -294,7 +294,7 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
                                                 opacity: 0
                                             }}
                                         >
-                                            {captionPoint[0]}
+                                            {labeling ? labeling[captionPoint[0] as number] : captionPoint[0]}
                                             <br />
                                             {captionPoint[1]} {captionPoint[1] === 1 ? 'event' : 'events'}
                                         </motion.figcaption>

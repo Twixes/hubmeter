@@ -6,11 +6,12 @@ import React, { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 're
 import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 
-import { currentUserState } from '../../atoms'
+import { currentUserState, timeZoneUtcOffsetState } from '../../atoms'
 import { Select } from '../../components/Select'
 import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
 import { breakpointWidthTablet } from '../../styles'
+import { utcOffsetMinutesToTimeZone } from '../../utils'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
 import {
@@ -27,6 +28,7 @@ import {
 
 export default function Controls(): JSX.Element {
     const currentUser = useRecoilValue(currentUserState)
+    const timeZoneUtcOffset = useRecoilValue(timeZoneUtcOffsetState)
 
     const { login } = useParams<{ login: string | undefined }>()
     const history = useHistory()
@@ -148,8 +150,12 @@ export default function Controls(): JSX.Element {
             />
             {login && (
                 <div css={controlsGrid}>
+                    <Select
+                        label={`Time zone - ${utcOffsetMinutesToTimeZone(timeZoneUtcOffset)}`}
+                        localStorageKey="filters"
+                        options={Object.entries(eventTypeToName)}
+                    />
                     <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
-                    <Select label="Foo" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
                 </div>
             )}
         </motion.form>

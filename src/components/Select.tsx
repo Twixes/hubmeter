@@ -135,9 +135,10 @@ const selectOptions = css`
 `
 
 const selectBoxSummary = css`
-    white-space pre;
+    white-space: pre;
     overflow: hidden;
-    text-overflow: ellipsis;`
+    text-overflow: ellipsis;
+`
 
 export function Select({ label }: SelectProps): JSX.Element {
     const shouldReduceMotion = useReducedMotion()

@@ -14,11 +14,20 @@ export function getDayOfWeek(date: DateTime): number {
 }
 
 export function formatTime(date: DateTime): string {
-    return date.toFormat('h:mm a ZZZZ')
+    return date.toFormat('h:mm a')
 }
 
 export function formatDate(date: DateTime): string {
     return date.toFormat('EEE, MMM d')
+}
+
+export function utcOffsetMinutesToTimeZone(utcOffsetMinutes: number): string {
+    const sign = utcOffsetMinutes > 0 ? '+' : '-'
+    utcOffsetMinutes = Math.abs(utcOffsetMinutes)
+    const hours = Math.floor(utcOffsetMinutes / 60)
+    const minutes = Math.floor(Math.abs(utcOffsetMinutes % 60))
+    const timeZone = `UTC${sign}${hours}:${minutes.toString().padStart(2, '0')}`
+    return timeZone
 }
 
 export function capitalize(text: string): string {

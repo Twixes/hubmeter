@@ -27,9 +27,9 @@ export const loginToUserEventsState = atom<Map<string, Event[] | undefined>>({
     default: new Map()
 })
 
-export const timeZoneUTCOffsetState = atom<number>({
-    key: 'timeZoneUTCOffset',
-    default: 0
+export const timeZoneUtcOffsetState = atom<number>({
+    key: 'timeZoneUtcOffset',
+    default: -new Date().getTimezoneOffset()
 })
 
 export const eventTypesFilterState = atom<Set<EventType> | null>({
