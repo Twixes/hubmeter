@@ -72,6 +72,11 @@ h1 {
         0 0 0.3em var(--color-accent), 0 0 1em var(--color-accent), 0 0 1.5em var(--color-accent);
 }
 
+h2 {
+    margin: 0.5rem 0;
+    font-style: italic;
+}
+
 button,
 input {
     border: none;

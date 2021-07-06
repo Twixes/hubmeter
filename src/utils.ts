@@ -26,7 +26,7 @@ export function utcOffsetMinutesToTimeZone(utcOffsetMinutes: number): string {
     utcOffsetMinutes = Math.abs(utcOffsetMinutes)
     const hours = Math.floor(utcOffsetMinutes / 60)
     const minutes = Math.floor(Math.abs(utcOffsetMinutes % 60))
-    const timeZone = `UTC${sign}${hours}:${minutes.toString().padStart(2, '0')}`
+    const timeZone = `UTC${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
     return timeZone
 }
 

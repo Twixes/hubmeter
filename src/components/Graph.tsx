@@ -19,6 +19,8 @@ const graph = css({
     padding: '0.75rem 1.5rem'
 })
 
+const graphContainer = css({ position: 'relative', width: '100%', height: '100%' })
+
 const graphOverlayCaption = css({
     position: 'absolute',
     textAlign: 'center',
@@ -57,6 +59,14 @@ const graphArea = css({
     margin: 0
 })
 
+const graphErrorMessage = css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%'
+})
+
 const CORNER_RADIUS = 4
 const TRANSITION = { type: 'spring', damping: 18 }
 const OPACITY_VARIANTS: Variants = {
@@ -82,7 +92,6 @@ function generateXLegend(
     xLegendRefs: MutableRefObject<(HTMLDivElement | null)[]>,
     labeling?: Labeling
 ): JSX.Element {
-    if (!points.length) throw Error('No data points to draw')
     const columnWidth: number = width / points.length
     const xLegendValueElements: JSX.Element[] = []
     for (const [i, [x]] of points.entries()) {
@@ -120,7 +129,6 @@ function drawRoundedBarGraphWithOverlay(
     setCaptionPoint: Dispatch<SetStateAction<CaptionPoint | null>>,
     xLegendHeight: number
 ): [JSX.Element, JSX.Element[]] {
-    if (!points.length) throw new Error('No data points to draw')
     if (xLegendHeight > 0) height -= xLegendHeight
     const maxY: number = Math.max(...points.map(([, y]) => y)) || 10 // fall back to 10 to avoid division by 0
     let markerValue: number = 10 ** Math.floor(Math.log10(maxY))
@@ -260,10 +268,15 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
 
     return (
         <div css={[card, graph]}>
-            <div css={{ width: '100%', height: '100%' }} ref={vectorRef}>
+            <div css={graphContainer} ref={vectorRef}>
                 <AnimatePresence>
                     {isLoading ? (
                         <Spinner color="var(--color-accent)" />
+                    ) : dataPoints.length === 0 ? (
+                        <div css={graphErrorMessage}>
+                            <h2>No relevant data</h2>
+                            <span>Try with different filters or a more active user</span>
+                        </div>
                     ) : (
                         <>
                             <figure css={graphArea}>{vectorMainElement}</figure>
