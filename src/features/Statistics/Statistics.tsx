@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
@@ -26,8 +26,7 @@ import {
 } from '../../data-processing/aggregation'
 import { filterByEventType } from '../../data-processing/filtration'
 import { transformUsingTimeZone } from '../../data-processing/transformation'
-import { EventType, fetchUserEventsAll } from '../../github-api'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { fetchUserEventsAll } from '../../github-api'
 import { breakpointWidthTablet } from '../../styles'
 
 const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]

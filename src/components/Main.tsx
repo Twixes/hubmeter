@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { ReactChild, useEffect, useMemo, useState } from 'react'
+import { ReactChild, useEffect, useState } from 'react'
 import { Route, useHistory, useParams } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 
@@ -30,7 +30,7 @@ function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | nul
     const { login } = useParams<Params>()
 
     return login ? null : (
-        <AnimatePresence initial={false}>
+        <AnimatePresence>
             <motion.h1
                 variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }}
                 style={{ margin: '0.5rem 0' }}
@@ -62,7 +62,7 @@ export default function Main(): JSX.Element {
 
     const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
     const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
-    const [isCurrentUserLoading, setIsCurrentUserLoading] = useRecoilState(isCurrentUserLoadingState)
+    const [, setIsCurrentUserLoading] = useRecoilState(isCurrentUserLoadingState)
 
     const [randomQuestion, setRandomQuestion] = useState(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
 

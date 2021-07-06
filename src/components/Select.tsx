@@ -2,19 +2,10 @@
 
 import { css } from '@emotion/react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
-import React, {
-    Dispatch,
-    KeyboardEvent,
-    MutableRefObject,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useMemo
-} from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
 
-import { EventType, eventTypeToName, User } from '../github-api'
+import { EventType, eventTypeToName } from '../github-api'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useOutsideClickHandler } from '../hooks/useOutsideClickHandler'
 import { card, expandableExpandedBottom, expandableExpandedTop } from '../styles'
@@ -26,7 +17,7 @@ export interface SelectProps {
     options: [string, string][]
 }
 
-const initialSelectState = Object.fromEntries(Object.keys(EventType).map((key) => [key, false])) as Record<
+const initialSelectState = Object.fromEntries(Object.keys(EventType).map((key) => [key, true])) as Record<
     EventType,
     boolean
 >
@@ -58,16 +49,16 @@ function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, 
 }
 
 const VARIANTS: Variants = {
-    hidden: ([shouldReduceMotion, optionCount]: [boolean, number]) => {
+    hidden: ([shouldReduceMotion]: [boolean]) => {
         return {
             opacity: shouldReduceMotion ? 0 : 1,
-            height: shouldReduceMotion ? `${optionCount * 2.5}rem` : 0
+            height: shouldReduceMotion ? `auto` : 0
         }
     },
-    shown: ([, optionCount]: [boolean, number]) => {
+    shown: () => {
         return {
             opacity: 1,
-            height: `${optionCount * 2.5}rem`
+            height: `auto`
         }
     }
 }
@@ -167,7 +158,7 @@ export function Select({ label }: SelectProps): JSX.Element {
                 {areOptionsShown && (
                     <motion.ul
                         css={[card, selectOptions, expandableExpandedBottom]}
-                        custom={[shouldReduceMotion, Object.keys(eventTypeSelection).length]}
+                        custom={[shouldReduceMotion]}
                         variants={VARIANTS}
                         initial="hidden"
                         animate="shown"

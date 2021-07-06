@@ -106,7 +106,6 @@ export default function Notice({
                     initial="hidden"
                     animate="shown"
                     exit="hidden"
-                    layout
                 >
                     <div css={noticeIndicator}>{indicator}</div>
                     <motion.div

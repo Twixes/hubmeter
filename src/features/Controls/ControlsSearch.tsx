@@ -5,8 +5,6 @@ import React, { ChangeEvent, Dispatch, KeyboardEvent, MutableRefObject, SetState
 import { fetchSearchUsers, User } from '../../github-api'
 import { card, expandableExpandedTop } from '../../styles'
 import {
-    controls,
-    controlsGrid,
     controlsIndicator,
     controlsIndicatorAvatar,
     controlsIndicatorSolid,

@@ -1,4 +1,4 @@
-import { Event, EventType } from '../github-api'
+import { Event } from '../github-api'
 import { utcOffsetMinutesToTimeZone } from '../utils'
 
 export type Transformable = Pick<Event, 'created_at'>

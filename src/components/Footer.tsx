@@ -24,7 +24,7 @@ const footer = css`
 
 export default function Footer(): JSX.Element {
     return (
-        <motion.footer css={[widthControl, footer]} layout>
+        <motion.footer css={[widthControl, footer]}>
             <span>
                 GitHub&nbsp;activity insights you&nbsp;haven't seen&nbsp;before. <br />
                 By&nbsp;<a href="https://matloka.com">Michael Matloka</a>.&nbsp;👋
