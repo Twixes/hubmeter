@@ -275,7 +275,7 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
                     ) : dataPoints.length === 0 ? (
                         <div css={graphErrorMessage}>
                             <h2>No relevant data</h2>
-                            <span>Try with different filters or a more active user</span>
+                            <span>Try with more event types or a different user</span>
                         </div>
                     ) : (
                         <>
