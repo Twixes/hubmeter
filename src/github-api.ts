@@ -78,7 +78,7 @@ export function buildApiUrl(parts: string[], params?: Record<string, any>): URL 
 async function throwOnProblem(response: Response, ignoredStatuses: number[] = []): Promise<void> {
     if (response.status === 403) {
         const rateLimitReset: DateTime = DateTime.fromSeconds(parseInt(response.headers.get('X-Ratelimit-Reset')!))
-        const deltaMinutes: number = Math.ceil(rateLimitReset.diffNow().minutes)
+        const deltaMinutes: number = Math.ceil(rateLimitReset.diff(DateTime.local()).as('minutes'))
         throw new Error(
             `Exceeded GitHub rate limit for now. Try again in ${deltaMinutes} min at ${formatTime(rateLimitReset)}.`
         )

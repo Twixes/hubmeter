@@ -67,6 +67,10 @@ const noticeMessage = css`
     padding: 0.375rem 0;
     margin: 0 0.75rem;
     overflow: hidden;
+    ::selection {
+        background: var(--color-foreground);
+        color: var(--color-accent);
+    }
 `
 
 const noticeButton = css`
