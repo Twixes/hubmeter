@@ -16,7 +16,7 @@ export default function App(): JSX.Element {
     history.listen(() => {
         posthog.capture('$pageview')
     })
-    throw new Error('Woah!')
+
     return (
         <>
             <Header />

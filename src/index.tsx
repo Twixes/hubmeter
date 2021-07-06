@@ -28,7 +28,7 @@ ReactDOM.render(
         <ErrorBoundary
             fallback={
                 <div css={[widthControl, main]}>
-                    <Notice message="An error occurred! Reload the page."></Notice>
+                    <Notice message="A fatal error occurred! Please reload the page."></Notice>
                 </div>
             }
         >
