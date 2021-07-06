@@ -1,5 +1,6 @@
-import './Statistics.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
@@ -25,6 +26,7 @@ import {
 import { filterByEventType } from '../../data-processing/filtration'
 import { EventType, fetchUserEventsAll } from '../../github-api'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { breakpointWidthTablet } from '../../styles'
 
 const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const HOURS: string[] = HOUR_NUMBERS.map((hour) => `${hour} AM`).concat(HOUR_NUMBERS.map((hour) => `${hour} PM`))
@@ -38,6 +40,19 @@ const VARIANTS: Variants = {
         opacity: 1
     }
 }
+
+const statistics = css({
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    [`@media screen and (min-width: ${breakpointWidthTablet})`]: {
+        paddingTop: '2rem',
+        paddingBottom: '2rem'
+    },
+    [`@media screen and (min-width: ${breakpointWidthTablet})`]: {
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: '0 3rem'
+    }
+})
 
 export default function Statistics(): JSX.Element {
     const { login } = useParams<Params>()
@@ -90,7 +105,7 @@ export default function Statistics(): JSX.Element {
                 if (currentUser) {
                     return (
                         <motion.div
-                            className="Statistics"
+                            css={statistics}
                             variants={VARIANTS}
                             initial="hidden"
                             animate="shown"

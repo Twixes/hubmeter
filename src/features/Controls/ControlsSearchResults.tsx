@@ -1,9 +1,12 @@
-import './ControlsSearchResults.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
 import React, { Dispatch, KeyboardEvent, MutableRefObject, SetStateAction } from 'react'
 
 import { User } from '../../github-api'
+import { card } from '../../styles'
+import { controlsIndicator, controlsIndicatorAvatar, controlsLogin } from './styles'
 
 interface Props {
     setCurrentLoginInput: Dispatch<SetStateAction<string>>
@@ -33,6 +36,39 @@ const VARIANTS: Variants = {
         }
     }
 }
+
+const controlsSearchResults = css`
+    z-index: 1000;
+    position: absolute;
+    flex-direction: column;
+    top: 3rem;
+    width: 100%;
+    padding: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    overflow: hidden;
+`
+
+const controlsSearchResultsUser = css`
+    transition: background var(--duration-short) var(--timing-function-standard),
+        border-color var(--duration-short) var(--timing-function-standard);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+    padding-left: 0.75rem;
+    border-top: 1px solid var(--color-shadow);
+    outline: none;
+    text-align: left;
+    font-size: 1.5rem;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+        border-top-color: transparent;
+        background: var(--color-mark);
+    }
+`
 
 export default function ControlsSearchResults({
     setCurrentLoginInput,
@@ -89,7 +125,7 @@ export default function ControlsSearchResults({
         <AnimatePresence>
             {isSearchShown && (
                 <motion.ul
-                    className="ControlsSearchResults"
+                    css={[card, controlsSearchResults]}
                     custom={[shouldReduceMotion, currentSearchResults.length]}
                     variants={VARIANTS}
                     initial="hidden"
@@ -98,7 +134,7 @@ export default function ControlsSearchResults({
                 >
                     {currentSearchResults.map((user, index) => (
                         <li
-                            className="ControlsSearchResults-user"
+                            css={controlsSearchResultsUser}
                             key={user.login}
                             tabIndex={index + 1}
                             ref={(ref) => {
@@ -118,14 +154,14 @@ export default function ControlsSearchResults({
                                 rel="noopener noreferrer"
                                 tabIndex={-1}
                             >
-                                <div className="Controls-indicator" style={{ opacity: 1 }}>
+                                <div css={controlsIndicator} style={{ opacity: 1 }}>
                                     <div
-                                        className="Controls-indicator-avatar"
+                                        css={controlsIndicatorAvatar}
                                         style={{ backgroundImage: `url(${user.avatar_url}&s=144` }}
                                     />
                                 </div>
                             </a>
-                            <div className="Controls-login">{user.login}</div>
+                            <div css={controlsLogin}>{user.login}</div>
                         </li>
                     ))}
                 </motion.ul>

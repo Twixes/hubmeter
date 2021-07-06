@@ -1,15 +1,43 @@
-import './Header.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+
+import { widthControl } from '../styles'
 
 function calculateCurrentClockHandRotation(extraRotations = 0): number {
     const now = DateTime.local()
     const hoursPrecise = now.hour + now.minute / 60
     return Math.round((hoursPrecise / 12 + extraRotations) * 360)
 }
+
+const header = css`
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+`
+
+const headerLogo = css`
+    display: flex;
+    align-items: center;
+    font-size: 1.75rem;
+`
+
+const headerNav = css`
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1rem;
+    & a {
+        height: 2rem;
+    }
+`
+
+const headerIcon = css({ fill: 'var(--color-foreground)' })
 
 export default function Header(): JSX.Element {
     const [extraRotations, setExtraRotations] = useState(0)
@@ -26,17 +54,18 @@ export default function Header(): JSX.Element {
     }, [updateClockHandTransform])
 
     return (
-        <header className="Header">
+        <header css={[widthControl, header]}>
             <Link
                 to="/"
-                className="Header-link"
+                css={{ textDecoration: 'none' }}
                 onClick={() => {
                     setExtraRotations(extraRotations + 1)
                 }}
             >
-                <div className="Header-logo">
+                <div css={headerLogo}>
                     <svg
                         id="Header-clock"
+                        css={{ stroke: 'var(--color-foreground)' }}
                         width="40"
                         height="40"
                         viewBox="0 0 40 40"
@@ -45,7 +74,7 @@ export default function Header(): JSX.Element {
                     >
                         <circle cx="20" cy="20" r="18" strokeWidth="4" />
                         <motion.line
-                            className="Header-clock-hand"
+                            css={{ transformOrigin: '20px !important' }}
                             transition={{ type: 'spring', damping: 22, stiffness: 140, mass: 2 }}
                             initial={{ rotate: clockHandRotation }}
                             animate={{ rotate: clockHandRotation }}
@@ -56,13 +85,13 @@ export default function Header(): JSX.Element {
                             strokeWidth="4"
                         />
                     </svg>
-                    <div className="Header-name">HubMeter</div>
+                    <div css={{ marginLeft: '0.5rem' }}>HubMeter</div>
                 </div>
             </Link>
-            <nav className="Header-nav">
+            <nav css={headerNav}>
                 <a href="https://www.producthunt.com/posts/hubmeter">
                     <svg
-                        className="Header-icon"
+                        css={headerIcon}
                         width="32"
                         height="32"
                         viewBox="0 0 32 32"
@@ -83,7 +112,7 @@ export default function Header(): JSX.Element {
                 </a>
                 <a href="http://github.com/Twixes/hubmeter">
                     <svg
-                        className="Header-icon"
+                        css={headerIcon}
                         width="32"
                         height="31"
                         viewBox="0 0 32 31"

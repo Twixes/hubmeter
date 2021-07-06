@@ -1,5 +1,6 @@
-import './Main.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import React, { ReactChild, useEffect, useMemo, useState } from 'react'
 import { Route, useHistory, useParams } from 'react-router-dom'
@@ -9,6 +10,7 @@ import { currentUserState, errorMessageState, isCurrentUserLoadingState } from '
 import Controls from '../features/Controls/Controls'
 import Statistics from '../features/Statistics/Statistics'
 import { fetchUser } from '../github-api'
+import { breakpointWidthTablet, widthControl } from '../styles'
 import { Params } from './App'
 import Notice from './Notice'
 
@@ -42,6 +44,17 @@ function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | nul
         </AnimatePresence>
     )
 }
+
+export const main = css`
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    @media screen and (min-width: ${breakpointWidthTablet}) {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+`
 
 export default function Main(): JSX.Element {
     const { login } = useParams<Params>()
@@ -85,7 +98,11 @@ export default function Main(): JSX.Element {
     }, [login, setErrorMessage, currentUser, setCurrentUser, history, setIsCurrentUserLoading])
 
     return (
-        <motion.main className="Main" style={{ flexGrow: login ? 1 : 0 }} animate={{ flexGrow: login ? 1 : 0 }}>
+        <motion.main
+            css={[widthControl, main]}
+            style={{ flexGrow: login ? 1 : 0 }}
+            animate={{ flexGrow: login ? 1 : 0 }}
+        >
             <HomeHeadline>Do</HomeHeadline>
             <Controls />
             <Notice message={errorMessage} />

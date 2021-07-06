@@ -1,16 +1,61 @@
-import './Graph.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import useSize from '@react-hook/size'
 import { roundCommands, SVGCommand } from '@twixes/svg-round-corners'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { DateTime } from 'luxon'
 import React, { Dispatch, MutableRefObject, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
+import { card } from '../styles'
 import Spinner from './Spinner'
 
 export type DataPoint = [string | number, number]
 export type Labeling = Record<string | number, string> | string[]
 type CaptionPoint = [string | number, number, number]
+
+const graph = css({
+    width: '100%',
+    height: '16rem',
+    padding: '0.75rem 1.5rem'
+})
+
+const graphOverlayCaption = css({
+    position: 'absolute',
+    textAlign: 'center',
+    padding: '0.25rem',
+    borderRadius: '0.25rem',
+    background: 'var(--color-accent)',
+    color: 'var(--color-foreground)',
+    lineHeight: 1
+})
+
+const graphLegendX = css({
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    paddingTop: '0.375rem',
+    lineHeight: 1
+})
+
+const graphLegendXValue = css({
+    transform: 'rotate(-30deg)',
+    transformOrigin: 'top right',
+    width: 'fit-content',
+    textAlign: 'right',
+    whiteSpace: 'nowrap',
+    fontSize: '0.75rem'
+})
+
+const graphLegendXValueContainer = css({
+    transform: 'translateX(-50%)',
+    display: 'flex',
+    flexFlow: 'nowrap column',
+    alignItems: 'flex-end'
+})
+
+const graphArea = css({
+    display: 'inline-block',
+    margin: 0
+})
 
 const CORNER_RADIUS = 4
 const TRANSITION = { type: 'spring', damping: 18 }
@@ -42,13 +87,9 @@ function generateXLegend(
     const xLegendValueElements: JSX.Element[] = []
     for (const [i, [x]] of points.entries()) {
         xLegendValueElements.push(
-            <div
-                className="Graph-legend-x-value-container"
-                style={{ width: columnWidth }}
-                key={`Graph-legend-x-value-${i + 1}`}
-            >
+            <div css={graphLegendXValueContainer} style={{ width: columnWidth }} key={`Graph-legend-x-value-${i + 1}`}>
                 <div
-                    className="Graph-legend-x-value"
+                    css={graphLegendXValue}
                     ref={(ref) => {
                         xLegendRefs.current[i] = ref
                     }}
@@ -60,7 +101,7 @@ function generateXLegend(
     }
     return (
         <motion.div
-            className="Graph-legend-x"
+            css={graphLegendX}
             transition={TRANSITION}
             variants={OPACITY_VARIANTS}
             initial="hidden"
@@ -93,7 +134,7 @@ function drawRoundedBarGraphWithOverlay(
     for (let markerY = height - 1; markerY > 0; markerY -= markerSpace) {
         markerElements.push(
             <motion.rect
-                className="Graph-main-marker"
+                css={{ fill: 'var(--color-accent-pale)' }}
                 x={0}
                 y={Math.round(markerY)}
                 key={`marker-${markerY}`}
@@ -138,7 +179,12 @@ function drawRoundedBarGraphWithOverlay(
                 width={columnWidth}
                 height={height}
                 fill="transparent"
-                className="Graph-overlay-part"
+                css={{
+                    transition: 'fill var(--duration-instant) var(--timing-function-standard)',
+                    ':hover': {
+                        fill: 'rgba(0, 0, 0, 0.25)'
+                    }
+                }}
                 key={`Graph-overlay-part-${i + 1}`}
                 style={{ width: columnWidth }}
                 onMouseEnter={() => {
@@ -149,7 +195,7 @@ function drawRoundedBarGraphWithOverlay(
                 }}
             >
                 <motion.path
-                    className="Graph-main-path"
+                    css={{ transformOrigin: 'bottom !important' }}
                     variants={EXPANSION_VARIANTS}
                     initial="hidden"
                     animate="shown"
@@ -165,7 +211,7 @@ function drawRoundedBarGraphWithOverlay(
         <svg viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg" width={width} height={height}>
             {markerElements}
             <motion.path
-                className="Graph-main-path"
+                css={{ transformOrigin: 'bottom !important' }}
                 variants={EXPANSION_VARIANTS}
                 initial="hidden"
                 animate="shown"
@@ -213,19 +259,19 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
     })
 
     return (
-        <div className="Graph">
-            <div className="Graph-container" ref={vectorRef}>
+        <div css={[card, graph]}>
+            <div css={{ width: '100%', height: '100%' }} ref={vectorRef}>
                 <AnimatePresence>
                     {isLoading ? (
                         <Spinner color="var(--color-accent)" />
                     ) : (
                         <>
-                            <figure className="Graph-main">{vectorMainElement}</figure>
-                            <figure className="Graph-overlay">
+                            <figure css={graphArea}>{vectorMainElement}</figure>
+                            <figure css={[graphArea, { marginLeft: '-100%' }]}>
                                 <AnimatePresence>
                                     {captionPoint && (
                                         <motion.figcaption
-                                            className="Graph-overlay-caption"
+                                            css={[card, graphOverlayCaption]}
                                             initial={{
                                                 x: `calc(-50% + ${
                                                     ((captionPoint[2] + 0.5) / dataPoints.length) * vectorWidth

@@ -1,4 +1,23 @@
-@import './src/_base.scss';
+$color-background: #000b2e;
+$color-foreground: #fff;
+$color-accent: #7a27ff;
+$color-shadow: rgba(0, 0, 0, 0.075);
+$color-mark: rgba(0, 0, 0, 0.125);
+$opacity-dim: 0.6;
+$opacity-pale: 0.2;
+$color-foreground-dim: rgba($color-foreground, $opacity-dim);
+$color-accent-dim: rgba($color-accent, $opacity-dim);
+$color-accent-pale: rgba($color-accent, $opacity-pale);
+$font-family-stack: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-weight: 700;
+$duration-instant: 0.1s;
+$duration-short: 0.2s;
+$duration-medium: 0.4s;
+$duration-long: 1s;
+$breakpoint-width-tablet: 38rem;
+$breakpoint-width-laptop: 78rem;
+$breakpoint-width-desktop: 118rem;
+$timing-function-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
 :root {
     --color-background: #{$color-background};

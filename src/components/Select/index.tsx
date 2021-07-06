@@ -1,7 +1,5 @@
 /** @jsxImportSource @emotion/react */
 
-import './index.scss'
-
 import { css } from '@emotion/react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
 import React, {
@@ -19,7 +17,7 @@ import { useRef } from 'react'
 import { EventType, eventTypeToName, User } from '../../github-api'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
-import { expandableExpandedBottom, expandableExpandedTop } from '../../styles'
+import { card, expandableExpandedBottom, expandableExpandedTop } from '../../styles'
 import { capitalize } from '../../utils'
 
 export interface SelectProps {
@@ -74,6 +72,73 @@ const VARIANTS: Variants = {
     }
 }
 
+const selectBox = css`
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    height: 3rem;
+    line-height: 1.2;
+    cursor: pointer;
+    overflow: hidden;
+    &::after {
+        transition: background var(--duration-short) var(--timing-function-standard);
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+    &:hover::after {
+        background: var(--color-shadow);
+    }
+`
+
+const selectOptions = css`
+    display: flex;
+    flex-flow: column;
+    list-style: none;
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    z-index: 1;
+    li {
+        display: flex;
+        align-items: center;
+        height: 2.5rem;
+        position: relative;
+        padding: 0.75rem;
+        &:not(:last-child) {
+            border-bottom: solid 1px var(--color-shadow);
+        }
+        &::after {
+            transition: background var(--duration-short) var(--timing-function-standard);
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        &:hover::after {
+            background: var(--color-shadow);
+        }
+    }
+    label {
+        flex-grow: 1;
+        line-height: 2.5rem;
+        padding-left: 0.5rem;
+    }
+`
+
+const selectBoxSummary = css`
+    white-space pre;
+    overflow: hidden;
+    text-overflow: ellipsis;`
+
 export function Select({ label }: SelectProps): JSX.Element {
     const shouldReduceMotion = useReducedMotion()
     const [eventTypeSelection, setEventTypeState] = useEventTypeSelection()
@@ -85,23 +150,21 @@ export function Select({ label }: SelectProps): JSX.Element {
     })
 
     return (
-        <div css={css({ position: 'relative' })} ref={containerRef}>
+        <div css={{ position: 'relative' }} ref={containerRef}>
             <div
-                className="SelectBox"
-                css={areOptionsShown && expandableExpandedTop}
+                css={[card, selectBox, areOptionsShown && expandableExpandedTop]}
                 title={humanizeAllowedEventTypes(eventTypeSelection, false)}
                 onClick={() => {
                     setAreOptionsShown((state) => !state)
                 }}
             >
                 <i>{label}</i>
-                <span className="SelectBox-summary">{humanizeAllowedEventTypes(eventTypeSelection)}</span>
+                <span css={selectBoxSummary}>{humanizeAllowedEventTypes(eventTypeSelection)}</span>
             </div>
             <AnimatePresence>
                 {areOptionsShown && (
                     <motion.ul
-                        className="SelectOptions"
-                        css={expandableExpandedBottom}
+                        css={[card, selectOptions, expandableExpandedBottom]}
                         custom={[shouldReduceMotion, Object.keys(eventTypeSelection).length]}
                         variants={VARIANTS}
                         initial="hidden"

@@ -1,37 +1,20 @@
 /** @jsxImportSource @emotion/react */
 
-import { css } from '@emotion/react'
 import React, { ChangeEvent, Dispatch, KeyboardEvent, MutableRefObject, SetStateAction, useState } from 'react'
 
 import { fetchSearchUsers, User } from '../../github-api'
 import { card, expandableExpandedTop } from '../../styles'
-
-const controlsSearch = css({
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 0
-})
-
-const controlsSearchButton = css({
-    transition:
-        'background var(--duration-short) var(--timing-function-standard), color var(--duration-short) var(--timing-function-standard)',
-    padding: 0,
-    height: '3rem',
-    width: '3rem',
-    textAlign: 'center',
-    lineHeight: '3rem',
-    userSelect: 'none',
-    cursor: 'pointer',
-    '&:not(:disabled):active': {
-        background: 'var(--color-accent)',
-        color: 'var(--color-foreground)'
-    },
-    '&:disabled': {
-        opacity: 'var(--opacity-dim)',
-        cursor: 'default'
-    }
-})
-
+import {
+    controls,
+    controlsGrid,
+    controlsIndicator,
+    controlsIndicatorAvatar,
+    controlsIndicatorSolid,
+    controlsIndicatorTyping,
+    controlsLogin,
+    controlsSearch,
+    controlsSearchButton
+} from './styles'
 interface Props {
     currentLoginInput: string
     setCurrentLoginInput: Dispatch<SetStateAction<string>>
@@ -143,7 +126,7 @@ export default function ControlsSearch({
     let isQuestionMarkShown = false
     if (isTypingInProgress) {
         currentIndicatorElement = (
-            <div className="Controls-indicator-typing">
+            <div css={[controlsIndicatorSolid, controlsIndicatorTyping]}>
                 <span>.</span>
                 <span>.</span>
                 <span>.</span>
@@ -152,7 +135,7 @@ export default function ControlsSearch({
     } else if (currentLoginInput && didSearchErrorOccur) {
         anchorAttributes.href = `https://github.com/${currentLoginInput}`
         currentIndicatorElement = (
-            <div className="Controls-indicator-mark" key="exclamation-mark">
+            <div css={controlsIndicatorSolid} key="exclamation-mark">
                 !
             </div>
         )
@@ -160,7 +143,7 @@ export default function ControlsSearch({
         anchorAttributes.href = `https://github.com/${selectedUser.login}`
         currentIndicatorElement = (
             <div
-                className="Controls-indicator-avatar"
+                css={controlsIndicatorAvatar}
                 style={{ backgroundImage: `url(${selectedUser.avatar_url}&s=144` }}
                 key="avatar"
             />
@@ -169,7 +152,7 @@ export default function ControlsSearch({
         anchorAttributes.href = `https://github.com/${matchingUser.login}`
         currentIndicatorElement = (
             <div
-                className="Controls-indicator-avatar"
+                css={controlsIndicatorAvatar}
                 style={{ backgroundImage: `url(${matchingUser.avatar_url}&s=144` }}
                 key="avatar"
             />
@@ -177,7 +160,7 @@ export default function ControlsSearch({
     } else {
         isQuestionMarkShown = true
         currentIndicatorElement = (
-            <div className="Controls-indicator-mark" key="question-mark">
+            <div css={controlsIndicatorSolid} key="question-mark">
                 ?
             </div>
         )
@@ -186,12 +169,12 @@ export default function ControlsSearch({
     return (
         <div css={[card, controlsSearch, isSearchShown && expandableExpandedTop]}>
             <a {...anchorAttributes} target="_blank" rel="noopener noreferrer">
-                <div className="Controls-indicator" style={{ opacity: isQuestionMarkShown ? '' : 1 }}>
+                <div css={controlsIndicator} style={{ opacity: isQuestionMarkShown ? '' : 1 }}>
                     {currentIndicatorElement}
                 </div>
             </a>
             <input
-                className="Controls-login"
+                css={controlsLogin}
                 type="search"
                 name="login"
                 ref={(ref) => {

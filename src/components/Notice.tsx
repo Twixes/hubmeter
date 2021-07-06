@@ -1,7 +1,10 @@
-import './Notice.scss'
+/** @jsxImportSource @emotion/react */
 
+import { css } from '@emotion/react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
 import React, { ReactChild } from 'react'
+
+import { card } from '../styles'
 
 interface Props {
     message: ReactChild | null
@@ -36,6 +39,51 @@ const INSIDE_VARIANTS: Variants = {
     }
 }
 
+const notice = css({
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: '3rem',
+    paddingRight: 0,
+    background: 'var(--color-accent)',
+    color: 'var(--color-foreground)',
+    fontSize: '1.5rem'
+})
+
+const noticeIndicator = css`
+    background: var(--color-foreground);
+    color: var(--color-accent);
+    font-size: 1.125rem;
+    text-align: center;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 0.25rem;
+    user-select: none;
+`
+
+const noticeMessage = css`
+    flex-grow: 1;
+    width: 0;
+    padding: 0.375rem 0;
+    margin: 0 0.75rem;
+    overflow: hidden;
+`
+
+const noticeButton = css`
+    transition: background var(--duration-short) var(--timing-function-standard),
+        color var(--duration-short) var(--timing-function-standard);
+    padding: 0;
+    align-self: stretch;
+    width: 3rem;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+    &:active {
+        background: var(--color-foreground);
+        color: var(--color-accent);
+    }
+`
+
 export default function Notice({
     message,
     indicator = '!',
@@ -48,7 +96,7 @@ export default function Notice({
         <AnimatePresence initial={initialAnimatePresence}>
             {!message ? null : (
                 <motion.div
-                    className="Notice"
+                    css={[card, notice]}
                     custom={shouldReduceMotion}
                     variants={OUTSIDE_VARIANTS}
                     initial="hidden"
@@ -56,9 +104,9 @@ export default function Notice({
                     exit="hidden"
                     layout
                 >
-                    <div className="Notice-indicator">{indicator}</div>
+                    <div css={noticeIndicator}>{indicator}</div>
                     <motion.div
-                        className="Notice-message"
+                        css={noticeMessage}
                         custom={shouldReduceMotion}
                         variants={INSIDE_VARIANTS}
                         initial="hidden"
@@ -68,7 +116,7 @@ export default function Notice({
                         {message}
                     </motion.div>
                     {onXClick && (
-                        <button className="Notice-button" type="button" onClick={onXClick}>
+                        <button css={noticeButton} type="button" onClick={onXClick}>
                             ✗
                         </button>
                     )}

@@ -1,8 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import './Controls.scss'
-
-import { css } from '@emotion/react'
+import { css, keyframes } from '@emotion/react'
 import { motion } from 'framer-motion'
 import React, { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -12,14 +10,20 @@ import { currentUserState } from '../../atoms'
 import { Select } from '../../components/Select'
 import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
+import { breakpointWidthTablet } from '../../styles'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
-
-const controlsGrid = css({
-    display: 'grid',
-    gridGap: '0.75rem',
-    '@media screen and (min-width: 38rem)': { gridTemplateColumns: 'repeat(2, 1fr)' }
-})
+import {
+    controls,
+    controlsGrid,
+    controlsIndicator,
+    controlsIndicatorAvatar,
+    controlsIndicatorSolid,
+    controlsIndicatorTyping,
+    controlsLogin,
+    controlsSearch,
+    controlsSearchButton
+} from './styles'
 
 export default function Controls(): JSX.Element {
     const currentUser = useRecoilValue(currentUserState)
@@ -108,7 +112,7 @@ export default function Controls(): JSX.Element {
     }
 
     return (
-        <motion.form className="Controls" ref={formRef} onSubmit={onFormSubmit} layout>
+        <motion.form css={controls} ref={formRef} onSubmit={onFormSubmit} layout>
             <ControlsSearch
                 currentLoginInput={currentLoginInput}
                 setCurrentLoginInput={setCurrentLoginInput}
