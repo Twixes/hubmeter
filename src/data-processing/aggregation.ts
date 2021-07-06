@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import { DataPoint } from '../components/Graph'
 import { Event } from '../github-api'
-import { getDayOfWeek, getHours } from '../utils'
+import { formatDate, getDayOfWeek, getHours } from '../utils'
 
 export type Aggregatable = Pick<Event, 'created_at'>
 
@@ -50,7 +50,7 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
         if (mode === WeekAggregationMode.Weekend) {
             thisWeekStart = thisWeekStart.plus({ days: 5 })
         }
-        dataPointMap.set(thisWeekStart.toISODate(), 0)
+        dataPointMap.set(formatDate(thisWeekStart), 0)
         nextWeekStart = nextWeekStart.plus({ weeks: 1 })
     }
     for (const createdAt of eventCreatedAts) {
@@ -58,7 +58,7 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
         if (mode === WeekAggregationMode.Weekend) {
             eventWeek = eventWeek.plus({ days: 5 })
         }
-        const eventWeekString = eventWeek.toISODate()
+        const eventWeekString = formatDate(eventWeek)
         dataPointMap.set(eventWeekString, dataPointMap.get(eventWeekString)! + 1)
     }
     return Array.from(dataPointMap.entries())

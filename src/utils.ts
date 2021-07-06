@@ -14,7 +14,11 @@ export function getDayOfWeek(date: DateTime): number {
 }
 
 export function formatTime(date: DateTime): string {
-    return date.toLocaleString(DateTime.TIME_SIMPLE)
+    return date.toFormat('h:mm a ZZZZ')
+}
+
+export function formatDate(date: DateTime): string {
+    return date.toFormat('EEE, MMM d')
 }
 
 export function capitalize(text: string): string {

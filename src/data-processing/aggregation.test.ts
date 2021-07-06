@@ -75,12 +75,12 @@ describe('#aggregateByWeek()', () => {
     it('should aggregate events by workweek into data points', () => {
         const results = aggregateByWeek(testEvents, WeekAggregationMode.Workweek)
 
-        expect(results).toStrictEqual([['2021-03-08', 1]])
+        expect(results).toStrictEqual([['Mon, Mar 8', 1]])
     })
 
     it('should aggregate events by weekend into data points', () => {
         const results = aggregateByWeek(testEvents, WeekAggregationMode.Weekend)
 
-        expect(results).toStrictEqual([['2021-03-13', 2]])
+        expect(results).toStrictEqual([['Sat, Mar 13', 2]])
     })
 })
