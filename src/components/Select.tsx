@@ -14,11 +14,11 @@ import React, {
 import { useState } from 'react'
 import { useRef } from 'react'
 
-import { EventType, eventTypeToName, User } from '../../github-api'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
-import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
-import { card, expandableExpandedBottom, expandableExpandedTop } from '../../styles'
-import { capitalize } from '../../utils'
+import { EventType, eventTypeToName, User } from '../github-api'
+import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useOutsideClickHandler } from '../hooks/useOutsideClickHandler'
+import { card, expandableExpandedBottom, expandableExpandedTop } from '../styles'
+import { capitalize } from '../utils'
 
 export interface SelectProps {
     label: string
@@ -157,6 +157,7 @@ export function Select({ label }: SelectProps): JSX.Element {
                 onClick={() => {
                     setAreOptionsShown((state) => !state)
                 }}
+                tabIndex={0}
             >
                 <i>{label}</i>
                 <span css={selectBoxSummary}>{humanizeAllowedEventTypes(eventTypeSelection)}</span>
