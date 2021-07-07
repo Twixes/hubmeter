@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { widthControl } from '../styles'
 
@@ -40,6 +40,8 @@ const headerNav = css`
 const headerIcon = css({ fill: 'var(--color-foreground)' })
 
 export default function Header(): JSX.Element {
+    const { pathname } = useLocation()
+
     const [extraRotations, setExtraRotations] = useState(0)
     const [clockHandRotation, setClockHandRotation] = useState(calculateCurrentClockHandRotation(extraRotations))
 
@@ -58,7 +60,12 @@ export default function Header(): JSX.Element {
             <Link
                 to="/"
                 css={{ textDecoration: 'none' }}
-                onClick={() => {
+                onClick={(event) => {
+                    console.log(pathname)
+                    if (pathname === '/') {
+                        // Suppress clicking the logo for fun from spamming tab history with repeated / entries
+                        event.preventDefault()
+                    }
                     setExtraRotations(extraRotations + 1)
                 }}
             >
