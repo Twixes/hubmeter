@@ -103,7 +103,7 @@ export default function Main(): JSX.Element {
             style={{ flexGrow: login ? 1 : 0 }}
             animate={{ flexGrow: login ? 1 : 0 }}
         >
-            <HomeHeadline>Do</HomeHeadline>
+            <HomeHeadline>Does</HomeHeadline>
             <Controls />
             <Notice message={errorMessage} />
             <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
