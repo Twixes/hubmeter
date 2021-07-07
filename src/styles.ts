@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 
-export const breakpointWidthTablet = '38rem'
+export const breakpointWidthTablet = '46rem'
 export const breakpointWidthLaptop = '78rem'
 export const breakpointWidthDesktop = '118rem'
 

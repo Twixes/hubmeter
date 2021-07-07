@@ -6,7 +6,7 @@ import { roundCommands, SVGCommand } from '@twixes/svg-round-corners'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import React, { Dispatch, MutableRefObject, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
-import { card } from '../styles'
+import { breakpointWidthLaptop, card } from '../styles'
 import Spinner from './Spinner'
 
 export type DataPoint = [string | number, number]
@@ -54,6 +54,15 @@ const graphLegendXValueContainer = css({
     alignItems: 'flex-end'
 })
 
+const hideEverySecondElement = css({
+    ':nth-of-type(even)': {
+        visibility: 'hidden',
+        [`@media screen and (min-width: ${breakpointWidthLaptop})`]: {
+            visibility: 'visible'
+        }
+    }
+})
+
 const graphArea = css({
     display: 'inline-block',
     margin: 0
@@ -96,14 +105,18 @@ function generateXLegend(
     const xLegendValueElements: JSX.Element[] = []
     for (const [i, [x]] of points.entries()) {
         xLegendValueElements.push(
-            <div css={graphLegendXValueContainer} style={{ width: columnWidth }} key={`Graph-legend-x-value-${i + 1}`}>
+            <div
+                css={[graphLegendXValueContainer, points.length >= 12 && hideEverySecondElement]}
+                style={{ width: columnWidth }}
+                key={`Graph-legend-x-value-${i + 1}`}
+            >
                 <div
                     css={graphLegendXValue}
                     ref={(ref) => {
                         xLegendRefs.current[i] = ref
                     }}
                 >
-                    {labeling?.[x as number] ?? x /* as number is slightly hacky, but does avoid TS complaints */}
+                    {labeling?.[x as number] ?? x}
                 </div>
             </div>
         )
