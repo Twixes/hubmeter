@@ -49,10 +49,9 @@ export const main = css`
     display: flex;
     flex-direction: column;
     padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
     @media screen and (min-width: ${breakpointWidthTablet}) {
         padding-top: 4rem;
-        padding-bottom: 4rem;
+        padding-bottom: 3.5rem;
     }
 `
 
