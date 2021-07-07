@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
@@ -11,11 +11,10 @@ import {
     currentUserState,
     errorMessageState,
     isCurrentUserLoadingState,
-    timeZoneUtcOffsetState,
-    userEventsState
+    userEventsProcessedSelector,
+    userEventsSelector
 } from '../../atoms'
 import { Params } from '../../components/App'
-import { useEventTypeSelection } from '../../components/Expandable/CheckboxExpandable'
 import Graph from '../../components/Graph'
 import Spinner from '../../components/Spinner'
 import {
@@ -24,8 +23,6 @@ import {
     aggregateByWeek,
     WeekAggregationMode
 } from '../../data-processing/aggregation'
-import { filterByEventType } from '../../data-processing/filtration'
-import { transformUsingTimeZone } from '../../data-processing/transformation'
 import { fetchUserEventsAll } from '../../github-api'
 import { breakpointWidthTablet } from '../../styles'
 
@@ -60,19 +57,16 @@ export default function Statistics(): JSX.Element {
 
     const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
     const [areEventsLoading, setAreEventsLoading] = useRecoilState(areEventsLoadingState)
-    const [userEvents, setUserEvents] = useRecoilState(userEventsState({ login: login!.toLowerCase() }))
-    const timeZoneUtcOffset = useRecoilValue(timeZoneUtcOffsetState)
+    const [userEvents, setUserEvents] = useRecoilState(userEventsSelector({ login: login!.toLowerCase() }))
+    const userEventsProcessed = useRecoilValue(userEventsProcessedSelector({ login: login!.toLowerCase() }))
     const isCurrentUserLoading = useRecoilValue(isCurrentUserLoadingState)
     const currentUser = useRecoilValue(currentUserState)
 
-    const [selectedOptions] = useEventTypeSelection()
-
-    const userEventsFiltered = useMemo(
-        () => userEvents && transformUsingTimeZone(filterByEventType(userEvents, selectedOptions), timeZoneUtcOffset),
-        [userEvents, timeZoneUtcOffset, selectedOptions]
-    )
     const loadUserEvents = useCallback(
         (login: string) => {
+            if (errorMessage) {
+                console.warn('Cannot load user events in an error state!')
+            }
             if (areEventsLoading) {
                 console.warn('User events already are loading!')
             } else {
@@ -90,7 +84,7 @@ export default function Statistics(): JSX.Element {
                     })
             }
         },
-        [areEventsLoading, setUserEvents, setAreEventsLoading, setErrorMessage]
+        [areEventsLoading, setUserEvents, setAreEventsLoading, errorMessage, setErrorMessage]
     )
 
     useEffect(() => {
@@ -103,7 +97,7 @@ export default function Statistics(): JSX.Element {
         <AnimatePresence>
             {(() => {
                 if (errorMessage) return null
-                if (isCurrentUserLoading || !userEventsFiltered) return <Spinner />
+                if (isCurrentUserLoading || !userEventsProcessed) return <Spinner />
                 if (currentUser) {
                     return (
                         <motion.div
@@ -117,7 +111,7 @@ export default function Statistics(): JSX.Element {
                             <section>
                                 <h1>By hour</h1>
                                 <Graph
-                                    dataPoints={aggregateByHour(userEventsFiltered)}
+                                    dataPoints={aggregateByHour(userEventsProcessed)}
                                     labeling={HOURS}
                                     isLoading={areEventsLoading}
                                 />
@@ -125,7 +119,7 @@ export default function Statistics(): JSX.Element {
                             <section>
                                 <h1>By day of week</h1>
                                 <Graph
-                                    dataPoints={aggregateByDayOfWeek(userEventsFiltered)}
+                                    dataPoints={aggregateByDayOfWeek(userEventsProcessed)}
                                     labeling={DAYS_OF_WEEK}
                                     isLoading={areEventsLoading}
                                 />
@@ -133,14 +127,14 @@ export default function Statistics(): JSX.Element {
                             <section>
                                 <h1>By workweek</h1>
                                 <Graph
-                                    dataPoints={aggregateByWeek(userEventsFiltered, WeekAggregationMode.Workweek)}
+                                    dataPoints={aggregateByWeek(userEventsProcessed, WeekAggregationMode.Workweek)}
                                     isLoading={areEventsLoading}
                                 />
                             </section>
                             <section>
                                 <h1>By weekend</h1>
                                 <Graph
-                                    dataPoints={aggregateByWeek(userEventsFiltered, WeekAggregationMode.Weekend)}
+                                    dataPoints={aggregateByWeek(userEventsProcessed, WeekAggregationMode.Weekend)}
                                     isLoading={areEventsLoading}
                                 />
                             </section>

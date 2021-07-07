@@ -1,5 +1,7 @@
-import { atom, DefaultValue, selectorFamily } from 'recoil'
+import { atom, selectorFamily } from 'recoil'
 
+import { filterByEventType } from './data-processing/filtration'
+import { transformUsingTimeZone } from './data-processing/transformation'
 import { Event, EventType, User } from './github-api'
 
 export const errorMessageState = atom<string | null>({
@@ -32,30 +34,45 @@ export const timeZoneUtcOffsetState = atom<number>({
     default: -new Date().getTimezoneOffset()
 })
 
-export const eventTypesFilterState = atom<Set<EventType> | null>({
-    key: 'eventTypesFilter',
-    default: null
+export const eventTypeSelectionState = atom<Record<EventType, boolean>>({
+    key: 'eventTypeSelectionState',
+    default: Object.fromEntries(Object.keys(EventType).map((key) => [key, true])) as Record<EventType, boolean>
 })
 
-export const userEventsState = selectorFamily<Event[] | undefined, { login: string }>({
+export const userEventsSelector = selectorFamily<Event[] | null, { login: string }>({
     key: 'userEvents',
     get:
         ({ login }) =>
         ({ get }) => {
-            if (!login) return undefined
+            if (!login) return null
             const userEvents = get(loginToUserEventsState).get(login)
-            const eventTypesFilter = get(eventTypesFilterState)
-            if (!userEvents || !eventTypesFilter) return userEvents
-            return userEvents.filter((event: Event) => eventTypesFilter.has(event.type))
+            if (!userEvents) return null
+            return userEvents
         },
     set:
         ({ login }) =>
-        ({ set }, newEvents: Event[] | undefined | DefaultValue) => {
+        ({ set }, newEvents) => {
             if (login)
                 set(loginToUserEventsState, (prevState) => {
                     const newState = new Map(prevState)
                     newState.set(login, newEvents as Event[])
                     return newState
                 })
+        }
+})
+
+export const userEventsProcessedSelector = selectorFamily<Event[] | null, { login: string }>({
+    key: 'userEventsProcessed',
+    get:
+        ({ login }) =>
+        ({ get }) => {
+            const userEvents = get(userEventsSelector({ login }))
+            console.log(get(loginToUserEventsState))
+            if (!userEvents) return null
+            const eventTypeSelection = get(eventTypeSelectionState)
+            const timeZoneUtcOffset = get(timeZoneUtcOffsetState)
+            const filteredUserEvents = filterByEventType(userEvents, eventTypeSelection)
+            const transformedUserEvents = transformUsingTimeZone(filteredUserEvents, timeZoneUtcOffset)
+            return transformedUserEvents
         }
 })

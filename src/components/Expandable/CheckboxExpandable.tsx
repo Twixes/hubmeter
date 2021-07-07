@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
+import { useRecoilState } from 'recoil'
+
+import { eventTypeSelectionState } from '../../atoms'
 import { EventType, eventTypeToName } from '../../github-api'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { capitalize } from '../../utils'
 import { Base } from './Base'
 
@@ -9,24 +11,6 @@ export interface SelectProps {
     label: string
     localStorageKey: string
     options: [string, string][]
-}
-
-const initialSelectState = Object.fromEntries(Object.keys(EventType).map((key) => [key, true])) as Record<
-    EventType,
-    boolean
->
-
-export function useEventTypeSelection(): [
-    Record<EventType, boolean>,
-    (eventType: EventType, newState: boolean) => void
-] {
-    const [eventTypeSelection, setEventTypeSelection] = useLocalStorage<Record<EventType, boolean>>('event-types', {
-        ...initialSelectState
-    })
-    return [
-        eventTypeSelection,
-        (eventType, newState) => setEventTypeSelection((currentState) => ({ ...currentState, [eventType]: newState }))
-    ]
 }
 
 function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, short = true): string {
@@ -43,7 +27,7 @@ function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, 
 }
 
 export function Select({ label }: SelectProps): JSX.Element {
-    const [eventTypeSelection, setEventTypeState] = useEventTypeSelection()
+    const [eventTypeSelection, setEventTypeSelection] = useRecoilState(eventTypeSelectionState)
 
     return (
         <Base
@@ -58,7 +42,9 @@ export function Select({ label }: SelectProps): JSX.Element {
                             id={key}
                             type="checkbox"
                             checked={value}
-                            onChange={(e) => setEventTypeState(key as EventType, e.target.checked)}
+                            onChange={(e) =>
+                                setEventTypeSelection((prevState) => ({ ...prevState, [key]: e.target.checked }))
+                            }
                         />
                         <label htmlFor={key}>{capitalize(eventTypeToName[key as EventType])}</label>
                     </li>
