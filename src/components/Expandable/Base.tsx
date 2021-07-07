@@ -46,6 +46,9 @@ const selectOptions = css`
         margin: 0;
         padding: 0;
     }
+    input {
+        flex-shrink: 0;
+    }
     li {
         display: flex;
         align-items: center;
@@ -78,10 +81,12 @@ const selectOptions = css`
 `
 
 const selectBoxSummary = css`
-    white-space: pre;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 `
+
+const expandableContainer = css({ position: 'relative', minWidth: 0 })
 
 const VARIANTS: Variants = {
     hidden: ([shouldReduceMotion, itemsLimit]: [boolean, number]) => {
@@ -117,7 +122,7 @@ export function Base({ label, summary, summaryExtended, children }: ExpandablePr
     })
 
     return (
-        <div css={{ position: 'relative' }} ref={containerRef}>
+        <div css={expandableContainer} ref={containerRef}>
             <div
                 css={[card, selectBox, isExpanded && expandableExpandedTop]}
                 title={summaryExtended || summary.toString()}

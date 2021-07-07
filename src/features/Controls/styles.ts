@@ -58,10 +58,10 @@ export const controlsIndicatorTyping = css`
     & span {
         animation: ${bounce} calc(var(--duration-long) / 2) cubic-bezier(0.1, 0, 0.5, 1) infinite alternate;
         display: inline-block;
-        &:nth-child(2) {
+        &:nth-of-type(2) {
             animation-delay: calc(var(--duration-long) / 15);
         }
-        &:nth-child(3) {
+        &:nth-of-type(3) {
             animation-delay: calc(var(--duration-long) / 15 * 2);
         }
     }
