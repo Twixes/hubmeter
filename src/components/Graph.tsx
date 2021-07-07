@@ -71,7 +71,7 @@ const graphArea = css({
 const graphErrorMessage = css({
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    textAlign: 'center',
     justifyContent: 'center',
     height: '100%'
 })
@@ -103,10 +103,11 @@ function generateXLegend(
 ): JSX.Element {
     const columnWidth: number = width / points.length
     const xLegendValueElements: JSX.Element[] = []
+    const doesLegendNeedDecluttering = points.length >= 12
     for (const [i, [x]] of points.entries()) {
         xLegendValueElements.push(
             <div
-                css={[graphLegendXValueContainer, points.length >= 12 && hideEverySecondElement]}
+                css={[graphLegendXValueContainer, doesLegendNeedDecluttering && hideEverySecondElement]}
                 style={{ width: columnWidth }}
                 key={`Graph-legend-x-value-${i + 1}`}
             >
