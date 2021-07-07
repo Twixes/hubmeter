@@ -15,7 +15,7 @@ import { Params } from './App'
 import Notice from './Notice'
 
 const QUESTIONS: string[] = [
-    // "Do ${subject} ${question}?"
+    // "Does ${subject} ${question}?"
     'release on Friday',
     'pull all-nighters',
     'work the night shift',
