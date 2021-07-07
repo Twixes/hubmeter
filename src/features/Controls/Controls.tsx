@@ -3,20 +3,20 @@
 import { motion } from 'framer-motion'
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { currentUserState, timeZoneUtcOffsetState } from '../../atoms'
-import { Select } from '../../components/Select'
+import { Select } from '../../components/Expandable/CheckboxExpandable'
+import { RadioExpandable } from '../../components/Expandable/RadioExpandable'
 import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
-import { utcOffsetMinutesToTimeZone } from '../../utils'
 import ControlsSearch from './ControlsSearch'
 import ControlsSearchResults from './ControlsSearchResults'
 import { controls, controlsGrid } from './styles'
 
 export default function Controls(): JSX.Element {
     const currentUser = useRecoilValue(currentUserState)
-    const timeZoneUtcOffset = useRecoilValue(timeZoneUtcOffsetState)
+    const [timeZoneUtcOffset, setTimeZoneUtcOffset] = useRecoilState(timeZoneUtcOffsetState)
 
     const { login } = useParams<{ login: string | undefined }>()
     const history = useHistory()
@@ -138,12 +138,47 @@ export default function Controls(): JSX.Element {
             />
             {login && (
                 <div css={controlsGrid}>
-                    <Select
-                        label={`Time zone - ${utcOffsetMinutesToTimeZone(timeZoneUtcOffset)}`}
-                        localStorageKey="filters"
-                        options={Object.entries(eventTypeToName)}
-                    />
                     <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
+                    <RadioExpandable
+                        label="User time zone"
+                        possibilities={[
+                            { value: -660, label: 'UTC-11:00', labelExtension: `Midway` },
+                            { value: -600, label: 'UTC-10:00', labelExtension: `Honolulu` },
+                            { value: -540, label: 'UTC-09:00', labelExtension: `Aleutian Islands` },
+                            { value: -480, label: 'UTC-08:00', labelExtension: `Anchorage` },
+                            { value: -420, label: 'UTC-07:00', labelExtension: `San Francisco, Seattle, Vancouver` },
+                            { value: -360, label: 'UTC-06:00', labelExtension: `Denver, Calgary` },
+                            { value: -300, label: 'UTC-05:00', labelExtension: `Chicago, Dallas, Mexico, Bogota` },
+                            { value: -240, label: 'UTC-04:00', labelExtension: `New York, Detroit, Santiago, Caracas` },
+                            {
+                                value: -180,
+                                label: 'UTC-03:00',
+                                labelExtension: `Halifax, Rio de Janeiro, Buenos Aires`
+                            },
+                            { value: -120, label: 'UTC-02:00', labelExtension: `Nuuk` },
+                            { value: -60, label: 'UTC-01:00', labelExtension: `Cape Verde` },
+                            { value: 0, label: 'UTC±00:00', labelExtension: `Reykjavík, Dakar` },
+                            { value: 60, label: 'UTC+01:00', labelExtension: `London, Dublin, Lisbon, Lagos` },
+                            { value: 120, label: 'UTC+02:00', labelExtension: `Paris, Warsaw, Cairo, Cape Town` },
+                            { value: 180, label: 'UTC+03:00', labelExtension: `Athens, Helsinki, Moscow, Nairobi` },
+                            { value: 240, label: 'UTC+04:00', labelExtension: `Dubai, Baku, Tbilisi, Samara` },
+                            { value: 270, label: 'UTC+04:30', labelExtension: `Tehran, Kabul` },
+                            { value: 300, label: 'UTC+05:00', labelExtension: `Islamabad, Yekaterinburg` },
+                            { value: 330, label: 'UTC+05:30', labelExtension: `New Delhi, Bombai` },
+                            { value: 360, label: 'UTC+06:00', labelExtension: `Nursultan, Omsk, Dhaka` },
+                            { value: 420, label: 'UTC+07:00', labelExtension: `Jakarta, Bangkok, Novosibirsk` },
+                            { value: 480, label: 'UTC+08:00', labelExtension: `Beijing, Hong Kong, Perth, Manila` },
+                            { value: 540, label: 'UTC+09:00', labelExtension: `Tokyo, Seoul, Yakutsk, Manokwari` },
+                            { value: 570, label: 'UTC+09:30', labelExtension: `Adelaide` },
+                            { value: 600, label: 'UTC+10:00', labelExtension: `Sydney, Vladivostok` },
+                            { value: 660, label: 'UTC+11:00', labelExtension: `Magadan` },
+                            { value: 720, label: 'UTC+12:00', labelExtension: `Auckland, Kamchatka` }
+                        ]}
+                        selectedValue={timeZoneUtcOffset}
+                        onChange={(selectedPossibility) =>
+                            selectedPossibility && setTimeZoneUtcOffset(selectedPossibility.value)
+                        }
+                    />
                 </div>
             )}
         </motion.form>

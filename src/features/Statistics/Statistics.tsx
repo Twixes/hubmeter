@@ -15,8 +15,8 @@ import {
     userEventsState
 } from '../../atoms'
 import { Params } from '../../components/App'
+import { useEventTypeSelection } from '../../components/Expandable/CheckboxExpandable'
 import Graph from '../../components/Graph'
-import { useEventTypeSelection } from '../../components/Select'
 import Spinner from '../../components/Spinner'
 import {
     aggregateByDayOfWeek,
@@ -51,7 +51,7 @@ const statistics = css({
     },
     [`@media screen and (min-width: ${breakpointWidthTablet})`]: {
         gridTemplateColumns: '1fr 1fr',
-        gridGap: '0 3rem'
+        gap: '0 0.75rem'
     }
 })
 

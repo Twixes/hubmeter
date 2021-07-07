@@ -34,10 +34,14 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
     // Cloning created_ats to avoid same internal mutability problems as with getDayOfWeek
     const eventCreatedAts: DateTime[] = events.map((event) => event.created_at.plus(0))
     const eventCreatedAtValues = eventCreatedAts.map((createdAt) => createdAt.toMillis())
+
     const earliestDateTime = DateTime.fromMillis(Math.min(...eventCreatedAtValues))
     const latestDateTime = DateTime.fromMillis(Math.max(...eventCreatedAtValues))
     const earliestWeekStart = earliestDateTime.startOf('week')
     const latestWeekStart = latestDateTime.startOf('week')
+
+    const today = DateTime.local().startOf('day')
+
     const dataPointMap: Map<string, number> = new Map()
     let nextWeekStart = earliestWeekStart
     while (nextWeekStart <= latestWeekStart) {
@@ -45,9 +49,14 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
         if (mode === WeekAggregationMode.Weekend) {
             thisWeekStart = thisWeekStart.plus({ days: 5 })
         }
+        if (thisWeekStart > today) {
+            // Skip future buckets – particularly relevant for weekend aggregation due to above addition of 5 days
+            break
+        }
         dataPointMap.set(formatDate(thisWeekStart), 0)
         nextWeekStart = nextWeekStart.plus({ weeks: 1 })
     }
+
     for (const createdAt of eventCreatedAts) {
         if (mode === WeekAggregationMode.Weekend) {
             if (createdAt.weekday <= 5) continue
@@ -61,5 +70,6 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
         const eventWeekString = formatDate(eventWeek)
         dataPointMap.set(eventWeekString, dataPointMap.get(eventWeekString)! + 1)
     }
+
     return Array.from(dataPointMap.entries())
 }

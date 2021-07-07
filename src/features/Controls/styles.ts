@@ -13,7 +13,7 @@ const bounce = keyframes`
 
 export const controlsGrid = css({
     display: 'grid',
-    gridGap: '0.75rem',
+    gap: '0.75rem',
     [`@media screen and (min-width: ${breakpointWidthTablet})`]: { gridTemplateColumns: 'repeat(2, 1fr)' }
 })
 
