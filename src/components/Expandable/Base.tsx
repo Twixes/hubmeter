@@ -54,7 +54,7 @@ const selectOptions = css`
         padding: 0.75rem;
         white-space: pre;
         &:not(:last-child) {
-            border-top: solid 1px var(--color-shadow);
+            border-bottom: solid 1px var(--color-shadow);
         }
         &::after {
             transition: background var(--duration-short) var(--timing-function-standard);
