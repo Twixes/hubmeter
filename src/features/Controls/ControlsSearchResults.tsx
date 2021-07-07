@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-moti
 import React, { Dispatch, KeyboardEvent, MutableRefObject, SetStateAction } from 'react'
 
 import { User } from '../../github-api'
-import { card } from '../../styles'
+import { card, expandableExpandedBottom } from '../../styles'
 import { controlsIndicator, controlsIndicatorAvatar, controlsLogin } from './styles'
 
 interface Props {
@@ -58,11 +58,13 @@ const controlsSearchResultsUser = css`
     width: 100%;
     height: 3rem;
     padding-left: 0.75rem;
-    border-top: 1px solid var(--color-shadow);
     outline: none;
     text-align: left;
     font-size: 1.5rem;
     cursor: pointer;
+    &:not(:last-child) {
+        border-bottom: 1px solid var(--color-shadow);
+    }
     &:hover,
     &:focus {
         border-top-color: transparent;
@@ -125,7 +127,7 @@ export default function ControlsSearchResults({
         <AnimatePresence>
             {isSearchShown && (
                 <motion.ul
-                    css={[card, controlsSearchResults]}
+                    css={[card, controlsSearchResults, expandableExpandedBottom]}
                     custom={[shouldReduceMotion, currentSearchResults.length]}
                     variants={VARIANTS}
                     initial="hidden"

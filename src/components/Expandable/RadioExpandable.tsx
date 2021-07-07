@@ -7,7 +7,6 @@ import { Base } from './Base'
 export interface Possibility<T extends string | number> {
     value: T
     label: string
-    labelExtension?: string
 }
 
 export interface RadioExpandableProps<T extends string | number> {
@@ -32,7 +31,7 @@ export function RadioExpandable<T extends string | number>({
         <Base label={label} summary={selectedPossibility?.label || <i>Select an option</i>}>
             <ul>
                 {possibilities.map((thisPossibility, index) => {
-                    const { value, label, labelExtension } = thisPossibility
+                    const { value, label } = thisPossibility
                     const inputId = value.toString()
                     return (
                         <li key={value} tabIndex={index + 1}>
@@ -50,7 +49,7 @@ export function RadioExpandable<T extends string | number>({
                                     }
                                 }}
                             />
-                            <label htmlFor={inputId}>{labelExtension ? `${label} – ${labelExtension}` : label}</label>
+                            <label htmlFor={inputId}>{label}</label>
                         </li>
                     )
                 })}

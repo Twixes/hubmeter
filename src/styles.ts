@@ -5,7 +5,11 @@ export const breakpointWidthLaptop = '78rem'
 export const breakpointWidthDesktop = '118rem'
 
 export const expandableExpandedTop = css({ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 })
-export const expandableExpandedBottom = css({ borderTopLeftRadius: 0, borderTopRightRadius: 0 })
+export const expandableExpandedBottom = css({
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderTop: '1px solid var(--color-shadow)'
+})
 
 export const card = css({
     transition: 'border-radius var(--duration-short) var(--timing-function-standard)',
