@@ -15,8 +15,8 @@ Or whether your boss codes on weekends!
 ## Gallery
 
 ![It all starts with a GitHub handle.](/public/readme-1.png)
-![It all starts with a GitHub handle.](/public/readme-2.png)
-![It all starts with a GitHub handle.](/public/readme-3.png)
+![Out comes data. GitHub activity stats, elegantly visualized.](/public/readme-2.png)
+![Filterable by event type. Adjustable for user time zone.](/public/readme-3.png)
 
 ## Stack
 
