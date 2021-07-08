@@ -2,33 +2,13 @@
 
 import { css } from '@emotion/react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { useCallback, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValueLoadable } from 'recoil'
 
-import {
-    areEventsLoadingState,
-    currentUserState,
-    errorMessageState,
-    isCurrentUserLoadingState,
-    userEventsProcessedSelector,
-    userEventsSelector
-} from '../../atoms'
-import { Params } from '../../components/App'
-import Graph from '../../components/Graph'
+import { aggregatedDataPointsState, currentUserState } from '../../atoms'
+import Graph, { Labeling } from '../../components/Graph'
 import Spinner from '../../components/Spinner'
-import {
-    aggregateByDayOfWeek,
-    aggregateByHour,
-    aggregateByWeek,
-    WeekAggregationMode
-} from '../../data-processing/aggregation'
-import { fetchUserEventsAll } from '../../github-api'
+import { AggregationBy, aggregationLabelingMapping } from '../../data-processing/aggregation'
 import { breakpointWidthTablet } from '../../styles'
-
-const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-const HOURS: string[] = HOUR_NUMBERS.map((hour) => `${hour} AM`).concat(HOUR_NUMBERS.map((hour) => `${hour} PM`))
-const DAYS_OF_WEEK: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 const VARIANTS: Variants = {
     hidden: {
@@ -52,97 +32,53 @@ const statistics = css({
     }
 })
 
+interface SmartGraphProps {
+    aggregationBy: AggregationBy
+    labeling?: Labeling
+}
+
+function SmartGraph({ aggregationBy }: SmartGraphProps): JSX.Element {
+    const aggregatedDataPoints = useRecoilValueLoadable(aggregatedDataPointsState(aggregationBy))
+    const labeling = aggregationLabelingMapping[aggregationBy]
+
+    if (aggregatedDataPoints.state === 'hasError') {
+        throw aggregatedDataPoints.contents
+    }
+
+    return <Graph dataPoints={aggregatedDataPoints.valueMaybe() || null} labeling={labeling} />
+}
+
 export default function Statistics(): JSX.Element {
-    const { login } = useParams<Params>()
+    const currentUserLoadable = useRecoilValueLoadable(currentUserState)
 
-    const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
-    const [areEventsLoading, setAreEventsLoading] = useRecoilState(areEventsLoadingState)
-    const [userEvents, setUserEvents] = useRecoilState(userEventsSelector({ login: login!.toLowerCase() }))
-    const userEventsProcessed = useRecoilValue(userEventsProcessedSelector({ login: login!.toLowerCase() }))
-    const isCurrentUserLoading = useRecoilValue(isCurrentUserLoadingState)
-    const currentUser = useRecoilValue(currentUserState)
-
-    const loadUserEvents = useCallback(
-        (login: string) => {
-            if (errorMessage) {
-                console.warn('Cannot load user events in an error state!')
-            }
-            if (areEventsLoading) {
-                console.warn('User events already are loading!')
-            } else {
-                setAreEventsLoading(true)
-                fetchUserEventsAll(login)
-                    .then((newEvents) => {
-                        setUserEvents(newEvents)
-                        return newEvents
-                    })
-                    .finally(() => {
-                        setAreEventsLoading(false)
-                    })
-                    .catch((error: Error) => {
-                        setErrorMessage(error.message)
-                    })
-            }
-        },
-        [areEventsLoading, setUserEvents, setAreEventsLoading, errorMessage, setErrorMessage]
-    )
-
-    useEffect(() => {
-        if (currentUser && !userEvents) {
-            loadUserEvents(currentUser.login)
-        }
-    }, [currentUser, userEvents, loadUserEvents])
+    if (currentUserLoadable.state === 'hasError') {
+        throw currentUserLoadable.contents
+    }
 
     return (
         <AnimatePresence>
-            {(() => {
-                if (errorMessage) return null
-                if (isCurrentUserLoading || !userEventsProcessed) return <Spinner />
-                if (currentUser) {
-                    return (
-                        <motion.div
-                            css={statistics}
-                            variants={VARIANTS}
-                            initial="hidden"
-                            animate="shown"
-                            exit="hidden"
-                            layout
-                        >
-                            <section>
-                                <h1>By hour</h1>
-                                <Graph
-                                    dataPoints={aggregateByHour(userEventsProcessed)}
-                                    labeling={HOURS}
-                                    isLoading={areEventsLoading}
-                                />
-                            </section>
-                            <section>
-                                <h1>By day of week</h1>
-                                <Graph
-                                    dataPoints={aggregateByDayOfWeek(userEventsProcessed)}
-                                    labeling={DAYS_OF_WEEK}
-                                    isLoading={areEventsLoading}
-                                />
-                            </section>
-                            <section>
-                                <h1>By workweek</h1>
-                                <Graph
-                                    dataPoints={aggregateByWeek(userEventsProcessed, WeekAggregationMode.Workweek)}
-                                    isLoading={areEventsLoading}
-                                />
-                            </section>
-                            <section>
-                                <h1>By weekend</h1>
-                                <Graph
-                                    dataPoints={aggregateByWeek(userEventsProcessed, WeekAggregationMode.Weekend)}
-                                    isLoading={areEventsLoading}
-                                />
-                            </section>
-                        </motion.div>
-                    )
-                }
-                return null
-            })()}
+            {currentUserLoadable.state === 'loading' ? (
+                <Spinner />
+            ) : (
+                <motion.div css={statistics} variants={VARIANTS} initial="hidden" animate="shown" exit="hidden" layout>
+                    <section>
+                        <h1>By hour</h1>
+                        <SmartGraph aggregationBy={AggregationBy.Hour} />
+                    </section>
+                    <section>
+                        <h1>By day of week</h1>
+                        <SmartGraph aggregationBy={AggregationBy.DayOfWeek} />
+                    </section>
+                    <section>
+                        <h1>By workweek</h1>
+                        <SmartGraph aggregationBy={AggregationBy.Workweek} />
+                    </section>
+                    <section>
+                        <h1>By weekend</h1>
+                        <SmartGraph aggregationBy={AggregationBy.Weekend} />
+                    </section>
+                </motion.div>
+            )}
         </AnimatePresence>
     )
 }

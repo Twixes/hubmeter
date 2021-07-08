@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValueLoadable } from 'recoil'
 
 import { currentUserState, timeZoneUtcOffsetState } from '../../atoms'
 import { Select } from '../../components/Expandable/CheckboxExpandable'
@@ -15,7 +15,7 @@ import ControlsSearchResults from './ControlsSearchResults'
 import { controls, controlsGrid } from './styles'
 
 export default function Controls(): JSX.Element {
-    const currentUser = useRecoilValue(currentUserState)
+    const currentUserLoadable = useRecoilValueLoadable(currentUserState)
     const [timeZoneUtcOffset, setTimeZoneUtcOffset] = useRecoilState(timeZoneUtcOffsetState)
 
     const { login } = useParams<{ login: string | undefined }>()
@@ -23,6 +23,8 @@ export default function Controls(): JSX.Element {
     const formRef = useRef(null)
     const buttonRef = useRef<HTMLButtonElement | null>(null)
     const navigationRefs = useRef<(HTMLElement | null)[]>(Array<HTMLElement | null>(5).fill(null))
+
+    const currentUser = currentUserLoadable.valueMaybe() || null
 
     const [currentLoginInput, setCurrentLoginInput] = useState<string>((currentUser ? currentUser.login : login) || '')
     const [matchingUser, setMatchingUser] = useState<User | null>(currentUser)
@@ -52,10 +54,11 @@ export default function Controls(): JSX.Element {
 
     useEffect(() => {
         if (currentUser) {
+            history.replace(`/${currentUser.login}`) // Fix capitalization in the URL once we know the proper login
             setCurrentLoginInput(currentUser.login)
             setMatchingUser(currentUser)
         }
-    }, [currentUser, setCurrentLoginInput, setMatchingUser])
+    }, [currentUser, setCurrentLoginInput, setMatchingUser, history])
 
     useEffect(() => {
         setCurrentLoginInput(login || '')

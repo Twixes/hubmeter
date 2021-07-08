@@ -247,12 +247,11 @@ function drawRoundedBarGraphWithOverlay(
 }
 
 export interface GraphProps {
-    dataPoints: DataPoint[]
+    dataPoints: DataPoint[] | null
     labeling?: Labeling
-    isLoading?: boolean
 }
 
-export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): JSX.Element {
+export default function Graph({ dataPoints, labeling }: GraphProps): JSX.Element {
     const vectorRef = useRef<HTMLDivElement | null>(null)
     const xLegendRefs = useRef<(HTMLDivElement | null)[]>([])
     const [vectorWidth, vectorHeight] = useSize(vectorRef)
@@ -260,16 +259,16 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
     const [captionPoint, setCaptionPoint] = useState<CaptionPoint | null>(null)
 
     const xLegendElement = useMemo(
-        () => (isLoading ? null : generateXLegend(dataPoints, vectorWidth, xLegendRefs, labeling)),
-        [isLoading, dataPoints, vectorWidth, labeling]
+        () => (dataPoints ? generateXLegend(dataPoints, vectorWidth, xLegendRefs, labeling) : null),
+        [dataPoints, vectorWidth, labeling]
     )
 
     const [vectorMainElement, vectorOverlayElements] = useMemo(
         () =>
-            isLoading
-                ? [null, null]
-                : drawRoundedBarGraphWithOverlay(dataPoints, vectorWidth, vectorHeight, setCaptionPoint, xLegendHeight),
-        [isLoading, dataPoints, vectorWidth, vectorHeight, xLegendHeight]
+            dataPoints
+                ? drawRoundedBarGraphWithOverlay(dataPoints, vectorWidth, vectorHeight, setCaptionPoint, xLegendHeight)
+                : [null, null],
+        [dataPoints, vectorWidth, vectorHeight, xLegendHeight]
     )
 
     useLayoutEffect(() => {
@@ -284,7 +283,7 @@ export default function Graph({ dataPoints, labeling, isLoading }: GraphProps): 
         <div css={[card, graph]}>
             <div css={graphContainer} ref={vectorRef}>
                 <AnimatePresence>
-                    {isLoading ? (
+                    {!dataPoints ? (
                         <Spinner color="var(--color-accent)" />
                     ) : dataPoints.length === 0 ? (
                         <div css={graphErrorMessage}>

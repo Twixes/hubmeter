@@ -6,36 +6,28 @@ import React, { ReactChild } from 'react'
 
 import { card } from '../styles'
 
-interface Props {
+interface NoticeAction {
+    icon: JSX.Element | string
+    callback: () => void
+}
+
+interface NoticeProps {
     message: ReactChild | null
     indicator?: string
-    onXClick?: () => void
+    action?: NoticeAction
     initialAnimatePresence?: boolean
 }
 
 const OUTSIDE_VARIANTS: Variants = {
     hidden: (shouldReduceMotion: boolean) => {
         return {
-            maxHeight: shouldReduceMotion ? '12rem' : '3rem',
             marginTop: shouldReduceMotion ? '0.75rem' : '-3rem',
             opacity: 0
         }
     },
     shown: {
-        maxHeight: '12rem',
         marginTop: '0.75rem',
         opacity: 1
-    }
-}
-
-const INSIDE_VARIANTS: Variants = {
-    hidden: (shouldReduceMotion: boolean) => {
-        return {
-            maxHeight: shouldReduceMotion ? '12rem' : '3rem'
-        }
-    },
-    shown: {
-        maxHeight: '12rem'
     }
 }
 
@@ -91,9 +83,9 @@ const noticeButton = css`
 export default function Notice({
     message,
     indicator = '!',
-    onXClick,
+    action,
     initialAnimatePresence
-}: Props): JSX.Element | null {
+}: NoticeProps): JSX.Element | null {
     const shouldReduceMotion = useReducedMotion()
 
     return (
@@ -108,19 +100,10 @@ export default function Notice({
                     exit="hidden"
                 >
                     <div css={noticeIndicator}>{indicator}</div>
-                    <motion.div
-                        css={noticeMessage}
-                        custom={shouldReduceMotion}
-                        variants={INSIDE_VARIANTS}
-                        initial="hidden"
-                        animate="shown"
-                        exit="hidden"
-                    >
-                        {message}
-                    </motion.div>
-                    {onXClick && (
-                        <button css={noticeButton} type="button" onClick={onXClick}>
-                            ✗
+                    <div css={noticeMessage}>{message}</div>
+                    {action && (
+                        <button css={noticeButton} type="button" onClick={() => action.callback()}>
+                            {action.icon}
                         </button>
                     )}
                 </motion.div>

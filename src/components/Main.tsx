@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
+import { ErrorBoundary } from '@sentry/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ReactChild, useEffect, useState } from 'react'
-import { Route, useHistory, useParams } from 'react-router-dom'
+import { ReactChild, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 
-import { currentUserState, errorMessageState, isCurrentUserLoadingState } from '../atoms'
+import { currentLoginState } from '../atoms'
 import Controls from '../features/Controls/Controls'
 import Statistics from '../features/Statistics/Statistics'
-import { fetchUser } from '../github-api'
 import { breakpointWidthTablet, widthControl } from '../styles'
+import { updatePageTitle } from '../utils'
 import { Params } from './App'
 import Notice from './Notice'
 
@@ -26,10 +27,8 @@ const QUESTIONS: string[] = [
     'even have a life'
 ]
 
-function HomeHeadline({ children }: { children: ReactChild }): JSX.Element | null {
-    const { login } = useParams<Params>()
-
-    return login ? null : (
+function HomeHeadline({ visible, children }: { visible: boolean; children: ReactChild }): JSX.Element | null {
+    return !visible ? null : (
         <AnimatePresence>
             <motion.h1
                 variants={{ hidden: { opacity: 0 }, shown: { opacity: 1 } }}
@@ -56,57 +55,38 @@ export const main = css`
 `
 
 export default function Main(): JSX.Element {
-    const { login } = useParams<Params>()
-    const history = useHistory()
+    const { login: paramLogin } = useParams<Params>()
 
-    const [errorMessage, setErrorMessage] = useRecoilState(errorMessageState)
-    const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
-    const [, setIsCurrentUserLoading] = useRecoilState(isCurrentUserLoadingState)
+    const [currentLogin, setCurrentLogin] = useRecoilState(currentLoginState)
+    const errorResetCallback = useRef<(() => void) | null>(null)
 
     const [randomQuestion, setRandomQuestion] = useState(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
 
     useEffect(() => {
+        errorResetCallback.current?.()
+        setCurrentLogin(paramLogin || null)
         setRandomQuestion(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
-        const titleElement = document.querySelector('title')
-        titleElement!.innerText = login || 'HubMeter'
-    }, [login])
-
-    useEffect(() => {
-        setErrorMessage(null)
-        if (login) {
-            if (!currentUser || currentUser.login.toLowerCase() !== login.toLowerCase()) {
-                fetchUser(login)
-                    .then((user) => {
-                        setIsCurrentUserLoading(true)
-                        setCurrentUser(user)
-                        setErrorMessage(null)
-                        history.replace(`/${user.login}`)
-                        return user
-                    })
-                    .finally(() => {
-                        setIsCurrentUserLoading(false)
-                    })
-                    .catch((error: Error) => {
-                        setCurrentUser(null)
-                        setErrorMessage(error.message)
-                    })
-            } else if (currentUser.login !== login) {
-                setCurrentUser(null)
-            }
-        }
-    }, [login, setErrorMessage, currentUser, setCurrentUser, history, setIsCurrentUserLoading])
+        updatePageTitle(paramLogin ? `${paramLogin} – HubMeter` : 'HubMeter')
+    }, [paramLogin, currentLogin, setCurrentLogin, errorResetCallback])
 
     return (
         <motion.main
             css={[widthControl, main]}
-            style={{ flexGrow: login ? 1 : 0 }}
-            animate={{ flexGrow: login ? 1 : 0 }}
+            style={{ flexGrow: paramLogin ? 1 : 0 }}
+            animate={{ flexGrow: paramLogin ? 1 : 0 }}
         >
-            <HomeHeadline>Does</HomeHeadline>
+            <HomeHeadline visible={!paramLogin}>Does</HomeHeadline>
             <Controls />
-            <Notice message={errorMessage} />
-            <HomeHeadline>{`…${randomQuestion}?`}</HomeHeadline>
-            <Route path="/:login" component={Statistics} />
+            <HomeHeadline visible={!paramLogin}>{`…${randomQuestion}?`}</HomeHeadline>
+
+            <ErrorBoundary
+                fallback={({ error, resetError }) => {
+                    errorResetCallback.current = resetError
+                    return <Notice message={error.message} />
+                }}
+            >
+                {paramLogin ? <Statistics /> : null}
+            </ErrorBoundary>
         </motion.main>
     )
 }

@@ -1,32 +1,32 @@
-import { atom, selectorFamily } from 'recoil'
+import { atom, selector, selectorFamily } from 'recoil'
 
+import { DataPoint } from './components/Graph'
+import { AggregationBy, aggregationFunctionMapping } from './data-processing/aggregation'
 import { filterByEventType } from './data-processing/filtration'
 import { transformUsingTimeZone } from './data-processing/transformation'
-import { Event, EventType, User } from './github-api'
+import { Event, EventType, fetchUser, fetchUserEventsAll, User } from './github-api'
 
-export const errorMessageState = atom<string | null>({
-    key: 'errorMessage',
+// User inferred from URL
+
+export const currentLoginState = atom<string | null>({
+    key: 'currentLogin',
     default: null
 })
 
-export const isCurrentUserLoadingState = atom<boolean>({
-    key: 'isCurrentUserLoading',
-    default: false
-})
-
-export const currentUserState = atom<User | null>({
+export const currentUserState = selector<User | null>({
     key: 'currentUser',
-    default: null
+    get: async ({ get }) => {
+        const currentLogin = get(currentLoginState)
+        if (!currentLogin) return null
+        return await fetchUser(currentLogin)
+    }
 })
 
-export const areEventsLoadingState = atom<boolean>({
-    key: 'areEventsLoading',
-    default: false
-})
+// Event data processing settings
 
-export const loginToUserEventsState = atom<Map<string, Event[] | undefined>>({
-    key: 'loginToUserEvents',
-    default: new Map()
+export const eventTypeSelectionState = atom<Record<EventType, boolean>>({
+    key: 'eventTypeSelectionState',
+    default: Object.fromEntries(Object.keys(EventType).map((key) => [key, true])) as Record<EventType, boolean>
 })
 
 export const timeZoneUtcOffsetState = atom<number>({
@@ -34,45 +34,28 @@ export const timeZoneUtcOffsetState = atom<number>({
     default: -new Date().getTimezoneOffset()
 })
 
-export const eventTypeSelectionState = atom<Record<EventType, boolean>>({
-    key: 'eventTypeSelectionState',
-    default: Object.fromEntries(Object.keys(EventType).map((key) => [key, true])) as Record<EventType, boolean>
-})
+// Event data
 
-export const userEventsSelector = selectorFamily<Event[] | null, { login: string }>({
+export const userEventsState = selector<Event[] | null>({
     key: 'userEvents',
-    get:
-        ({ login }) =>
-        ({ get }) => {
-            if (!login) return null
-            const userEvents = get(loginToUserEventsState).get(login)
-            if (!userEvents) return null
-            return userEvents
-        },
-    set:
-        ({ login }) =>
-        ({ set }, newEvents) => {
-            if (login)
-                set(loginToUserEventsState, (prevState) => {
-                    const newState = new Map(prevState)
-                    newState.set(login, newEvents as Event[])
-                    return newState
-                })
-        }
+    get: async ({ get }) => {
+        const currentUser = get(currentUserState)
+        if (!currentUser) return null
+        return await fetchUserEventsAll(currentUser.login)
+    }
 })
 
-export const userEventsProcessedSelector = selectorFamily<Event[] | null, { login: string }>({
-    key: 'userEventsProcessed',
+export const aggregatedDataPointsState = selectorFamily<DataPoint[], AggregationBy>({
+    key: 'aggregatedDataPoints',
     get:
-        ({ login }) =>
+        (aggregationBy) =>
         ({ get }) => {
-            const userEvents = get(userEventsSelector({ login }))
-            console.log(get(loginToUserEventsState))
-            if (!userEvents) return null
+            const userEvents = get(userEventsState) || []
             const eventTypeSelection = get(eventTypeSelectionState)
             const timeZoneUtcOffset = get(timeZoneUtcOffsetState)
             const filteredUserEvents = filterByEventType(userEvents, eventTypeSelection)
             const transformedUserEvents = transformUsingTimeZone(filteredUserEvents, timeZoneUtcOffset)
-            return transformedUserEvents
+            const aggregationFunction = aggregationFunctionMapping[aggregationBy]
+            return aggregationFunction(transformedUserEvents)
         }
 })

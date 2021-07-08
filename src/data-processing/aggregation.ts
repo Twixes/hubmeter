@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import { DataPoint } from '../components/Graph'
+import { DataPoint, Labeling } from '../components/Graph'
 import { Event } from '../github-api'
 import { formatDate, getDayOfWeek, getHours } from '../utils'
 
@@ -72,4 +72,29 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
     }
 
     return Array.from(dataPointMap.entries())
+}
+
+export enum AggregationBy {
+    Hour,
+    DayOfWeek,
+    Workweek,
+    Weekend
+}
+
+export const aggregationFunctionMapping: Record<AggregationBy, (events: Event[]) => DataPoint[]> = {
+    [AggregationBy.Hour]: aggregateByHour,
+    [AggregationBy.DayOfWeek]: aggregateByDayOfWeek,
+    [AggregationBy.Workweek]: (events) => aggregateByWeek(events, WeekAggregationMode.Workweek),
+    [AggregationBy.Weekend]: (events) => aggregateByWeek(events, WeekAggregationMode.Weekend)
+}
+
+const HOUR_NUMBERS: number[] = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+const HOURS: string[] = HOUR_NUMBERS.map((hour) => `${hour} AM`).concat(HOUR_NUMBERS.map((hour) => `${hour} PM`))
+const DAYS_OF_WEEK: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+export const aggregationLabelingMapping: Record<AggregationBy, Labeling | undefined> = {
+    [AggregationBy.Hour]: HOURS,
+    [AggregationBy.DayOfWeek]: DAYS_OF_WEEK,
+    [AggregationBy.Workweek]: undefined,
+    [AggregationBy.Weekend]: undefined
 }
