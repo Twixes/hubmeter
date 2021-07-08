@@ -18,7 +18,6 @@ export const controlsGrid = css({
 })
 
 export const controls = css`
-    z-index: 10;
     display: grid;
     grid-auto-flow: row;
     gap: 0.75rem;

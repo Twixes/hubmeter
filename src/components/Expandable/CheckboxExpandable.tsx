@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import { CSSProperties } from 'react'
 import { useRecoilState } from 'recoil'
 
 import { eventTypeSelectionState } from '../../atoms'
@@ -11,6 +12,7 @@ export interface SelectProps {
     label: string
     localStorageKey: string
     options: [string, string][]
+    style?: CSSProperties
 }
 
 function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, short = true): string {
@@ -26,7 +28,7 @@ function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, 
     return info
 }
 
-export function Select({ label }: SelectProps): JSX.Element {
+export function Select({ label, style }: SelectProps): JSX.Element {
     const [eventTypeSelection, setEventTypeSelection] = useRecoilState(eventTypeSelectionState)
 
     return (
@@ -34,6 +36,7 @@ export function Select({ label }: SelectProps): JSX.Element {
             label={label}
             summary={humanizeAllowedEventTypes(eventTypeSelection)}
             summaryExtended={humanizeAllowedEventTypes(eventTypeSelection, false)}
+            style={style}
         >
             <ul>
                 {Object.entries(eventTypeSelection).map(([key, value], index) => (

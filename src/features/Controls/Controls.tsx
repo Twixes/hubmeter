@@ -141,7 +141,12 @@ export default function Controls(): JSX.Element {
             />
             {login && (
                 <div css={controlsGrid}>
-                    <Select label="Event types" localStorageKey="filters" options={Object.entries(eventTypeToName)} />
+                    <Select
+                        label="Event types"
+                        localStorageKey="filters"
+                        options={Object.entries(eventTypeToName)}
+                        style={{ zIndex: 10 }}
+                    />
                     <RadioExpandable
                         label="Time zone"
                         possibilities={[
@@ -180,6 +185,7 @@ export default function Controls(): JSX.Element {
                         onChange={(selectedPossibility) =>
                             selectedPossibility && setTimeZoneUtcOffset(selectedPossibility.value)
                         }
+                        style={{ zIndex: 9 }}
                     />
                 </div>
             )}

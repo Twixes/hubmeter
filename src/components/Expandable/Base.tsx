@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import { AnimatePresence, motion, useReducedMotion, Variants } from 'framer-motion'
-import { ReactChild, ReactNode } from 'react'
+import { CSSProperties, ReactChild, ReactNode } from 'react'
 import { useRef, useState } from 'react'
 
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
@@ -34,7 +34,6 @@ const selectBox = css`
 const selectOptions = css`
     position: absolute;
     overflow: hidden;
-    z-index: 1;
     width: 100%;
     padding: 0;
     ul,
@@ -109,10 +108,11 @@ export interface ExpandablePropsBase {
     label: string
     summary: ReactChild | string
     summaryExtended?: string
+    style?: CSSProperties
     children: ReactNode
 }
 
-export function Base({ label, summary, summaryExtended, children }: ExpandablePropsBase): JSX.Element {
+export function Base({ label, summary, summaryExtended, style, children }: ExpandablePropsBase): JSX.Element {
     const shouldReduceMotion = useReducedMotion()
     const [isExpanded, setIsExpanded] = useState(false)
     const containerRef = useRef<HTMLDivElement | null>(null)
@@ -122,7 +122,7 @@ export function Base({ label, summary, summaryExtended, children }: ExpandablePr
     })
 
     return (
-        <div css={expandableContainer} ref={containerRef}>
+        <div css={expandableContainer} ref={containerRef} style={style}>
             <div
                 css={[card, selectBox, isExpanded && expandableExpandedTop]}
                 title={summaryExtended || summary.toString()}

@@ -38,7 +38,7 @@ const VARIANTS: Variants = {
 }
 
 const controlsSearchResults = css`
-    z-index: 1000;
+    z-index: 100;
     position: absolute;
     flex-direction: column;
     top: 3rem;
