@@ -12,6 +12,7 @@ const footer = css`
     align-items: center;
     justify-content: center;
     height: 4rem;
+    padding-bottom: 0.75rem;
     color: var(--color-foreground-dim);
     text-align: center;
     & br {
