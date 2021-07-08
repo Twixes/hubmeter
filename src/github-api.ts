@@ -89,12 +89,10 @@ async function throwOnProblem(response: Response, ignoredStatuses: number[] = []
 }
 
 export async function fetchFromApi(url: URL, ignoredErrorStatuses?: number[]): Promise<Response> {
-    const username = localStorage.getItem('username') || process?.env.USERNAME
-    const pat = localStorage.getItem('pat') || process?.env.PAT
+    const pat = localStorage.getItem('pat')
     let fetchOptions: RequestInit | undefined
-    if (username && pat) {
-        console.info(`Using GitHub as user ${username}`)
-        fetchOptions = { headers: new Headers([['Authorization', `Basic ${btoa(username + ':' + pat)}`]]) }
+    if (pat) {
+        fetchOptions = { headers: new Headers([['Authorization', `token ${pat}`]]) }
     }
     const response: Response = await fetch(url.toString(), fetchOptions)
     await throwOnProblem(response, ignoredErrorStatuses)

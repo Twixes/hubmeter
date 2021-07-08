@@ -51,7 +51,7 @@ export const main = css`
     padding-bottom: 0.75rem;
     @media screen and (min-width: ${breakpointWidthTablet}) {
         padding-top: 4rem;
-        padding-bottom: 4rem;
+        padding-bottom: 2rem;
     }
 `
 
