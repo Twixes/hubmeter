@@ -64,7 +64,8 @@ export default function Main(): JSX.Element {
 
     useEffect(() => {
         errorResetCallback.current?.()
-        setCurrentLogin(paramLogin || null)
+        errorResetCallback.current = null
+        setCurrentLogin(paramLogin?.toLowerCase() || null)
         setRandomQuestion(QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)])
         updatePageTitle(paramLogin ? `${paramLogin} – HubMeter` : 'HubMeter')
     }, [paramLogin, currentLogin, setCurrentLogin, errorResetCallback])
