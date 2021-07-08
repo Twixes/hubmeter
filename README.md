@@ -20,7 +20,10 @@ Or whether your boss codes on weekends!
 
 ## Stack
 
--   TypeScript
--   React
--   Recoil
--   Emotion
+Bootstrapped using [`create-react-app`](https://create-react-app.dev/).  
+Written in [TypeScript](https://www.typescriptlang.org/).  
+Built with [React](https://reactjs.org/), using:
+- [Recoil](https://recoiljs.org/) for state management,
+- [Emotion](https://emotion.sh) for CSS-in-JS,
+- [Framer Motion](https://www.framer.com/motion/) for interaction animations,
+- [Luxon](https://moment.github.io/luxon/) for datetime handling.
