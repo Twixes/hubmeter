@@ -9,7 +9,7 @@
         "email": "dev@twixes.com"
     },
     "repository": "github:Twixes/hubmeter",
-    "homepage": "https://hubmeter.live",
+    "homepage": "https://hubmeter.io",
     "private": true,
     "scripts": {
         "build": "react-scripts build",
