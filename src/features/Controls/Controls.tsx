@@ -5,8 +5,8 @@ import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useRecoilState, useRecoilValueLoadable } from 'recoil'
 
-import { currentUserState, timeZoneUtcOffsetState } from '../../atoms'
-import { Select } from '../../components/Expandable/CheckboxExpandable'
+import { currentUserState, eventTypeSelectionState, timeZoneUtcOffsetState } from '../../atoms'
+import { CheckboxExpandable } from '../../components/Expandable/CheckboxExpandable'
 import { RadioExpandable } from '../../components/Expandable/RadioExpandable'
 import { eventTypeToName, User } from '../../github-api'
 import { useOutsideClickHandler } from '../../hooks/useOutsideClickHandler'
@@ -17,6 +17,7 @@ import { controls, controlsGrid } from './styles'
 export default function Controls(): JSX.Element {
     const currentUserLoadable = useRecoilValueLoadable(currentUserState)
     const [timeZoneUtcOffset, setTimeZoneUtcOffset] = useRecoilState(timeZoneUtcOffsetState)
+    const [eventTypeSelection, setEventTypeSelection] = useRecoilState(eventTypeSelectionState)
 
     const { login } = useParams<{ login: string | undefined }>()
     const history = useHistory()
@@ -141,15 +142,18 @@ export default function Controls(): JSX.Element {
             />
             {login && (
                 <div css={controlsGrid}>
-                    <Select
+                    <CheckboxExpandable
                         label="Event types"
-                        localStorageKey="filters"
-                        options={Object.entries(eventTypeToName)}
+                        itemLabels={eventTypeToName}
+                        selectionState={eventTypeSelection}
+                        onSelect={(selectedValue, isChecked) =>
+                            setEventTypeSelection((prevState) => ({ ...prevState, [selectedValue]: isChecked }))
+                        }
                         style={{ zIndex: 10 }}
                     />
                     <RadioExpandable
                         label="Time zone"
-                        possibilities={[
+                        items={[
                             { value: -660, label: 'UTC-11:00 – Midway' },
                             { value: -600, label: 'UTC-10:00 – Honolulu' },
                             { value: -540, label: 'UTC-09:00 – Aleutian Islands' },
@@ -182,9 +186,7 @@ export default function Controls(): JSX.Element {
                             { value: 720, label: 'UTC+12:00 – Auckland, Kamchatka' }
                         ]}
                         selectedValue={timeZoneUtcOffset}
-                        onChange={(selectedPossibility) =>
-                            selectedPossibility && setTimeZoneUtcOffset(selectedPossibility.value)
-                        }
+                        onSelect={(selectedItem) => selectedItem && setTimeZoneUtcOffset(selectedItem.value)}
                         style={{ zIndex: 9 }}
                     />
                 </div>

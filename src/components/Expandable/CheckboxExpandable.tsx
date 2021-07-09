@@ -1,17 +1,16 @@
 /** @jsxImportSource @emotion/react */
 
 import { CSSProperties } from 'react'
-import { useRecoilState } from 'recoil'
 
-import { eventTypeSelectionState } from '../../atoms'
 import { EventType, eventTypeToName } from '../../github-api'
 import { capitalize } from '../../utils'
 import { Base } from './Base'
 
-export interface SelectProps {
+export interface CheckboxExpandableProps {
     label: string
-    localStorageKey: string
-    options: [string, string][]
+    itemLabels: Record<string, string>
+    selectionState: Record<string, boolean>
+    onSelect: (selectedItem: string, isChecked: boolean) => void
     style?: CSSProperties
 }
 
@@ -28,28 +27,30 @@ function humanizeAllowedEventTypes(selectedOptions: Record<EventType, boolean>, 
     return info
 }
 
-export function Select({ label, style }: SelectProps): JSX.Element {
-    const [eventTypeSelection, setEventTypeSelection] = useRecoilState(eventTypeSelectionState)
-
+export function CheckboxExpandable({
+    label,
+    itemLabels,
+    selectionState,
+    onSelect,
+    style
+}: CheckboxExpandableProps): JSX.Element {
     return (
         <Base
             label={label}
-            summary={humanizeAllowedEventTypes(eventTypeSelection)}
-            summaryExtended={humanizeAllowedEventTypes(eventTypeSelection, false)}
+            summary={humanizeAllowedEventTypes(selectionState)}
+            summaryExtended={humanizeAllowedEventTypes(selectionState, false)}
             style={style}
         >
             <ul>
-                {Object.entries(eventTypeSelection).map(([key, value], index) => (
-                    <li key={key} tabIndex={index + 1}>
+                {Object.entries(selectionState).map(([value, isChecked], index) => (
+                    <li key={value} tabIndex={index + 1}>
                         <input
-                            id={key}
+                            id={value}
                             type="checkbox"
-                            checked={value}
-                            onChange={(e) =>
-                                setEventTypeSelection((prevState) => ({ ...prevState, [key]: e.target.checked }))
-                            }
+                            checked={isChecked as boolean}
+                            onChange={(e) => onSelect(value, e.target.checked)}
                         />
-                        <label htmlFor={key}>{capitalize(eventTypeToName[key as EventType])}</label>
+                        <label htmlFor={value}>{capitalize(itemLabels[value])}</label>
                     </li>
                 ))}
             </ul>
