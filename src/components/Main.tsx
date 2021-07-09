@@ -74,8 +74,8 @@ export default function Main(): JSX.Element {
     return (
         <motion.main
             css={[widthControl, main]}
-            style={{ flexGrow: paramLogin ? 1 : 0 }}
-            animate={{ flexGrow: paramLogin ? 1 : 0 }}
+            animate={paramLogin ? { flexGrow: 1, maxWidth: '120rem' } : { flexGrow: 0, maxWidth: '48rem' }}
+            initial={false}
         >
             <HomeHeadline visible={!paramLogin}>Does</HomeHeadline>
             <Controls />
