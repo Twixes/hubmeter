@@ -122,18 +122,7 @@ function generateXLegend(
             </div>
         )
     }
-    return (
-        <motion.div
-            css={graphLegendX}
-            transition={TRANSITION}
-            variants={OPACITY_VARIANTS}
-            initial="hidden"
-            animate="shown"
-            exit="hidden"
-        >
-            {xLegendValueElements}
-        </motion.div>
-    )
+    return <div css={graphLegendX}>{xLegendValueElements}</div>
 }
 
 function drawRoundedBarGraphWithOverlay(
@@ -155,18 +144,13 @@ function drawRoundedBarGraphWithOverlay(
     const markerElements: JSX.Element[] = []
     for (let markerY = height - 1; markerY > 0; markerY -= markerSpace) {
         markerElements.push(
-            <motion.rect
+            <rect
                 css={{ fill: 'var(--color-accent-pale)' }}
                 x={0}
                 y={Math.round(markerY)}
                 key={`marker-${markerY}`}
                 width={width}
                 height={1}
-                transition={TRANSITION}
-                variants={OPACITY_VARIANTS}
-                initial="hidden"
-                animate="shown"
-                exit="hidden"
             />
         )
     }
