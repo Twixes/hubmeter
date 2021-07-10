@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import useSize from '@react-hook/size'
 import { roundCommands, SVGCommand } from '@twixes/svg-round-corners'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import React, { Dispatch, MutableRefObject, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Dispatch, MutableRefObject, SetStateAction, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import { breakpointWidthLaptop, card } from '../styles'
 import Spinner from './Spinner'
@@ -78,14 +78,6 @@ const graphErrorMessage = css({
 
 const CORNER_RADIUS = 4
 const TRANSITION = { type: 'spring', damping: 18 }
-const OPACITY_VARIANTS: Variants = {
-    hidden: {
-        opacity: 0
-    },
-    shown: {
-        opacity: 1
-    }
-}
 const EXPANSION_VARIANTS: Variants = {
     hidden: {
         scaleY: 0
