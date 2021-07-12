@@ -36,25 +36,15 @@ export function aggregateByWeek(events: Aggregatable[], mode: WeekAggregationMod
     const eventCreatedAtValues = eventCreatedAts.map((createdAt) => createdAt.toMillis())
 
     const earliestDateTime = DateTime.fromMillis(Math.min(...eventCreatedAtValues))
-    const latestDateTime = DateTime.fromMillis(Math.max(...eventCreatedAtValues))
-    const earliestWeekStart = earliestDateTime.startOf('week')
-    const latestWeekStart = latestDateTime.startOf('week')
-
-    const today = DateTime.local().startOf('day')
+    let earliestWeekStart = earliestDateTime.startOf('week')
+    if (mode === WeekAggregationMode.Weekend) {
+        earliestWeekStart = earliestWeekStart.plus({ days: 5 })
+    }
 
     const dataPointMap: Map<string, number> = new Map()
-    let nextWeekStart = earliestWeekStart
-    while (nextWeekStart <= latestWeekStart) {
-        let thisWeekStart = nextWeekStart
-        if (mode === WeekAggregationMode.Weekend) {
-            thisWeekStart = thisWeekStart.plus({ days: 5 })
-        }
-        if (thisWeekStart > today) {
-            // Skip future buckets – particularly relevant for weekend aggregation due to above addition of 5 days
-            break
-        }
-        dataPointMap.set(formatDate(thisWeekStart), 0)
-        nextWeekStart = nextWeekStart.plus({ weeks: 1 })
+    const weekCount = DateTime.local().diff(earliestWeekStart, 'weeks').weeks
+    for (let i = 0; i < weekCount; i++) {
+        dataPointMap.set(formatDate(earliestWeekStart.plus({ weeks: i })), 0)
     }
 
     for (const createdAt of eventCreatedAts) {
