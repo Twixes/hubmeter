@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "@react-hook/size": "^2.1.2",
-        "@sentry/browser": "^6.8.0",
+        "@sentry/browser": "^7.119.1",
         "@sentry/react": "^6.8.0",
         "@twixes/svg-round-corners": "^0.1.1",
         "focus-visible": "^5.2.0",
